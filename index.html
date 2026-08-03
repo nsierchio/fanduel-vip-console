@@ -1277,7 +1277,7 @@
       <div class="card-header">
         <div class="card-title-row">
           <div class="card-icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAArRJREFUeAG9VctVGzEUvZInDsvpIGYRPitMB1ABSgVABUAFmA6ggkAFKBVgKshkBSYLpgSHkwWBGSn3zcdoBhM75IR3Dnj09HT1vlfAfxbVVnTMzQ6VaxHyk3u7mmIOWTBXvQydPQ98y+3SabgXNRbm+4aD+0xDPEBv8Gc9NrfxT2R9h7xPf+LS0o81OklmPw5R2l5Q1ysxrtLMrg6nXuDh4mDZ75jR+R0e5KK4GawCHYE2o7GCsr4CLzF0iDEtRaNTRrCNV4k/cXZlP9TocCG5JPgaXi1qSzAamvpDcs10fOVnD/8miUN3E3ZxLItJBHd4PJwDXA6d8S/9g00/KrEKKSKQsNgJt5hDNNxmhoVE49eAx/desuvCLUqbFxE8onM43cyftDXsnfMF3MdSTHpnK7sDlNFN5AFqv3RIthlWC0eMxwLCdlxEmZYJQFalMoc7qFRc+6MmhNoq/he3mJEPdlIq5eB2bpc/YYZ0zNVOzqGDXUq0uWGT+Imzzi6rCK22osGX3K5I6PadueEEo89hSiNkaU0d9XTLN/VD0kNaQV7S56dsEDuCHDKjMLRxFdUghy9qw0kVOhCeGjJUaecJSKXfLTlINeqAushotJ2Pm7/BDvxl6WVb76adSQpH67QEERQ0wbQM20COvKPhbVtPXVKd3QpwCl1UGVj31NOxNtf7LPAxC7hL8urxsg/smUuGnGQo0nckOnr+QxFc2JMF3kNAemTfo9LR2gtzfRwOjlLYyc+XzzCHVDR/EXh/6uzSbuMCsDP0My7Sgy6ys5cenpK/hBZ8yKApuWi95qImXbOtdPF4NDlJJlYKrKCLQ1JUfq9RZ1C8FSG420Tg0LP3oIqE6frbN4FvAd4Pas9fvqAZzWDWRdJtigUNn8nm/ixhRBHuOdGq8SbLdOfoDtsev7n8BkrlLX8AqPkHAAAAAElFTkSuQmCC" width="14" height="14" alt="Agentforce" style="display:block;"></div>
-          <span class="card-heading">Agentforce Recommendations</span>
+          <span class="card-heading">Next Best Action</span>
           <span class="badge badge-red">3 Actions</span>
         </div>
         <span style="font-size:0.62rem;color:#706e6b;">AI-prioritized</span>
@@ -1437,49 +1437,61 @@
       </div>
     </div>
 
-    <!-- ── Birthdays this week ── -->
+    <!-- ── Salesforce Campaign Manager ── -->
     <div class="card">
       <div class="card-header">
         <div class="card-title-row">
-          <div class="card-icon-wrap"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1" stroke="#706e6b" stroke-width="1.3"/><path d="M5 7V5.5a3 3 0 0 1 6 0V7" stroke="#706e6b" stroke-width="1.3" stroke-linecap="round"/><path d="M8 4V2" stroke="#706e6b" stroke-width="1.3" stroke-linecap="round"/><path d="M6 2.5c0-.8.8-1.5.8-1.5s.2.5.2 1" stroke="#706e6b" stroke-width="1" stroke-linecap="round"/><path d="M10 2.5c0-.8-.8-1.5-.8-1.5s-.2.5-.2 1" stroke="#706e6b" stroke-width="1" stroke-linecap="round"/></svg></div>
-          <span class="card-heading">Birthdays this week</span>
-          <span class="badge badge-pink">3</span>
+          <div class="card-icon-wrap">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 12l4-4 3 3 5-7" stroke="#706e6b" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="card-heading">Campaign Manager</span>
+          <span class="badge badge-blue">3 Active</span>
+        </div>
+        <button class="btn btn-brand btn-sm" onclick="showToast('Opening Salesforce Campaign Manager…')">+ New</button>
+      </div>
+      <div>
+        <!-- Campaign row 1 -->
+        <div class="nba-item-slim">
+          <div class="nba-accent" style="background:#0060a3;"></div>
+          <div class="nba-body">
+            <p class="nba-item-title">NFL Season Re-engagement</p>
+            <p class="nba-context">42 VIPs · Email + SMS · Ends Aug 31 · <span style="color:#2e844a;font-weight:600;">Live</span></p>
+          </div>
+          <div class="nba-actions"><button class="btn btn-neutral btn-sm" onclick="showToast('Opening NFL campaign…')">View</button></div>
+        </div>
+        <!-- Campaign row 2 -->
+        <div class="nba-item-slim">
+          <div class="nba-accent" style="background:#0060a3;"></div>
+          <div class="nba-body">
+            <p class="nba-item-title">Birthday Celebration Series</p>
+            <p class="nba-context">12 VIPs · Personalised offer · Rolling · <span style="color:#2e844a;font-weight:600;">Live</span></p>
+          </div>
+          <div class="nba-actions"><button class="btn btn-neutral btn-sm" onclick="showToast('Opening Birthday campaign…')">View</button></div>
+        </div>
+        <!-- Campaign row 3 -->
+        <div class="nba-item-slim">
+          <div class="nba-accent" style="background:#f59e0b;"></div>
+          <div class="nba-body">
+            <p class="nba-item-title">Casino Reactivation — Q3</p>
+            <p class="nba-context">18 VIPs · Bonus offer · Starts Aug 5 · <span style="color:#dd7a01;font-weight:600;">Scheduled</span></p>
+          </div>
+          <div class="nba-actions"><button class="btn btn-neutral btn-sm" onclick="showToast('Opening Casino campaign…')">View</button></div>
+        </div>
+        <!-- Campaign row 4 -->
+        <div class="nba-item-slim" style="border-bottom:none;">
+          <div class="nba-accent" style="background:#94a3b8;"></div>
+          <div class="nba-body">
+            <p class="nba-item-title">F1 Miami VIP Invite Wave</p>
+            <p class="nba-context">8 VIPs · Event invite · <span style="color:#706e6b;font-weight:600;">Draft</span></p>
+          </div>
+          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="showToast('Opening draft campaign…')">Edit</button></div>
         </div>
       </div>
-      <div style="padding:0.2rem 0;">
-        <div style="display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.85rem;border-bottom:1px solid #f3f2f2;">
-          <div style="flex:1;min-width:0;">
-            <div style="display:flex;align-items:center;gap:0.4rem;">
-              <span style="font-size:0.77rem;font-weight:600;color:#0060a3;cursor:pointer;" onclick="openVipModal('Olivia Bennett')">Olivia Bennett</span>
-              <span class="chip chip-sbk" style="font-size:0.58rem;">Sportsbook</span>
-              <span style="font-size:0.62rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.08rem 0.4rem;">Today</span>
-            </div>
-            <div style="font-size:0.67rem;color:#706e6b;">No celebration sent yet</div>
-          </div>
-          <button class="btn btn-brand btn-sm" onclick="sendCelebration(this,'Olivia Bennett')">Send</button>
-        </div>
-        <div style="display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.85rem;border-bottom:1px solid #f3f2f2;">
-          <div style="flex:1;min-width:0;">
-            <div style="display:flex;align-items:center;gap:0.4rem;">
-              <span style="font-size:0.77rem;font-weight:600;color:#0060a3;cursor:pointer;" onclick="openVipModal('Luca Romano')">Luca Romano</span>
-              <span class="chip chip-casino" style="font-size:0.58rem;">Casino</span>
-              <span style="font-size:0.62rem;font-weight:700;background:#fef3c7;color:#92400e;border-radius:999px;padding:0.08rem 0.4rem;">Tomorrow</span>
-            </div>
-            <div style="font-size:0.67rem;color:#706e6b;">No celebration sent yet</div>
-          </div>
-          <button class="btn btn-neutral btn-sm" onclick="sendCelebration(this,'Luca Romano')">Send</button>
-        </div>
-        <div style="display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.85rem;">
-          <div style="flex:1;min-width:0;">
-            <div style="display:flex;align-items:center;gap:0.4rem;">
-              <span style="font-size:0.77rem;font-weight:600;color:#706e6b;">Gavin Turner</span>
-              <span class="chip chip-racing" style="font-size:0.58rem;">Racing</span>
-              <span style="font-size:0.62rem;color:#706e6b;border-radius:999px;padding:0.08rem 0.4rem;">Aug 1</span>
-            </div>
-            <div style="font-size:0.67rem;color:#2e844a;font-weight:600;">Gift sent ✓</div>
-          </div>
-          <button class="btn btn-neutral btn-sm" disabled style="opacity:0.4;cursor:default;">Sent</button>
-        </div>
+      <div style="padding:0.55rem 0.75rem;border-top:1px solid #f1f5f9;">
+        <button class="btn btn-neutral btn-sm" style="width:100%;justify-content:center;gap:0.4rem;" onclick="showToast('Opening Salesforce Campaign Manager…')">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 12l4-4 3 3 5-7" stroke="#706e6b" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Open Campaign Manager
+        </button>
       </div>
     </div>
 
@@ -1550,61 +1562,49 @@
       </div>
     </div>
 
-    <!-- ── Salesforce Campaign Manager ── -->
+    <!-- ── Birthdays this week ── -->
     <div class="card">
       <div class="card-header">
         <div class="card-title-row">
-          <div class="card-icon-wrap">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 12l4-4 3 3 5-7" stroke="#706e6b" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="card-heading">Campaign Manager</span>
-          <span class="badge badge-blue">3 Active</span>
-        </div>
-        <button class="btn btn-brand btn-sm" onclick="showToast('Opening Salesforce Campaign Manager…')">+ New</button>
-      </div>
-      <div>
-        <!-- Campaign row 1 -->
-        <div class="nba-item-slim">
-          <div class="nba-accent" style="background:#0060a3;"></div>
-          <div class="nba-body">
-            <p class="nba-item-title">NFL Season Re-engagement</p>
-            <p class="nba-context">42 VIPs · Email + SMS · Ends Aug 31 · <span style="color:#2e844a;font-weight:600;">Live</span></p>
-          </div>
-          <div class="nba-actions"><button class="btn btn-neutral btn-sm" onclick="showToast('Opening NFL campaign…')">View</button></div>
-        </div>
-        <!-- Campaign row 2 -->
-        <div class="nba-item-slim">
-          <div class="nba-accent" style="background:#0060a3;"></div>
-          <div class="nba-body">
-            <p class="nba-item-title">Birthday Celebration Series</p>
-            <p class="nba-context">12 VIPs · Personalised offer · Rolling · <span style="color:#2e844a;font-weight:600;">Live</span></p>
-          </div>
-          <div class="nba-actions"><button class="btn btn-neutral btn-sm" onclick="showToast('Opening Birthday campaign…')">View</button></div>
-        </div>
-        <!-- Campaign row 3 -->
-        <div class="nba-item-slim">
-          <div class="nba-accent" style="background:#f59e0b;"></div>
-          <div class="nba-body">
-            <p class="nba-item-title">Casino Reactivation — Q3</p>
-            <p class="nba-context">18 VIPs · Bonus offer · Starts Aug 5 · <span style="color:#dd7a01;font-weight:600;">Scheduled</span></p>
-          </div>
-          <div class="nba-actions"><button class="btn btn-neutral btn-sm" onclick="showToast('Opening Casino campaign…')">View</button></div>
-        </div>
-        <!-- Campaign row 4 -->
-        <div class="nba-item-slim" style="border-bottom:none;">
-          <div class="nba-accent" style="background:#94a3b8;"></div>
-          <div class="nba-body">
-            <p class="nba-item-title">F1 Miami VIP Invite Wave</p>
-            <p class="nba-context">8 VIPs · Event invite · <span style="color:#706e6b;font-weight:600;">Draft</span></p>
-          </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="showToast('Opening draft campaign…')">Edit</button></div>
+          <div class="card-icon-wrap"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1" stroke="#706e6b" stroke-width="1.3"/><path d="M5 7V5.5a3 3 0 0 1 6 0V7" stroke="#706e6b" stroke-width="1.3" stroke-linecap="round"/><path d="M8 4V2" stroke="#706e6b" stroke-width="1.3" stroke-linecap="round"/><path d="M6 2.5c0-.8.8-1.5.8-1.5s.2.5.2 1" stroke="#706e6b" stroke-width="1" stroke-linecap="round"/><path d="M10 2.5c0-.8-.8-1.5-.8-1.5s-.2.5-.2 1" stroke="#706e6b" stroke-width="1" stroke-linecap="round"/></svg></div>
+          <span class="card-heading">Birthdays this week</span>
+          <span class="badge badge-pink">3</span>
         </div>
       </div>
-      <div style="padding:0.55rem 0.75rem;border-top:1px solid #f1f5f9;">
-        <button class="btn btn-neutral btn-sm" style="width:100%;justify-content:center;gap:0.4rem;" onclick="showToast('Opening Salesforce Campaign Manager…')">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 12l4-4 3 3 5-7" stroke="#706e6b" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Open Campaign Manager
-        </button>
+      <div style="padding:0.2rem 0;">
+        <div style="display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.85rem;border-bottom:1px solid #f3f2f2;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:0.4rem;">
+              <span style="font-size:0.77rem;font-weight:600;color:#0060a3;cursor:pointer;" onclick="openVipModal('Olivia Bennett')">Olivia Bennett</span>
+              <span class="chip chip-sbk" style="font-size:0.58rem;">Sportsbook</span>
+              <span style="font-size:0.62rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.08rem 0.4rem;">Today</span>
+            </div>
+            <div style="font-size:0.67rem;color:#706e6b;">No celebration sent yet</div>
+          </div>
+          <button class="btn btn-brand btn-sm" onclick="sendCelebration(this,'Olivia Bennett')">Send</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.85rem;border-bottom:1px solid #f3f2f2;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:0.4rem;">
+              <span style="font-size:0.77rem;font-weight:600;color:#0060a3;cursor:pointer;" onclick="openVipModal('Luca Romano')">Luca Romano</span>
+              <span class="chip chip-casino" style="font-size:0.58rem;">Casino</span>
+              <span style="font-size:0.62rem;font-weight:700;background:#fef3c7;color:#92400e;border-radius:999px;padding:0.08rem 0.4rem;">Tomorrow</span>
+            </div>
+            <div style="font-size:0.67rem;color:#706e6b;">No celebration sent yet</div>
+          </div>
+          <button class="btn btn-neutral btn-sm" onclick="sendCelebration(this,'Luca Romano')">Send</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.85rem;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:0.4rem;">
+              <span style="font-size:0.77rem;font-weight:600;color:#706e6b;">Gavin Turner</span>
+              <span class="chip chip-racing" style="font-size:0.58rem;">Racing</span>
+              <span style="font-size:0.62rem;color:#706e6b;border-radius:999px;padding:0.08rem 0.4rem;">Aug 1</span>
+            </div>
+            <div style="font-size:0.67rem;color:#2e844a;font-weight:600;">Gift sent ✓</div>
+          </div>
+          <button class="btn btn-neutral btn-sm" disabled style="opacity:0.4;cursor:default;">Sent</button>
+        </div>
       </div>
     </div>
 
@@ -1665,7 +1665,7 @@
           <button class="suggested-chip" onclick="startPriorityTodayChat()">Who should I prioritize today?</button>
           <button class="suggested-chip" onclick="startUncontacted30Chat()">VIPs not contacted in 30+ days</button>
           <button class="suggested-chip" onclick="startBonusApprovalsChat()">Show my pending bonus approvals</button>
-          <button class="suggested-chip" onclick="startEmbeddedFootballChat()" style="border-color:#f5c518;color:#7a5000;">Football season — 10K+ bettors</button>
+          <button class="suggested-chip" onclick="startEmbeddedFootballChat()" style="border-color:#f5c518;color:#7a5000;">GGR L30 > 10K</button>
         </div>
       </div>
 
@@ -2490,7 +2490,7 @@ function renderBook() {
         <button class="suggested-chip" onclick="startPriorityTodayChat()">Who should I prioritize today?</button>
         <button class="suggested-chip" onclick="startUncontacted30Chat()">VIPs not contacted in 30+ days</button>
         <button class="suggested-chip" onclick="startBonusApprovalsChat()">Show my pending bonus approvals</button>
-        <button class="suggested-chip" onclick="startEmbeddedFootballChat()" style="background:#fef9ee;border-color:#f5c518;color:#7a5000;">Football season — 10K+ chat demo</button>
+        <button class="suggested-chip" onclick="startEmbeddedFootballChat()" style="background:#fef9ee;border-color:#f5c518;color:#7a5000;">GGR L30 > 10K</button>
       </div>
     </div>
     <div class="input-area">
