@@ -1285,7 +1285,7 @@
 
       <!-- NBA Card 1: Birthday -->
       <div class="nba-card" id="nbaCard1">
-        <div class="nba-card-header" onclick="toggleNba('nbaCard1')">
+        <div class="nba-card-header" onclick="toggleNba('nbaCard1')" style="cursor:pointer;">
           <div style="display:flex;align-items:center;gap:0.55rem;min-width:0;">
             <div style="width:0.25rem;min-height:2rem;border-radius:999px;background:#10b981;flex-shrink:0;align-self:stretch;"></div>
             <div style="min-width:0;">
@@ -1300,7 +1300,7 @@
           </div>
           <svg class="nba-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#706e6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <div class="nba-card-body" style="display:none;">
+        <div class="nba-card-body" id="nbaCard1-body" style="display:none;">
           <div class="nba-meta-row">
             <div><p class="nba-meta-lbl">Segment</p><p class="nba-meta-val">Sportsbook</p></div>
             <div><p class="nba-meta-lbl">Tier</p><p class="nba-meta-val">Shield Select</p></div>
@@ -1338,7 +1338,7 @@
           </div>
           <svg class="nba-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#706e6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <div class="nba-card-body" style="display:none;">
+        <div class="nba-card-body" id="nbaCard2-body" style="display:none;">
           <div class="nba-meta-row">
             <div><p class="nba-meta-lbl">Segment</p><p class="nba-meta-val">Casino</p></div>
             <div><p class="nba-meta-lbl">Tier</p><p class="nba-meta-val">VIP Gold</p></div>
@@ -1374,7 +1374,7 @@
           </div>
           <svg class="nba-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#706e6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <div class="nba-card-body" style="display:none;">
+        <div class="nba-card-body" id="nbaCard3-body" style="display:none;">
           <div class="nba-meta-row">
             <div><p class="nba-meta-lbl">Segment</p><p class="nba-meta-val">DFS</p></div>
             <div><p class="nba-meta-lbl">Tier</p><p class="nba-meta-val">Elite</p></div>
@@ -1424,7 +1424,7 @@
         <div class="nba-item-slim">
           <div class="nba-accent" style="background:#6366f1;"></div>
           <div class="nba-body">
-            <p class="nba-item-title">My Mets — Kesha</p>
+            <p class="nba-item-title">Kesha</p>
             <p class="nba-context">Aug 19 · PNC Bank Arts Center · Holmdel, NJ</p>
           </div>
           <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="issueInvite(this,'My Mets — Kesha')">Invite</button></div>
