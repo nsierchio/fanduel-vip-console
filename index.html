@@ -916,10 +916,10 @@
           <span class="badge badge-blue">353 VIPs</span>
         </div>
         <div style="display:flex;gap:0.35rem;">
-          <span style="font-size:0.65rem;color:#706e6b;">SBK 160</span>
-          <span style="font-size:0.65rem;color:#706e6b;">Casino 110</span>
-          <span style="font-size:0.65rem;color:#706e6b;">DFS 55</span>
-          <span style="font-size:0.65rem;color:#706e6b;">Racing 28</span>
+          <a onclick="filterBySegment('Sportsbook')" style="font-size:0.65rem;color:#0060a3;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">SBK 160</a>
+          <a onclick="filterBySegment('Casino')" style="font-size:0.65rem;color:#0060a3;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">Casino 110</a>
+          <a onclick="filterBySegment('DFS')" style="font-size:0.65rem;color:#0060a3;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">DFS 55</a>
+          <a onclick="filterBySegment('Racing')" style="font-size:0.65rem;color:#0060a3;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">Racing 28</a>
         </div>
       </div>
       <!-- Tab bar -->
@@ -2022,6 +2022,12 @@ function setSegFilter(btn, seg) {
   });
   if (btn) btn.classList.add('book-seg-active');
   renderBook();
+}
+
+function filterBySegment(seg) {
+  setPlaybookTab('book');
+  const btn = document.querySelector(`.book-seg-btn[data-seg="${seg}"]`);
+  setSegFilter(btn, seg);
 }
 
 function setTierFilter(btn, tier) {
