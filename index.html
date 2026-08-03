@@ -1212,11 +1212,11 @@
           </div>
           <div id="ob-new" data-tab-group="ob">
             <p style="font-size:0.72rem;color:#475569;margin:0 0 0.4rem">New VIPs in 6-week onboarding window.</p>
-            <div class="ob-head"><span>Name</span><span>Segment</span><span>Joined</span><span>Week</span><span>KYC</span><span>Action</span></div>
+            <div class="ob-head"><span>Name</span><span>Segment</span><span>Joined</span><span>Week</span><span>Status / Stage</span><span>Action</span></div>
             <div class="ob-row"><a class="vip-link">Tyler Morgan</a><span class="chip chip-sbk">SBK</span><span style="font-size:0.7rem;color:#475569">8d ago</span><span class="week-ok">Wk 1</span><span class="kyc-pending">Pending</span><button class="btn btn-brand btn-sm" onclick="taskAction(this,'Send Survey','Welcome survey sent to Tyler Morgan ✓')">Send Survey</button></div>
             <div class="ob-row"><a class="vip-link">Uma Price</a><span class="chip chip-casino">Casino</span><span style="font-size:0.7rem;color:#475569">14d ago</span><span class="week-ok">Wk 2</span><span class="kyc-pending">Pending</span><button class="btn btn-brand btn-sm" onclick="taskAction(this,'Send Survey','Welcome survey sent to Uma Price ✓')">Send Survey</button></div>
             <div class="ob-row"><a class="vip-link">Victor Ward</a><span class="chip chip-dfs">DFS</span><span style="font-size:0.7rem;color:#475569">21d ago</span><span class="week-warn">Wk 3</span><span class="kyc-done">Complete</span><button class="btn btn-brand btn-sm" onclick="taskAction(this,'Log Prefs','Preferences logged for Victor Ward ✓')">Log Prefs</button></div>
-            <div class="ob-row"><a class="vip-link">Aaliyah Henderson</a><span class="chip chip-racing">Racing</span><span style="font-size:0.7rem;color:#475569">38d ago</span><span class="week-urgent">Wk 6</span><span class="kyc-pending">Pending</span><button class="btn btn-brand btn-sm" onclick="taskAction(this,'KYC','KYC review opened for Aaliyah Henderson ✓')">Urgent: KYC</button></div>
+            <div class="ob-row"><a class="vip-link">Aaliyah Henderson</a><span class="chip chip-racing">Racing</span><span style="font-size:0.7rem;color:#475569">38d ago</span><span class="week-urgent">Wk 6</span><span class="kyc-pending">Pending</span><button class="btn btn-brand btn-sm" onclick="taskAction(this,'Status Review','Status review opened for Aaliyah Henderson ✓')">Urgent: Review</button></div>
           </div>
           <div id="ob-churn" data-tab-group="ob" style="display:none;">
             <p style="font-size:0.72rem;color:#475569;margin:0 0 0.4rem">VIPs at risk of demotion or churn — action required.</p>
@@ -1313,8 +1313,9 @@
             <div class="nba-bullet nba-bullet-amber">Personalized outreach + offer combo has 3× re-deposit rate vs. offer alone.</div>
           </div>
           <div class="nba-actions-bar">
-            <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Outreach initiated for Olivia Bennett ✓')">Contact Now</button>
-            <button class="btn btn-neutral btn-sm" onclick="openBonusModal('Olivia Bennett')">Apply Offer</button>
+            <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Outreach initiated for Olivia Bennett ✓')">Contact</button>
+            <button class="btn btn-neutral btn-sm" onclick="openBonusModal('Olivia Bennett')">Send Bonus</button>
+            <button class="btn btn-neutral btn-sm" onclick="showToast('Postal gift queued for Olivia Bennett ✓')">Send Postal Gift</button>
             <button class="btn btn-neutral btn-sm" onclick="openVipModal('Olivia Bennett')">View Profile</button>
           </div>
         </div>
@@ -1404,29 +1405,38 @@
         </div>
       </div>
       <div>
+        <!-- Hosted event with RSVP status -->
+        <div class="nba-item-slim">
+          <div class="nba-accent" style="background:#f5821f;"></div>
+          <div class="nba-body">
+            <p class="nba-item-title" style="display:flex;align-items:center;gap:0.4rem;">My Hosted Event <span style="font-size:0.6rem;font-weight:700;background:#fff3e0;color:#c25a00;border-radius:999px;padding:0.08rem 0.4rem;">Host</span></p>
+            <p class="nba-context">Washington Nationals at New York Mets · Aug 15 · Citi Field</p>
+            <div style="display:flex;gap:0.5rem;margin-top:0.25rem;flex-wrap:wrap;">
+              <span style="font-size:0.62rem;background:#d1fae5;color:#065f46;border-radius:999px;padding:0.06rem 0.4rem;font-weight:600;">6 Accepted</span>
+              <span style="font-size:0.62rem;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.06rem 0.4rem;font-weight:600;">1 Declined</span>
+              <span style="font-size:0.62rem;background:#fef3c7;color:#92400e;border-radius:999px;padding:0.06rem 0.4rem;font-weight:600;">3 Pending</span>
+              <span style="font-size:0.62rem;color:#706e6b;">10 invites</span>
+            </div>
+          </div>
+          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="showToast('Opening event manager…')">Manage</button></div>
+        </div>
+        <!-- My Mets Kesha -->
         <div class="nba-item-slim">
           <div class="nba-accent" style="background:#6366f1;"></div>
           <div class="nba-body">
-            <p class="nba-item-title">Super Bowl LIX</p>
-            <p class="nba-context">Feb 8 · 2 tickets · Caesars Superdome</p>
+            <p class="nba-item-title">My Mets — Kesha</p>
+            <p class="nba-context">Aug 19 · PNC Bank Arts Center · Holmdel, NJ</p>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="issueInvite(this,'Super Bowl LIX')">Invite</button></div>
+          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="issueInvite(this,'My Mets — Kesha')">Invite</button></div>
         </div>
-        <div class="nba-item-slim">
-          <div class="nba-accent" style="background:#6366f1;"></div>
-          <div class="nba-body">
-            <p class="nba-item-title">Knicks vs Celtics Suite</p>
-            <p class="nba-context">Mar 14 · 4 tickets · MSG</p>
-          </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="issueInvite(this,'Knicks vs Celtics Suite')">Invite</button></div>
-        </div>
+        <!-- Jets vs Giants preseason -->
         <div class="nba-item-slim" style="border-bottom:none;">
           <div class="nba-accent" style="background:#6366f1;"></div>
           <div class="nba-body">
-            <p class="nba-item-title">F1 Miami Grand Prix</p>
-            <p class="nba-context">May 3 · 3 tickets · Hard Rock Stadium</p>
+            <p class="nba-item-title">Jets vs. New York Giants <span style="font-size:0.6rem;color:#706e6b;font-weight:400;">(Pre-Season)</span></p>
+            <p class="nba-context">Aug 28 · MetLife Stadium</p>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="issueInvite(this,'F1 Miami Grand Prix')">Invite</button></div>
+          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="issueInvite(this,'Jets vs Giants Preseason')">Invite</button></div>
         </div>
       </div>
       <div style="padding:0.55rem 0.75rem;border-top:1px solid #f1f5f9;">
