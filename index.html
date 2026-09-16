@@ -479,6 +479,17 @@
   .book-seg-btn.book-seg-active { background:#0060a3;border-color:#0060a3;color:#fff; }
   .book-seg-btn:hover { background:#f1f5f9; }
   .book-seg-btn.book-seg-active:hover { background:#0051a2; }
+  /* My VIPs table */
+  .book-filter-btn { display:flex;align-items:center;gap:0.25rem;font-size:0.7rem;font-weight:700;color:#475569;background:#fff;border:1.5px solid #d0d5dd;border-radius:0.35rem;padding:0.24rem 0.65rem;cursor:pointer; }
+  .book-filter-btn:hover { border-color:#0060a3;color:#0060a3; }
+  .book-status-pill { font-size:0.56rem;font-weight:700;border-radius:999px;padding:0.04rem 0.22rem;display:inline-block;white-space:nowrap;text-transform:uppercase;letter-spacing:0.01em; }
+  .bsp-active { background:#d1fae5;color:#065f46; }
+  .bsp-deactivated { background:#f1f5f9;color:#64748b; }
+  .bsp-suspended { background:#fee2e2;color:#991b1b; }
+  .book-nba-alert { position:relative;display:inline-flex;align-items:center;flex-shrink:0;cursor:default; }
+  .book-nba-popover { display:none;position:absolute;left:50%;bottom:calc(100% + 5px);transform:translateX(-50%);background:#1e293b;color:#fff;font-size:0.61rem;font-weight:600;white-space:nowrap;padding:0.28rem 0.5rem;border-radius:0.28rem;z-index:200;pointer-events:none; }
+  .book-nba-popover::after { content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#1e293b; }
+  .book-nba-alert:hover .book-nba-popover { display:block; }
   .slack-pane { display:none; }
   /* ── VIP Feedback Pulse ── */
   .fb-tab-btn { font-size:0.7rem;font-weight:600;padding:0.35rem 0.65rem;border:none;background:transparent;color:#706e6b;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color 0.12s; }
@@ -995,29 +1006,31 @@
 
       <!-- Pane: Book of Business -->
       <div id="pbt-pane-book" style="display:none;">
-        <div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;background:#f8fafc;border-bottom:1px solid #e2e8f0;flex-wrap:wrap;">
-          <span title="Filter VIPs" style="display:flex;align-items:center;gap:0.25rem;font-size:0.68rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;flex-shrink:0;">
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;"><path d="M1 3h14M4 8h8M7 13h2" stroke="#64748b" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <div style="display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0.75rem;background:#f8fafc;border-bottom:1px solid #e2e8f0;">
+          <div style="position:relative;">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style="position:absolute;left:0.42rem;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="6.5" cy="6.5" r="4.5" stroke="#94a3b8" stroke-width="1.6"/><path d="M10.5 10.5l3 3" stroke="#94a3b8" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <input id="bookSearch" type="search" placeholder="Search by name…" oninput="filterBook()" style="border:1.5px solid #d0d5dd;border-radius:0.35rem;padding:0.28rem 0.6rem 0.28rem 1.75rem;font-size:0.73rem;width:13rem;outline:none;" />
+          </div>
+          <button class="book-filter-btn" onclick="showToast('Salesforce list filters opening…')">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M1 3h14M4 8h8M7 13h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             Filter
-          </span>
-          <input id="bookSearch" type="search" placeholder="Search by name…" oninput="filterBook()" style="border:1.5px solid #d0d5dd;border-radius:0.35rem;padding:0.3rem 0.6rem;font-size:0.74rem;width:13rem;outline:none;" />
-          <div style="display:flex;gap:0.2rem;" id="segFilterBtns">
-            <button class="book-seg-btn book-seg-active" data-seg="all" onclick="setSegFilter(this,'all')">All</button>
-            <button class="book-seg-btn" data-seg="Sportsbook" onclick="setSegFilter(this,'Sportsbook')">Sportsbook</button>
-            <button class="book-seg-btn" data-seg="Casino" onclick="setSegFilter(this,'Casino')">Casino</button>
-            <button class="book-seg-btn" data-seg="DFS" onclick="setSegFilter(this,'DFS')">DFS</button>
-            <button class="book-seg-btn" data-seg="Racing" onclick="setSegFilter(this,'Racing')">Racing</button>
-          </div>
-          <div style="display:flex;gap:0.2rem;">
-            <button class="book-seg-btn book-seg-active" data-tier="all" onclick="setTierFilter(this,'all')">All Tiers</button>
-            <button class="book-seg-btn" data-tier="VIP" onclick="setTierFilter(this,'VIP')">VIP</button>
-            <button class="book-seg-btn" data-tier="MVP" onclick="setTierFilter(this,'MVP')">MVP</button>
-            <button class="book-seg-btn" data-tier="Shield Select" onclick="setTierFilter(this,'Shield Select')">Shield Select</button>
-          </div>
+          </button>
+          <button class="book-filter-btn" onclick="refreshBookTable()" title="Refresh" style="padding:0.24rem 0.45rem;">
+            <svg id="bookRefreshIcon" width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5c1.8 0 3.4.87 4.4 2.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><polyline points="12.5,1.5 12.5,4.7 9.3,4.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <span id="bookLastRefresh" style="font-size:0.62rem;color:#94a3b8;margin-left:0.1rem;"></span>
         </div>
-        <div style="display:grid;grid-template-columns:1.6rem 1.4fr 0.75fr 0.85fr 1fr 0.75fr 0.7fr 0.85fr 0.9fr;gap:0.4rem;padding:0.25rem 0.75rem;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;font-weight:700;border-bottom:1px solid #e5e5e5;background:#f3f3f3;align-items:center;">
+        <div id="bookTableHead" style="display:grid;grid-template-columns:1.5rem 1.5fr 0.6fr 0.7fr 0.48fr 0.72fr 0.7fr 1.45fr 0.62fr 0.9fr;gap:0.45rem;padding:0.26rem 0.75rem;font-size:0.61rem;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;font-weight:700;border-bottom:1px solid #e5e5e5;background:#f3f3f3;align-items:center;">
           <input type="checkbox" id="bookSelectAll" onchange="toggleSelectAll(this)" style="cursor:pointer;accent-color:#0060a3;" />
-          <span>Name</span><span>Segment</span><span>Tier</span><span>Location</span><span>Last Contact</span><span>Status</span><span>Bonus Credits</span><span>Actions</span>
+          <span style="cursor:pointer;display:flex;align-items:center;gap:0.15rem;" onclick="sortBook('name')">Name <span id="sort-name" style="font-size:0.53rem;color:#94a3b8;">⇅</span></span>
+          <span>Segment</span>
+          <span style="cursor:pointer;display:flex;align-items:center;gap:0.15rem;" onclick="sortBook('tier')">Tier <span id="sort-tier" style="font-size:0.53rem;color:#94a3b8;">⇅</span></span>
+          <span>State</span>
+          <span style="cursor:pointer;display:flex;align-items:center;gap:0.15rem;" onclick="sortBook('ggr')">GGR L30 <span id="sort-ggr" style="font-size:0.53rem;color:#94a3b8;">⇅</span></span>
+          <span style="cursor:pointer;display:flex;align-items:center;gap:0.15rem;" onclick="sortBook('bonus')">Last Bonus Issued <span id="sort-bonus" style="font-size:0.53rem;color:#94a3b8;">⇅</span></span>
+          <span style="cursor:pointer;display:flex;align-items:center;gap:0.15rem;" onclick="sortBook('days')">Last Contact <span id="sort-days" style="font-size:0.53rem;color:#94a3b8;">⇅</span></span>
+          <span>Status</span>
+          <span>Actions</span>
         </div>
         <!-- Bulk action bar — shown when rows selected -->
         <div id="bookBulkBar" style="display:none;align-items:center;gap:0.6rem;padding:0.4rem 0.75rem;background:#eff6ff;border-bottom:1px solid #bfdbfe;">
@@ -1026,7 +1039,7 @@
           <button onclick="bulkContact()" style="font-size:0.7rem;font-weight:700;background:#fff;color:#0060a3;border:1.5px solid #0060a3;border-radius:0.35rem;padding:0.22rem 0.65rem;cursor:pointer;">Contact All</button>
           <button onclick="clearBookSelection()" style="font-size:0.68rem;color:#64748b;background:none;border:none;cursor:pointer;margin-left:auto;">✕ Clear</button>
         </div>
-        <div id="bookTableBody" style="max-height:20rem;overflow-y:auto;"></div>
+        <div id="bookTableBody"></div>
         <div style="display:flex;align-items:center;justify-content:space-between;padding:0.4rem 0.75rem;border-top:1px solid #e2e8f0;background:#f8fafc;">
           <span id="bookPageInfo" style="font-size:0.68rem;color:#64748b;"></span>
           <div style="display:flex;gap:0.3rem;">
@@ -2026,24 +2039,56 @@ function slackDismiss(btn) {
 /* ── My Book of Business ── */
 const BOOK_FIRST = ['James','Marcus','Elena','Priya','Tyler','Sofia','Derek','Nadia','Logan','Chloe','Victor','Amara','Ethan','Olivia','Noah','Ava','Liam','Sophia','Ryan','Isabella','Jordan','Aiden','Mia','Carter','Harper','Mason','Evelyn','Luke','Abigail','Owen','Emily','Sebastian','Madison','Caleb','Charlotte','Julian','Amelia','Hudson','Scarlett','Xavier'];
 const BOOK_LAST = ['Parker','Bennett','Torres','Chen','Foster','Novak','Rivera','Kim','Morgan','Patel','Brooks','Jackson','Coleman','Evans','Richardson','Thompson','Walker','Martinez','Robinson','Harris','Clark','Lewis','Lee','Garcia','Rodriguez','Martinez','Wilson','Anderson','Taylor','Thomas','Hernandez','Moore','Jackson','White','Lopez','Brown','Davis','Miller','Johnson','Williams'];
-const SEGS = ['SBK','SBK','SBK','SBK','Casino','Casino','Casino','DFS','DFS','Racing'];
-const TIERS = ['VIP','VIP','MVP','Shield Select','VIP','MVP'];
-const LOCS = ['New York, NY','Los Angeles, CA','Chicago, IL','Miami, FL','Houston, TX','Boston, MA','Dallas, TX','Denver, CO','Phoenix, AZ','Atlanta, GA'];
+const SEGS = ['SBK','SBK','SBK','SBK','CAS','CAS','CAS','DFS','DFS','FDR'];
+const SBK_TIERS = ['Tier 1','Tier 2','Tier 3','Tier 4','Shield Select'];
+const CAS_TIERS = ['Tier 5','Tier 4','Tier 3','Tier 2','Tier 1','Shield Select'];
+const DFS_TIERS = ['Tier 1','Tier 2','Tier 3','Shield Select'];
+const FDR_TIERS = ['Tier 1','Tier 2','Shield Select'];
+const TIER_MAP = {SBK:SBK_TIERS,CAS:CAS_TIERS,DFS:DFS_TIERS,FDR:FDR_TIERS};
+const STATES = ['NY','NJ','CT','PA'];
+const BONUS_TYPES = ['Bonus Bet','Postal Gift','Event'];
+const BONUS_DATES = ['Jul 22','Jul 28','Aug 1','Aug 5','Aug 10','Aug 14','Aug 18','Aug 22'];
 const SEG_COLORS = {SBK:'#f3f2f2:#706e6b',Casino:'#f3f2f2:#706e6b',DFS:'#f3f2f2:#706e6b',Racing:'#f3f2f2:#706e6b'};
 
+const CURATED_VIPS = [
+  {id:0,  name:'Jordan Williams', segs:['SBK'],            seg:'SBK', tier:'Shield Select', state:'NJ', days:3,  ggr:4820,  nba:true,  bonus:{amount:500, type:'Bonus Bet',   date:'Aug 14'}, status:'Active',      bday:'03/15'},
+  {id:1,  name:'Alex Johnson',    segs:['SBK','CAS'],      seg:'SBK', tier:'Tier 2',        state:'NY', days:8,  ggr:1230,  nba:false, bonus:{ob:true,amount:0,type:'Bonus Bet',date:'Aug 3'}, status:'Active',      bday:'07/22'},
+  {id:2,  name:'Morgan Smith',    segs:['CAS'],            seg:'CAS', tier:'Tier 3',        state:'CT', days:22, ggr:-340,  nba:true,  bonus:{amount:126, type:'Postal Gift', date:'Jul 30'}, status:'Active',      bday:'11/08'},
+  {id:3,  name:'Taylor Brown',    segs:['DFS','SBK'],      seg:'DFS', tier:'Tier 1',        state:'PA', days:14, ggr:980,   nba:false, bonus:{amount:47,  type:'Bonus Bet',   date:'Aug 10'}, status:'Suspended',   bday:'01/30'},
+  {id:4,  name:'Casey Davis',     segs:['FDR'],            seg:'FDR', tier:'Tier 2',        state:'NJ', days:38, ggr:210,   nba:false, bonus:null,                                            status:'Deactivated', bday:'06/14'},
+  {id:5,  name:'Reese Wilson',    segs:['SBK','CAS','DFS'],seg:'SBK', tier:'Shield Select', state:'NY', days:5,  ggr:7650,  nba:true,  bonus:{amount:715, type:'Event',       date:'Aug 1'},  status:'Active',      bday:'09/03'},
+  {id:6,  name:'Sam Moore',       segs:['CAS'],            seg:'CAS', tier:'Tier 1',        state:'CT', days:29, ggr:-820,  nba:false, bonus:{ob:true,amount:0,type:'Postal Gift',date:'Jul 22'}, status:'Active',   bday:'04/19'},
+  {id:7,  name:'Jamie Taylor',    segs:['SBK'],            seg:'SBK', tier:'Tier 4',        state:'NJ', days:11, ggr:2100,  nba:true,  bonus:{amount:293, type:'Bonus Bet',   date:'Aug 18'}, status:'Active',      bday:'12/07'},
+  {id:8,  name:'Riley Anderson',  segs:['DFS'],            seg:'DFS', tier:'Tier 3',        state:'PA', days:43, ggr:180,   nba:false, bonus:null,                                            status:'Suspended',   bday:'02/25'},
+  {id:9,  name:'Chris Thomas',    segs:['SBK','CAS'],      seg:'SBK', tier:'Tier 2',        state:'NY', days:17, ggr:3400,  nba:true,  bonus:{amount:200, type:'Postal Gift', date:'Aug 5'},  status:'Active',      bday:'08/11'},
+];
+
 function buildVips() {
-  const out = [];
-  for (let i = 0; i < 353; i++) {
-    const fn = BOOK_FIRST[i % BOOK_FIRST.length];
-    const ln = BOOK_LAST[(i * 3 + 7) % BOOK_LAST.length];
-    const seg = SEGS[i % SEGS.length];
-    const tier = TIERS[(i * 2 + 1) % TIERS.length];
-    const loc = LOCS[(i * 4 + 2) % LOCS.length];
+  const out = CURATED_VIPS.slice();
+  for (let i = 10; i < 353; i++) {
+    const fnIdx = i % BOOK_FIRST.length;
+    const lnIdx = (fnIdx + Math.floor(i / BOOK_FIRST.length)) % BOOK_LAST.length;
+    const name = `${BOOK_FIRST[fnIdx]} ${BOOK_LAST[lnIdx]}`;
+    const primarySeg = SEGS[i % SEGS.length];
+    const segRoll = i % 13;
+    const segs = (segRoll === 5 && primarySeg === 'SBK') ? ['SBK','CAS']
+               : (segRoll === 9 && primarySeg === 'SBK') ? ['SBK','CAS','DFS']
+               : [primarySeg];
+    const tierArr = TIER_MAP[primarySeg] || SBK_TIERS;
+    const tier = tierArr[(i * 2 + 1) % tierArr.length];
+    const state = STATES[(i * 4 + 2) % STATES.length];
     const days = (i * 7 + 3) % 45;
-    const status = days > 35 ? 'Lapsed' : days > 20 ? 'Due Contact' : 'Active';
-    const ltv = ((i * 1337 + 412) % 9000 + 1000) * 10;
+    const statusRoll = i % 10;
+    const status = (statusRoll === 7 || statusRoll === 3) ? 'Suspended' : statusRoll === 4 ? 'Deactivated' : 'Active';
+    const ggr = ((i * 491 + 230) % 8000) - 1200;
     const bday = `${String((i % 12) + 1).padStart(2,'0')}/${String((i * 3 % 28) + 1).padStart(2,'0')}`;
-    out.push({id:i, name:`${fn} ${ln}`, seg, tier, loc, days, status, ltv, bday});
+    const nba = i % 3 === 0;
+    const bonusRoll = i % 5;
+    let bonus;
+    if (bonusRoll === 0) { bonus = null; }
+    else if (bonusRoll === 1) { bonus = {ob:true, amount:0, type:BONUS_TYPES[i % 3], date:BONUS_DATES[i % 8]}; }
+    else { bonus = {amount:((i * 317 + 50) % 700 + 47), type:BONUS_TYPES[i % 3], date:BONUS_DATES[(i * 2 + 1) % 8]}; }
+    out.push({id:i, name, segs, seg:primarySeg, tier, state, days, status, ggr, bday, nba, bonus});
   }
   return out;
 }
@@ -2209,17 +2254,50 @@ function bulkContact() {
   showToast(`Outreach queued for ${vips.length} VIP${vips.length > 1 ? 's' : ''} ✓`);
   clearBookSelection();
 }
-const BOOK_PAGE_SIZE = 15;
+const BOOK_PAGE_SIZE = 10;
+
+let bookSortKey = null, bookSortDir = 1;
 
 function getFilteredVips() {
-  const segMap = {Sportsbook:'SBK'};
-  const activeSeg = segMap[bookSeg] || bookSeg;
-  return ALL_VIPS.filter(v => {
-    if (activeSeg !== 'All' && v.seg !== activeSeg) return false;
-    if (bookTier !== 'All' && v.tier !== bookTier) return false;
-    if (bookSearch && !v.name.toLowerCase().includes(bookSearch.toLowerCase()) && !v.loc.toLowerCase().includes(bookSearch.toLowerCase())) return false;
+  let list = ALL_VIPS.filter(v => {
+    if (bookSearch && !v.name.toLowerCase().includes(bookSearch.toLowerCase()) && !v.state.toLowerCase().includes(bookSearch.toLowerCase())) return false;
     return true;
   });
+  list = list.slice().sort((a, b) => {
+    let av, bv;
+    if (bookSortKey === 'name') { av = a.name; bv = b.name; return bookSortDir * av.localeCompare(bv); }
+    if (bookSortKey === 'tier') { av = a.tier; bv = b.tier; return bookSortDir * av.localeCompare(bv); }
+    if (bookSortKey === 'ggr')  { av = a.ggr;  bv = b.ggr;  return bookSortDir * (av - bv); }
+    if (bookSortKey === 'days') { av = a.days;  bv = b.days;  return bookSortDir * (av - bv); }
+    if (bookSortKey === 'bonus') {
+      av = a.bonus ? (a.bonus.ob ? -1 : a.bonus.amount) : -2;
+      bv = b.bonus ? (b.bonus.ob ? -1 : b.bonus.amount) : -2;
+      return bookSortDir * (av - bv);
+    }
+    return 0;
+  });
+  return list;
+}
+
+function refreshBookTable() {
+  const icon = document.getElementById('bookRefreshIcon');
+  if (icon) { icon.style.transition = 'transform 0.6s'; icon.style.transform = 'rotate(360deg)'; setTimeout(() => { icon.style.transition = 'none'; icon.style.transform = 'rotate(0deg)'; }, 650); }
+  renderBook();
+  const el = document.getElementById('bookLastRefresh');
+  if (el) { const now = new Date(); el.textContent = `Refreshed ${now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`; }
+  showToast('My VIPs table refreshed');
+}
+
+function sortBook(key) {
+  if (bookSortKey === key) { bookSortDir *= -1; } else { bookSortKey = key; bookSortDir = 1; }
+  ['name','tier','ggr','days','bonus'].forEach(k => {
+    const el = document.getElementById('sort-' + k);
+    if (!el) return;
+    if (k === key) { el.textContent = bookSortDir === 1 ? '▲' : '▼'; el.style.color = '#0060a3'; }
+    else { el.textContent = '⇅'; el.style.color = '#94a3b8'; }
+  });
+  bookCurPage = 1;
+  renderBook();
 }
 
 function setPlaybookTab(tab) {
@@ -2311,10 +2389,11 @@ function openBookVipModal(v) {
   document.getElementById('modalAv').textContent = initials;
   document.getElementById('modalAv').style.background = segBg[v.seg] || '#0060a3';
   document.getElementById('modalName').textContent = v.name;
-  document.getElementById('modalMeta').textContent = `${segLabel[v.seg] || v.seg} · ${v.tier} · ${v.loc}`;
+  document.getElementById('modalMeta').textContent = `${segLabel[v.seg] || v.seg} · ${v.tier} · ${v.state}`;
 
+  const ltv = ((v.id * 1319 + 800) % 12000 + 1500);
   const statsHtml = [
-    {l:'Est. LTV', v:'$' + v.ltv.toLocaleString(), cls:''},
+    {l:'Est. LTV', v:'$' + ltv.toLocaleString(), cls:''},
     {l:'30d Spend', v:'$' + spend.toLocaleString(), cls: spend > 3000 ? 'positive' : ''},
     {l:'Sessions/Wk', v: sessions.toFixed(1), cls:''},
     {l:'Avg Stake', v:'$' + stake.toLocaleString(), cls:''},
@@ -2326,7 +2405,7 @@ function openBookVipModal(v) {
       <div class="modal-grid">
         <div class="modal-field"><div class="mf-label">Segment</div><div class="mf-val"><span style="font-size:0.68rem;font-weight:700;border-radius:999px;padding:0.1rem 0.45rem;${segChipStyle[v.seg]}">${segLabel[v.seg] || v.seg}</span></div></div>
         <div class="modal-field"><div class="mf-label">Tier</div><div class="mf-val">${v.tier}</div></div>
-        <div class="modal-field"><div class="mf-label">Location</div><div class="mf-val">${v.loc}</div></div>
+        <div class="modal-field"><div class="mf-label">State</div><div class="mf-val">${v.state}</div></div>
         <div class="modal-field"><div class="mf-label">Birthday</div><div class="mf-val">${v.bday}</div></div>
         <div class="modal-field"><div class="mf-label">Last Contact</div><div class="mf-val">${v.days}d ago</div></div>
         <div class="modal-field"><div class="mf-label">Status</div><div class="mf-val"><span style="font-size:0.68rem;font-weight:700;border-radius:999px;padding:0.1rem 0.45rem;${statC[v.status]}">${v.status}</span></div></div>
@@ -2346,6 +2425,16 @@ function openBookVipModal(v) {
   document.body.style.overflow = 'hidden';
 }
 
+const SHIELD_ICON = `<svg width="10" height="12" viewBox="0 0 14 16" fill="none" style="flex-shrink:0"><path d="M7 1L1.5 3.5V8c0 3.3 2.3 6.2 5.5 7 3.2-.8 5.5-3.7 5.5-7V3.5L7 1z" fill="#0060a3" opacity="0.15" stroke="#0060a3" stroke-width="1.3" stroke-linejoin="round"/><path d="M4.5 8l1.8 1.8L9.5 6" stroke="#0060a3" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const NBA_ALERT_ICON = `<span class="book-nba-alert"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L1.5 13h13L8 1.5z" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 6v3.5" stroke="#d97706" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.5" r="0.75" fill="#d97706"/></svg><span class="book-nba-popover">NBA Action pending</span></span>`;
+
+function renderBonusCell(b) {
+  if (!b) return `<span style="font-size:0.7rem;color:#d1d5db;">—</span>`;
+  const meta = `<span style="font-size:0.59rem;color:#64748b;white-space:nowrap;">${b.type} · ${b.date}</span>`;
+  if (b.ob) return `<div style="display:flex;flex-direction:column;gap:0.04rem;line-height:1.3"><span style="font-size:0.69rem;font-weight:700;color:#334155;">$0 <span style="font-size:0.55rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.03rem 0.26rem;">Overbonused</span></span>${meta}</div>`;
+  return `<div style="display:flex;flex-direction:column;gap:0.04rem;line-height:1.3"><span style="font-size:0.69rem;font-weight:700;color:#334155;">$${b.amount.toLocaleString()}</span>${meta}</div>`;
+}
+
 function renderBook() {
   const filtered = getFilteredVips();
   const maxPage = Math.ceil(filtered.length / BOOK_PAGE_SIZE) || 1;
@@ -2353,7 +2442,6 @@ function renderBook() {
   const start = (bookCurPage - 1) * BOOK_PAGE_SIZE;
   const page = filtered.slice(start, start + BOOK_PAGE_SIZE);
 
-  // pagination info
   const pi = document.getElementById('bookPageInfo');
   if (pi) pi.textContent = `${start + 1}–${Math.min(start + BOOK_PAGE_SIZE, filtered.length)} of ${filtered.length}`;
   const prevBtn = document.getElementById('bookPrevBtn');
@@ -2361,39 +2449,41 @@ function renderBook() {
   if (prevBtn) prevBtn.disabled = bookCurPage <= 1;
   if (nextBtn) nextBtn.disabled = bookCurPage >= maxPage;
 
-  // table rows
   const tbody = document.getElementById('bookTableBody');
   if (!tbody) return;
-  const segC = {SBK:'background:transparent;color:#706e6b',Casino:'background:transparent;color:#706e6b',DFS:'background:transparent;color:#706e6b',Racing:'background:transparent;color:#706e6b'};
-  const statC = {Active:'background:#d1fae5;color:#065f46','Due Contact':'background:#fef3c7;color:#92400e',Lapsed:'background:#fee2e2;color:#991b1b'};
-  const daysC = d => d > 35 ? 'background:#fee2e2;color:#991b1b' : d > 20 ? 'background:#fef3c7;color:#92400e' : 'background:#f0fdf4;color:#166534';
 
-  const bonusC = b => b > 5000 ? 'color:#ba0517;font-weight:700' : b > 2500 ? 'color:#dd7a01;font-weight:700' : 'color:#2e844a;font-weight:700';
+  const ROW_GRID = 'display:grid;grid-template-columns:1.5rem 1.5fr 0.6fr 0.7fr 0.48fr 0.72fr 0.7fr 1.45fr 0.62fr 0.9fr;gap:0.45rem;align-items:center;padding:0.38rem 0.75rem;border-bottom:1px solid #f1f5f9;font-size:0.73rem;transition:background 0.1s;';
+  const daysC = d => d > 35 ? 'background:#fee2e2;color:#991b1b' : d > 20 ? 'background:#fef3c7;color:#92400e' : 'background:#f0fdf4;color:#166534';
+  const statCls = {Active:'bsp-active',Deactivated:'bsp-deactivated',Suspended:'bsp-suspended'};
+
   tbody.innerHTML = page.map(v => {
-    const bonus = ((v.id * 317 + 150) % 6000 + 200);
-    const bonusLabel = bonus > 5000 ? 'Over' : bonus > 2500 ? 'Mid' : 'Under';
-    const bonusBg = bonus > 5000 ? 'background:#fee2e2;color:#991b1b' : bonus > 2500 ? 'background:#fef3c7;color:#92400e' : 'background:#d1fae5;color:#065f46';
-    const checked = bookSelected && bookSelected.has(v.id) ? 'checked' : '';
-    return `<div style="display:grid;grid-template-columns:1.6rem 1.4fr 0.75fr 0.85fr 1fr 0.75fr 0.7fr 0.85fr 0.9fr;gap:0.4rem;align-items:center;padding:0.38rem 0.75rem;border-bottom:1px solid #f1f5f9;font-size:0.73rem;border-left:3px solid ${checked ? '#0060a3' : 'transparent'};background:${checked ? '#f0f7ff' : ''};transition:background 0.1s" onmouseover="if(!this.querySelector('input').checked)this.style.background='#f8fafc'" onmouseout="if(!this.querySelector('input').checked)this.style.background=''">
+    const checked = bookChecked.has(v.id) ? 'checked' : '';
+    const ggrStr = (v.ggr >= 0 ? '+' : '') + '$' + Math.abs(v.ggr).toLocaleString();
+    const ggrStyle = v.ggr >= 0 ? 'color:#065f46;font-weight:700;font-size:0.71rem;' : 'color:#991b1b;font-weight:700;font-size:0.71rem;';
+    const tierHtml = v.tier === 'Shield Select'
+      ? `<span style="display:inline-flex;align-items:center;gap:0.15rem;font-size:0.64rem;color:#0060a3;font-weight:700;">${SHIELD_ICON}Shield Select</span>`
+      : `<span style="font-size:0.71rem;color:#334155;font-weight:600;">${v.tier}</span>`;
+
+    return `<div style="${ROW_GRID}border-left:3px solid ${checked ? '#0060a3' : 'transparent'};background:${checked ? '#f0f7ff' : ''};" onmouseover="if(!this.querySelector('input').checked)this.style.background='#f8fafc'" onmouseout="if(!this.querySelector('input').checked)this.style.background=''">
       <input type="checkbox" ${checked} data-vid="${v.id}" onchange="toggleBookRow(this,${v.id})" onclick="event.stopPropagation()" style="cursor:pointer;accent-color:#0060a3;" />
-      <span onclick="selectVip(${v.id})" style="color:#0b5fc5;font-weight:600;text-decoration:underline;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer">${v.name}</span>
-      <span style="font-size:0.6rem;font-weight:700;border-radius:999px;padding:0.08rem 0.4rem;${segC[v.seg]}">${v.seg}</span>
-      <span style="font-size:0.71rem;color:#334155">${v.tier}</span>
-      <span style="font-size:0.7rem;color:#475569;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${v.loc}</span>
-      <span style="font-size:0.62rem;font-weight:700;border-radius:0.25rem;padding:0.08rem 0.3rem;${daysC(v.days)}">${v.days}d ago</span>
-      <span style="font-size:0.6rem;font-weight:700;border-radius:999px;padding:0.08rem 0.35rem;${statC[v.status]}">${v.status}</span>
-      <div style="display:flex;flex-direction:column;gap:0.08rem;line-height:1.2">
-        <span style="font-size:0.69rem;font-weight:700;${bonusC(bonus)}">$${bonus.toLocaleString()}</span>
-        <span style="font-size:0.57rem;font-weight:700;border-radius:999px;padding:0.04rem 0.28rem;display:inline-block;width:fit-content;${bonusBg}">${bonusLabel}</span>
+      <div style="display:flex;align-items:center;gap:0.25rem;min-width:0;">
+        <span onclick="selectVip(${v.id})" style="color:#0b5fc5;font-weight:600;text-decoration:underline;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;">${v.name}</span>
+        ${v.nba ? NBA_ALERT_ICON : ''}
       </div>
-      <div style="display:flex;gap:0.25rem">
-        <button onclick="event.stopPropagation();openBonusModal('${v.name}')" style="font-size:0.63rem;font-weight:600;border-radius:0.3rem;padding:0.15rem 0.4rem;border:1.5px solid #10b981;background:#10b981;color:#fff;cursor:pointer">Bonus</button>
+      <span style="font-size:0.7rem;color:#475569;">${v.segs.join(', ')}</span>
+      ${tierHtml}
+      <span style="font-size:0.7rem;color:#475569;font-weight:600;">${v.state}</span>
+      <span style="${ggrStyle}">${ggrStr}</span>
+      ${renderBonusCell(v.bonus)}
+      <span style="font-size:0.62rem;font-weight:700;border-radius:0.25rem;padding:0.08rem 0.3rem;${daysC(v.days)}">${v.days}d ago</span>
+      <span class="book-status-pill ${statCls[v.status]||'bsp-active'}">${v.status}</span>
+      <div style="display:flex;gap:0.22rem;">
         <button onclick="event.stopPropagation();showToast('Opening contact for ${v.name}…')" style="font-size:0.63rem;font-weight:600;border-radius:0.3rem;padding:0.15rem 0.4rem;border:1.5px solid #0060a3;background:#0060a3;color:#fff;cursor:pointer">Contact</button>
+        <button onclick="event.stopPropagation();openBonusModal('${v.name}')" style="font-size:0.63rem;font-weight:600;border-radius:0.3rem;padding:0.15rem 0.4rem;border:1.5px solid #10b981;background:#10b981;color:#fff;cursor:pointer">Bonus</button>
       </div>
     </div>`;
   }).join('');
 
-  // drawer hidden — selection now opens the shared modal
   const drawer = document.getElementById('vipDetailDrawer');
   if (drawer) drawer.style.display = 'none';
 }
