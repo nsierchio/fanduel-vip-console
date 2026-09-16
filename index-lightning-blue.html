@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FanDuel VIP KAM Console — Lightning Blue</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.24.2/styles/salesforce-lightning-design-system.min.css">
+<style>
+  :root {
+    --nav-bar-bg: #0b5cab;
+    --brand-primary: #0176d3;
+    --brand-dark: #0a5d9c;
+    --page-bg: #f3f2f2;
+    --card-bg: #ffffff;
+    --card-border: #dddbda;
+    --table-header-bg: #f3f2f2;
+    --text-primary: #181818;
+    --text-secondary: #706e6b;
+    --text-label: #3e3e3c;
+    --text-placeholder: #9b9b9b;
+    --border-color: #dddbda;
+    --row-hover: #f3f9ff;
+    --color-success: #2e844a;
+    --color-error: #ba0517;
+    --color-warning: #dd7a01;
+    --color-info: #0176d3;
+    --global-nav-height: 3rem;
+    --context-bar-height: 3rem;
+    --page-header-height: 3.5rem;
+    --button-height: 2rem;
+    --font-family: 'Salesforce Sans', Arial, sans-serif;
+    --shadow-card: 0 2px 2px rgba(0,0,0,.06);
+    --shadow-dropdown: 0 8px 32px rgba(0,0,0,0.18);
+    --sidebar-width: 320px;
+    --agent-width: 360px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font-family);
+    background: var(--page-bg);
+    font-size: 0.875rem;
+    color: var(--text-primary);
+  }
+
+  /* ── GLOBAL HEADER — Lightning Blue ── */
+  .slds-global-header {
+    background: var(--nav-bar-bg);
+    height: var(--global-nav-height);
+    display: flex; align-items: center;
+    padding: 0 0.75rem;
+    position: sticky; top: 0; z-index: 8000;
+  }
+  .app-launcher-btn {
+    width: 3rem; height: 3rem;
+    border: none; background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; padding: 0;
+  }
+  .app-launcher-btn:hover { background: rgba(255,255,255,0.12); }
+  .app-launcher-icon { display: grid; grid-template-columns: repeat(3, 4px); gap: 3px; }
+  .app-launcher-icon span {
+    width: 4px; height: 4px; background: #fff; border-radius: 1px; display: block;
+  }
+  .global-header__logo {
+    display: flex; align-items: center; height: 100%;
+    padding: 0 0.75rem;
+    border-left: 1px solid rgba(255,255,255,0.25);
+    margin-left: 0.25rem;
+  }
+  .global-header__logo span {
+    font-size: 0.8125rem; font-weight: 700; color: #fff;
+    white-space: nowrap; letter-spacing: 0.01em;
+  }
+  .global-header__icons { display: flex; align-items: center; margin-left: auto; }
+  .header-icon-btn {
+    width: 3rem; height: 3rem;
+    border: none; background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; flex-shrink: 0;
+  }
+  .header-icon-btn:hover { background: rgba(255,255,255,0.12); }
+  .header-icon-btn svg { width: 1.1rem; height: 1.1rem; fill: rgba(255,255,255,0.85); }
+  .header-icon-btn.af-active { background: rgba(255,255,255,0.16); }
+  .bell-badge {
+    position: absolute; top: 0.55rem; right: 0.55rem;
+    width: 0.625rem; height: 0.625rem;
+    background: var(--color-error); border-radius: 50%;
+    border: 1.5px solid var(--nav-bar-bg);
+  }
+  .user-avatar {
+    width: 1.75rem; height: 1.75rem; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(255,255,255,0.5);
+    color: #fff; font-size: 0.6rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; margin: 0 0.5rem;
+  }
+  .user-avatar:hover { border-color: #fff; }
+
+  /* ── WORKSPACE TABS — Console UI v1 anatomy ── */
+  .slds-context-bar {
+    background: #fff;
+    height: var(--context-bar-height);
+    display: flex; align-items: stretch;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky; top: 3rem; z-index: 7000;
+    padding: 0 0.25rem;
+  }
+  .workspace-tab {
+    display: flex; align-items: center; gap: 0.4rem;
+    padding: 0 0.85rem;
+    font-size: 0.8125rem; font-weight: 400;
+    color: var(--text-secondary); cursor: pointer;
+    border: none; border-bottom: 3px solid transparent;
+    background: none; white-space: nowrap;
+    font-family: inherit;
+  }
+  .workspace-tab:hover { color: var(--text-primary); background: #f3f2f2; }
+  .workspace-tab.is-active {
+    font-weight: 700; color: var(--brand-primary);
+    border-bottom-color: var(--brand-primary); background: #fff;
+  }
+  .workspace-tab svg { width: 0.875rem; height: 0.875rem; fill: currentColor; flex-shrink: 0; }
+  .tab-close {
+    width: 1.25rem; height: 1.25rem; border: none; background: none;
+    border-radius: 0.125rem; color: var(--text-secondary); cursor: pointer;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+  }
+  .tab-close:hover { background: #dddbda; color: var(--text-primary); }
+  .tab-close svg { width: 0.7rem; height: 0.7rem; fill: currentColor; }
+  .workspace-new {
+    width: 2rem; height: 100%;
+    border: none; background: none; cursor: pointer;
+    color: var(--text-secondary);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .workspace-new:hover { background: #f3f2f2; color: var(--brand-primary); }
+  .workspace-new svg { width: 0.85rem; height: 0.85rem; fill: currentColor; }
+
+  /* ── PAGE HEADER ── */
+  .slds-page-header {
+    background: #fff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    position: sticky; top: 6rem; z-index: 6000;
+    min-height: var(--page-header-height);
+  }
+  .page-header__icon {
+    width: 1.75rem; height: 1.75rem; border-radius: 0.25rem;
+    background: var(--brand-primary);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .page-header__icon svg { width: 0.875rem; height: 0.875rem; fill: #fff; }
+  .page-header__title {
+    font-size: 1.25rem; font-weight: 700; color: var(--text-primary);
+    line-height: 1.2;
+  }
+  .page-header__meta { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.1rem; }
+  .page-header__body { flex: 1; min-width: 0; }
+
+  /* ── BUTTONS ── */
+  .slds-button {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: var(--button-height); padding: 0 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.8125rem; font-weight: 700;
+    cursor: pointer; white-space: nowrap;
+    gap: 0.3rem; border: 1px solid transparent;
+    font-family: inherit;
+  }
+  .slds-button_brand { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }
+  .slds-button_brand:hover { background: var(--brand-dark); border-color: var(--brand-dark); }
+  .slds-button_neutral { background: #fff; color: var(--brand-primary); border-color: var(--border-color); }
+  .slds-button_neutral:hover { background: var(--page-bg); }
+  .slds-button_icon {
+    background: none; border-color: transparent; color: var(--text-secondary);
+    padding: 0 0.375rem; width: 2rem;
+  }
+  .slds-button_icon:hover { background: var(--page-bg); border-color: var(--border-color); color: var(--text-primary); }
+  .slds-button_small { height: 1.5rem; font-size: 0.7rem; padding: 0 0.5rem; }
+  .btn-group { display: flex; align-items: center; gap: 0.5rem; }
+
+  /* ── 2-COLUMN BODY — Agentforce is a pin overlay, not a grid column ── */
+  .console-body {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 1fr var(--sidebar-width);
+    gap: 1rem;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  body.agent-open .console-body { padding-right: calc(1rem + var(--agent-width)); }
+  .console-main, .console-sidebar { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+
+  /* ── CARD ── */
+  .slds-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 0.25rem;
+    box-shadow: var(--shadow-card);
+  }
+  .slds-card__header {
+    display: flex; align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    min-height: 3.25rem; gap: 0.5rem;
+  }
+  .slds-card__header-title {
+    font-size: 1rem; font-weight: 700; color: var(--text-primary);
+    flex: 1; min-width: 0;
+  }
+  .slds-card__body { padding: 0; }
+  .card-tabs {
+    display: flex; border-bottom: 1px solid var(--border-color); background: #fff;
+  }
+  .card-tab {
+    font-size: 0.8125rem; font-weight: 600; padding: 0.55rem 1rem;
+    border: none; border-bottom: 3px solid transparent; margin-bottom: -1px;
+    background: none; color: var(--text-secondary); cursor: pointer; font-family: inherit;
+  }
+  .card-tab.is-active { color: var(--brand-primary); border-bottom-color: var(--brand-primary); }
+
+  /* ── METRICS ── */
+  .metric-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;
+    padding: 1rem;
+  }
+  .metric-tile { min-width: 0; }
+  .metric-label {
+    font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase;
+    letter-spacing: 0.04em; font-weight: 700;
+  }
+  .metric-value { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-top: 0.15rem; }
+
+  /* ── TABLE ── */
+  .slds-table-wrap { overflow-x: auto; }
+  .slds-table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+  .slds-table thead tr { background: var(--table-header-bg); border-bottom: 1px solid var(--border-color); }
+  .slds-table thead th {
+    padding: 0 0.75rem; height: 2.5rem;
+    font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);
+    text-align: left; white-space: nowrap;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .slds-table tbody tr { border-bottom: 1px solid #f3f2f2; height: 3rem; }
+  .slds-table tbody tr:hover { background: var(--row-hover); }
+  .slds-table tbody td { padding: 0 0.75rem; vertical-align: middle; white-space: nowrap; }
+  .col-cb { width: 2.5rem; padding: 0 0.5rem !important; }
+  .slds-checkbox { width: 1rem; height: 1rem; accent-color: var(--brand-primary); cursor: pointer; }
+  .table-toolbar {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.5rem 0.75rem; border-bottom: 1px solid #f3f2f2; flex-wrap: wrap;
+  }
+  .filter-chip {
+    height: 1.75rem; padding: 0 0.65rem; font-size: 0.75rem; font-weight: 700;
+    border: 1px solid var(--border-color); border-radius: 0.25rem;
+    background: #fff; color: var(--text-secondary); cursor: pointer; font-family: inherit;
+  }
+  .filter-chip.is-active { color: var(--brand-primary); border-color: var(--brand-primary); background: #f3f9ff; }
+  .slds-input-wrap { position: relative; display: flex; align-items: center; }
+  .slds-input-wrap svg {
+    position: absolute; left: 0.5rem; width: 0.875rem; height: 0.875rem;
+    fill: var(--text-secondary); pointer-events: none;
+  }
+  .slds-input {
+    height: 2rem; padding: 0 0.75rem 0 2rem;
+    border: 1px solid var(--border-color); border-radius: 0.25rem;
+    font-size: 0.8125rem; color: var(--text-primary); background: #fff;
+    outline: none; width: 220px; font-family: inherit;
+  }
+  .slds-input::placeholder { color: var(--text-placeholder); }
+  .slds-input:focus { border-color: var(--brand-primary); box-shadow: 0 0 0 1px var(--brand-primary); }
+  .table-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.5rem 0.75rem; border-top: 1px solid var(--border-color);
+    background: var(--table-header-bg); font-size: 0.75rem; color: var(--text-secondary);
+  }
+  .pagination-btns { display: flex; align-items: center; gap: 0.25rem; }
+  .page-btn {
+    width: 1.75rem; height: 1.75rem; border: 1px solid var(--border-color); border-radius: 0.25rem;
+    background: #fff; color: var(--brand-primary); font-size: 0.75rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: inherit;
+  }
+  .page-btn.active { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }
+  .page-btn:disabled { opacity: 0.4; cursor: default; }
+  .bulk-bar {
+    display: none; align-items: center; gap: 0.6rem;
+    padding: 0.4rem 0.75rem; background: #f3f9ff; border-bottom: 1px solid #d8e6fe;
+  }
+  .bulk-bar.is-on { display: flex; }
+
+  .vip-name-link { color: var(--brand-primary); font-weight: 700; text-decoration: none; cursor: pointer; }
+  .vip-name-link:hover { text-decoration: underline; }
+  .vip-nba-flag { display: inline-flex; align-items: center; margin-left: 0.35rem; position: relative; cursor: default; }
+  .vip-nba-flag svg { width: 0.8rem; height: 0.8rem; fill: var(--color-warning); }
+  .nba-tooltip {
+    display: none; position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%);
+    background: var(--text-primary); color: #fff; font-size: 0.7rem;
+    padding: 0.25rem 0.5rem; border-radius: 0.25rem; white-space: nowrap; z-index: 100;
+  }
+  .vip-nba-flag:hover .nba-tooltip { display: block; }
+  .ggr-pos { color: var(--color-success); font-weight: 700; }
+  .ggr-neg { color: var(--color-error); font-weight: 700; }
+  .lc-overdue { color: var(--color-error); font-weight: 600; }
+  .lc-warning { color: var(--color-warning); font-weight: 600; }
+  .lc-ok { color: var(--text-secondary); }
+  .slds-badge {
+    display: inline-flex; align-items: center;
+    padding: 0 0.4rem; height: 1.25rem; border-radius: 0.25rem;
+    font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .badge-active { background: #e3f5e9; color: var(--color-success); }
+  .badge-deactivated { background: #f3f2f2; color: var(--text-secondary); }
+  .badge-suspended { background: #fff1d0; color: #a86403; }
+  .badge-overbonused { background: #fff1d0; color: #a86403; font-size: 0.6rem; height: 1rem; padding: 0 0.3rem; }
+  .badge-count { background: #fee2e2; color: #991b1b; }
+  .badge-muted { background: #f3f2f2; color: var(--text-secondary); font-size: 0.6rem; height: 1rem; }
+  .tier-shield { display: inline-flex; align-items: center; gap: 0.25rem; }
+  .tier-shield svg { width: 0.875rem; height: 0.875rem; fill: #b08800; }
+  .row-actions { display: flex; align-items: center; gap: 0.25rem; opacity: 0; }
+  tr:hover .row-actions { opacity: 1; }
+
+  .demo-label {
+    display: inline-flex; align-items: center;
+    padding: 0.1rem 0.45rem; border-radius: 0.75rem;
+    font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+    background: #f3f2f2; color: var(--text-secondary); border: 1px solid var(--border-color);
+    margin-left: 0.4rem; vertical-align: middle;
+  }
+
+  /* ── LIST ITEMS ── */
+  .list-item {
+    display: flex; align-items: center; gap: 0.65rem;
+    padding: 0.55rem 1rem; border-bottom: 1px solid #f3f2f2; font-size: 0.8125rem;
+  }
+  .list-item:last-child { border-bottom: none; }
+  .urgency-bar { width: 0.2rem; align-self: stretch; min-height: 1.75rem; border-radius: 999px; flex-shrink: 0; }
+  .bar-red { background: var(--color-error); }
+  .bar-amber { background: var(--color-warning); }
+  .bar-green { background: var(--color-success); }
+  .bar-teal { background: #06a59a; }
+  .bar-blue { background: var(--brand-primary); }
+  .list-item__body { flex: 1; min-width: 0; }
+  .list-item__title { font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .list-item__sub { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.05rem; }
+  .cadence-wrap { padding: 0.6rem 1rem 0.35rem; }
+  .cadence-track { height: 0.35rem; background: #ecebea; border-radius: 999px; overflow: hidden; }
+  .cadence-fill { height: 100%; width: 62%; background: var(--brand-primary); }
+  .cadence-lbl { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.3rem; }
+
+  /* ── NBA ── */
+  .nba-card { border-bottom: 1px solid #f3f2f2; }
+  .nba-card:last-child { border-bottom: none; }
+  .nba-card-header {
+    display: flex; align-items: flex-start; gap: 0.55rem;
+    padding: 0.65rem 0.85rem; cursor: pointer;
+  }
+  .nba-card-header:hover { background: #fafafa; }
+  .nba-chevron { width: 0.875rem; height: 0.875rem; fill: var(--text-secondary); flex-shrink: 0; margin-top: 0.2rem; transition: transform 0.15s; }
+  .nba-card.is-open .nba-chevron { transform: rotate(90deg); }
+  .nba-type { font-size: 0.75rem; font-weight: 700; }
+  .nba-summary { font-size: 0.7rem; color: var(--text-secondary); margin: 0.15rem 0 0; }
+  .tag {
+    font-size: 0.6rem; font-weight: 700; border-radius: 999px; padding: 0.08rem 0.4rem;
+  }
+  .tag-red { background: #fee2e2; color: #991b1b; }
+  .tag-amber { background: #fff1d0; color: #a86403; }
+  .tag-green { background: #e3f5e9; color: #0e5a2b; }
+  .tag-teal { background: #ccfdf7; color: #0f766e; }
+  .nba-card-body { display: none; padding: 0 0.85rem 0.75rem 1.4rem; }
+  .nba-card.is-open .nba-card-body { display: block; }
+  .nba-meta-row {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .nba-meta-lbl { font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
+  .nba-meta-val { font-size: 0.75rem; font-weight: 600; }
+  .nba-bullet { font-size: 0.72rem; padding: 0.3rem 0.5rem; margin-bottom: 0.25rem; border-left: 3px solid; }
+  .nba-bullet-green { border-color: var(--color-success); background: #f3fbf6; }
+  .nba-bullet-amber { border-color: var(--color-warning); background: #fffaf0; }
+  .nba-bullet-blue { border-color: var(--brand-primary); background: #f3f9ff; }
+  .nba-actions-bar { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem; }
+
+  /* ── AWARENESS / ONBOARDING ── */
+  .padded { padding: 0.75rem 1rem; }
+  .section-title-sm { font-weight: 700; font-size: 0.75rem; color: var(--text-label); margin: 0.5rem 0 0.35rem; }
+  .swing-row, .ob-row {
+    display: grid; align-items: center; gap: 0.5rem;
+    padding: 0.4rem 0; border-bottom: 1px solid #f3f2f2; font-size: 0.8rem;
+  }
+  .swing-row { grid-template-columns: 1.3fr 0.8fr 0.7fr auto; }
+  .ob-row { grid-template-columns: 1.2fr 0.55fr 0.7fr 0.85fr auto; }
+  .swing-head, .ob-head {
+    display: grid; gap: 0.5rem; padding: 0.25rem 0;
+    font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--text-label); font-weight: 700; border-bottom: 1px solid #e5e5e5;
+    background: #f3f3f3; margin: 0 -1rem; padding-left: 1rem; padding-right: 1rem;
+  }
+  .swing-head { grid-template-columns: 1.3fr 0.8fr 0.7fr auto; }
+  .ob-head { grid-template-columns: 1.2fr 0.55fr 0.7fr 0.85fr auto; }
+  .alert-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+    padding: 0.45rem 0.5rem; border-radius: 0.25rem; margin-bottom: 0.35rem;
+    border: 1px solid var(--border-color);
+  }
+  .alert-error { background: #fff5f5; border-color: #fecaca; }
+  .alert-warn { background: #fffbeb; border-color: #fde68a; }
+
+  /* ── NOTIFICATIONS ── */
+  #navNotifPanel {
+    position: fixed; top: 3rem; right: 0.5rem; z-index: 9000;
+    width: 22rem; background: #fff; border-radius: 0.25rem;
+    box-shadow: var(--shadow-dropdown); border: 1px solid var(--border-color);
+    display: none; flex-direction: column; overflow: hidden;
+  }
+  #navNotifPanel.is-open { display: flex; }
+  .notif-header, .notif-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); background: #f8fafc;
+  }
+  .notif-footer { border-bottom: none; border-top: 1px solid var(--border-color); justify-content: center; }
+  .notif-header-title { font-size: 0.78rem; font-weight: 700; }
+  .notif-link { font-size: 0.67rem; font-weight: 600; color: var(--brand-primary); background: none; border: none; cursor: pointer; font-family: inherit; }
+  .notif-item {
+    display: flex; gap: 0.6rem; padding: 0.6rem 0.85rem;
+    border-bottom: 1px solid #f1f5f9; cursor: pointer; align-items: flex-start;
+  }
+  .notif-item:hover { background: #f8fafc; }
+  .notif-item.unread { background: #f0f6ff; }
+  .notif-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; flex-shrink: 0; margin-top: 0.3rem; }
+  .notif-title { font-size: 0.73rem; font-weight: 600; }
+  .notif-desc { font-size: 0.66rem; color: var(--text-secondary); margin-top: 0.08rem; }
+  .notif-time { font-size: 0.62rem; color: #94a3b8; white-space: nowrap; }
+
+  /* ── MODALS ── */
+  .modal-backdrop {
+    display: none; position: fixed; inset: 0; z-index: 10000;
+    background: rgba(8, 7, 7, 0.6); align-items: center; justify-content: center; padding: 1.5rem;
+  }
+  .modal-backdrop.is-open { display: flex; }
+  .modal {
+    background: #fff; border-radius: 0.25rem; width: min(720px, 100%);
+    max-height: calc(100vh - 3rem); overflow: hidden;
+    display: flex; flex-direction: column; box-shadow: var(--shadow-dropdown);
+  }
+  .modal--sm { width: min(420px, 100%); }
+  .modal-header {
+    display: flex; align-items: center; gap: 0.6rem;
+    padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color);
+  }
+  .modal-title { font-size: 1.1rem; font-weight: 700; flex: 1; }
+  .modal-body { padding: 1rem; overflow-y: auto; }
+  .modal-footer {
+    display: flex; justify-content: flex-end; gap: 0.5rem;
+    padding: 0.75rem 1rem; border-top: 1px solid var(--border-color); background: #f3f2f2;
+  }
+  .modal-stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+  .modal-stat { background: #f3f2f2; border-radius: 0.25rem; padding: 0.5rem 0.65rem; }
+  .ms-label { font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
+  .ms-val { font-size: 0.9rem; font-weight: 700; margin-top: 0.15rem; }
+  .form-row { margin-bottom: 0.75rem; }
+  .form-label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-label); margin-bottom: 0.25rem; }
+  .slds-select, .slds-textarea {
+    width: 100%; border: 1px solid var(--border-color); border-radius: 0.25rem;
+    font-family: inherit; font-size: 0.8125rem; color: var(--text-primary);
+    padding: 0.4rem 0.5rem;
+  }
+  .slds-textarea { min-height: 5rem; resize: vertical; }
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 0.75rem; border-left: 2px solid #dddbda; }
+  .timeline li { position: relative; padding: 0 0 0.85rem 0.85rem; }
+  .timeline li::before {
+    content: ''; position: absolute; left: -0.45rem; top: 0.2rem;
+    width: 0.65rem; height: 0.65rem; border-radius: 50%;
+    background: var(--brand-primary); border: 2px solid #fff;
+  }
+  .tl-title { font-size: 0.8rem; font-weight: 600; }
+  .tl-meta { font-size: 0.7rem; color: var(--text-secondary); }
+
+  /* ── AGENTFORCE PINNED OVERLAY (not a column) ── */
+  #agentPanel {
+    display: none;
+    position: fixed;
+    top: 9.5rem; right: 0.75rem; bottom: 0.75rem;
+    width: var(--agent-width); z-index: 7500;
+    background: #fff; border: 1px solid var(--border-color); border-radius: 0.25rem;
+    box-shadow: var(--shadow-dropdown);
+    flex-direction: column; overflow: hidden;
+  }
+  #agentPanel.is-open { display: flex; }
+  .companion-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 0.4rem 0 0.85rem; border-bottom: 1px solid var(--border-color);
+    height: 2.75rem; flex-shrink: 0;
+  }
+  .c-name { font-size: 0.88rem; font-weight: 700; }
+  .c-header-right { display: flex; }
+  .c-header-btn {
+    width: 1.85rem; height: 1.85rem; border: none; background: none; cursor: pointer;
+    color: var(--text-secondary); display: flex; align-items: center; justify-content: center;
+    border-radius: 0.25rem;
+  }
+  .c-header-btn:hover { background: #f3f2f2; }
+  .c-header-btn svg { width: 1.1rem; height: 1.1rem; fill: currentColor; }
+  .c-idle { flex: 1; overflow: auto; padding: 1.25rem 1rem; background: #eef1fb; }
+  .c-idle h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+  .c-idle p { margin: 0; font-size: 0.74rem; color: var(--text-label); line-height: 1.55; }
+  .msg-thread { flex: 1; overflow-y: auto; padding: 0.7rem 0.75rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .msg { font-size: 0.73rem; line-height: 1.5; white-space: pre-line; }
+  .msg-user { color: var(--text-primary); font-weight: 600; }
+  .suggested-wrap { padding: 0.6rem 0.75rem; background: #eef1fb; flex-shrink: 0; }
+  .suggested-chip {
+    display: block; width: 100%; text-align: left; margin-bottom: 0.4rem;
+    background: #fff; border: 1px solid var(--border-color); color: var(--brand-primary);
+    font-size: 0.74rem; font-weight: 500; border-radius: 1.5rem; padding: 0.55rem 0.9rem;
+    cursor: pointer; font-family: inherit;
+  }
+  .suggested-chip:hover { background: #f3f2f2; }
+  .input-area { padding: 0.55rem 0.65rem 0.4rem; border-top: 1px solid var(--border-color); flex-shrink: 0; }
+  .input-wrap {
+    display: flex; align-items: center; gap: 0.3rem;
+    border: 1px solid #c8c8c8; border-radius: 0.5rem; padding: 0.35rem 0.5rem;
+  }
+  .input-wrap:focus-within { border-color: var(--brand-primary); }
+  .msg-input {
+    flex: 1; border: none; outline: none; background: transparent;
+    font-size: 0.74rem; font-family: inherit; resize: none; min-height: 1.4rem;
+  }
+  .input-hint { font-size: 0.59rem; color: #9e9e9e; margin: 0.3rem 0 0; }
+  #agentFab {
+    display: flex; position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 7400;
+    width: 3.25rem; height: 3.25rem; border-radius: 50%;
+    background: var(--brand-primary); border: none; cursor: pointer;
+    align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(1,118,211,0.35);
+  }
+  body.agent-open #agentFab { display: none; }
+  #agentFab svg { width: 1.35rem; height: 1.35rem; fill: #fff; }
+  #agentFab:hover { background: var(--brand-dark); }
+
+  #toast {
+    position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(1rem);
+    background: #032d60; color: #fff; font-size: 0.8rem; font-weight: 600;
+    padding: 0.55rem 1rem; border-radius: 0.25rem; z-index: 11000;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s;
+  }
+  #toast.is-on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .reports-toggle {
+    display: flex; justify-content: flex-end;
+    padding: 0.35rem 1rem 0.55rem; border-top: 1px solid #e2e8f0;
+  }
+  .tableau-placeholder {
+    height: 160px; margin: 0.75rem 1rem 1rem;
+    background: #f8fafc; border: 1px dashed var(--border-color); border-radius: 0.25rem;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-secondary); font-size: 0.8rem; font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<!-- GLOBAL NAV — Lightning Blue -->
+<header class="slds-global-header" role="banner">
+  <button class="app-launcher-btn" aria-label="App Launcher" onclick="toast('App Launcher — live org only')">
+    <div class="app-launcher-icon">
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+  </button>
+  <div class="global-header__logo"><span>FanDuel VIP KAM Console</span></div>
+  <div class="global-header__icons">
+    <button class="header-icon-btn" id="navAfBtn" aria-label="Agentforce" title="Agentforce" onclick="toggleAgent()">
+      <svg viewBox="0 0 52 52"><path d="M26 4l5.2 12.4L44 18.2 34 27l2.8 13.8L26 34.4 15.2 40.8 18 27 8 18.2l12.8-1.8z"/></svg>
+    </button>
+    <button class="header-icon-btn" aria-label="Help & Training" onclick="toast('Help — live org only')">
+      <svg viewBox="0 0 52 52"><path d="M26 2C12.7 2 2 12.7 2 26s10.7 24 24 24 24-10.7 24-24S39.3 2 26 2zm2 37h-4v-4h4v4zm4.5-15.3c-1.1 1.3-2.2 2.1-2.8 3.3-.2.5-.3 1-.3 2h-4c0-1.3.1-2.2.5-3.1.8-1.7 2.3-2.9 3.4-4.1.6-.7.9-1.5.9-2.4 0-1.8-1.4-3.2-3.2-3.2s-3.2 1.4-3.2 3.2H20c0-4 3.2-7.2 7.2-7.2s7.2 3.2 7.2 7.2c0 1.7-.7 3.3-2 4.3z"/></svg>
+    </button>
+    <button class="header-icon-btn" aria-label="Setup" onclick="toast('Setup — live org only')">
+      <svg viewBox="0 0 52 52"><path d="M26.4 17.1c-5 0-9.1 4.1-9.1 9.1s4.1 9.1 9.1 9.1 9.1-4.1 9.1-9.1-4.1-9.1-9.1-9.1zm0 14.6c-3 0-5.5-2.5-5.5-5.5s2.5-5.5 5.5-5.5 5.5 2.5 5.5 5.5-2.5 5.5-5.5 5.5zm18.8-5c0-.6 0-1.2-.1-1.8l3.8-3-3.8-6.4-4.7 1.9c-1-.8-2.1-1.4-3.2-1.9L36.4 12h-7.6l-.8 4.6c-1.1.5-2.2 1.1-3.2 1.9L20 16.5l-3.8 6.4 3.8 3c-.1.6-.1 1.2-.1 1.8s0 1.2.1 1.8l-3.8 3 3.8 6.4 4.7-1.9c1 .8 2.1 1.4 3.2 1.9l.8 4.6h7.6l.8-4.6c1.1-.5 2.2-1.1 3.2-1.9l4.7 1.9 3.8-6.4-3.8-3c.1-.6.1-1.2.1-1.8z"/></svg>
+    </button>
+    <button class="header-icon-btn" id="navBellBtn" aria-label="Notifications" onclick="toggleNotif(event)">
+      <svg viewBox="0 0 52 52"><path d="M38 32c0-7-3.1-12.8-9-14.3V16c0-1.7-1.3-3-3-3s-3 1.3-3 3v1.7C17.1 19.2 14 25 14 32v6H8v4h36v-4h-6v-6zm-12 8c-2.2 0-4-1.8-4-4h8c0 2.2-1.8 4-4 4z"/></svg>
+      <span class="bell-badge" id="bellBadge"></span>
+    </button>
+    <div class="user-avatar" title="Taylor Kim — Sportsbook KAM">TK</div>
+  </div>
+</header>
+
+<!-- WORKSPACE TABS — Console UI v1 -->
+<nav class="slds-context-bar" role="navigation" aria-label="Workspace tabs">
+  <button class="workspace-tab is-active" type="button">
+    <svg viewBox="0 0 52 52"><path d="M8 8h16v16H8zm20 0h16v16H28zM8 28h16v16H8zm20 0h16v16H28z"/></svg>
+    My VIP Playbook
+    <span class="tab-close" onclick="event.stopPropagation(); toast('Close tab — live org only')" aria-label="Close tab">
+      <svg viewBox="0 0 52 52"><path d="M28.2 26l10.6-10.6c.6-.6.6-1.5 0-2.1s-1.5-.6-2.1 0L26 23.9 15.4 13.3c-.6-.6-1.5-.6-2.1 0s-.6 1.5 0 2.1L23.9 26 13.3 36.6c-.6.6-.6 1.5 0 2.1.3.3.7.4 1.1.4s.8-.1 1.1-.4L26 28.1l10.6 10.6c.3.3.7.4 1.1.4s.8-.1 1.1-.4c.6-.6.6-1.5 0-2.1L28.2 26z"/></svg>
+    </span>
+  </button>
+  <button class="workspace-new" type="button" aria-label="New Tab" onclick="toast('New workspace tab — live org only')">
+    <svg viewBox="0 0 52 52"><path d="M38 24H28V14c0-1.1-.9-2-2-2s-2 .9-2 2v10H14c-1.1 0-2 .9-2 2s.9 2 2 2h10v10c0 1.1.9 2 2 2s2-.9 2-2V28h10c1.1 0 2-.9 2-2s-.9-2-2-2z"/></svg>
+  </button>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="slds-page-header">
+  <div class="page-header__icon" aria-hidden="true">
+    <svg viewBox="0 0 52 52"><path d="M26 8c4.4 0 8 3.6 8 8s-3.6 8-8 8-8-3.6-8-8 3.6-8 8-8zm0 20c8.8 0 16 4.5 16 10v6H10v-6c0-5.5 7.2-10 16-10z"/></svg>
+  </div>
+  <div class="page-header__body">
+    <div class="page-header__title">My VIP Playbook <span class="demo-label">Mock</span></div>
+    <div class="page-header__meta">47 VIPs · Sportsbook KAM · Taylor Kim</div>
+  </div>
+  <div class="btn-group">
+    <button class="slds-button slds-button_neutral" onclick="toast('Filters — mock list view')">Filters</button>
+    <button class="slds-button slds-button_neutral" onclick="toast('Export queued')">Export</button>
+    <button class="slds-button slds-button_brand" onclick="openLogContact()">Log Contact</button>
+  </div>
+</div>
+
+<div class="console-body">
+
+  <!-- MAIN -->
+  <div class="console-main">
+
+    <div class="slds-card">
+      <div class="slds-card__header">
+        <h2 class="slds-card__header-title">VIP Playbook <span class="demo-label">Mock</span></h2>
+      </div>
+      <div class="card-tabs">
+        <button class="card-tab" data-tabset="playbook" data-tab="overview" onclick="setTab('playbook','overview')">Overview</button>
+        <button class="card-tab is-active" data-tabset="playbook" data-tab="vips" onclick="setTab('playbook','vips')">My VIPs</button>
+      </div>
+
+      <div id="pane-playbook-overview" hidden>
+        <div class="metric-row">
+          <div class="metric-tile"><div class="metric-label">Total VIPs</div><div class="metric-value">47</div></div>
+          <div class="metric-tile"><div class="metric-label">Active</div><div class="metric-value">44</div></div>
+          <div class="metric-tile"><div class="metric-label">Shield Select</div><div class="metric-value">6</div></div>
+          <div class="metric-tile"><div class="metric-label">Avg GGR L30</div><div class="metric-value">$2,840</div></div>
+        </div>
+        <div class="reports-toggle">
+          <button class="slds-button slds-button_neutral slds-button_small" id="reportsBtn" onclick="toggleReports()">View Reports</button>
+        </div>
+        <div id="reportsPanel" hidden>
+          <div class="card-tabs">
+            <button class="card-tab is-active" data-tabset="tableau" data-tab="t-overview" onclick="setTab('tableau','t-overview')">Overview</button>
+            <button class="card-tab" data-tabset="tableau" data-tab="t-spend" onclick="setTab('tableau','t-spend')">Spend Trends</button>
+            <button class="card-tab" data-tabset="tableau" data-tab="t-seg" onclick="setTab('tableau','t-seg')">Segments</button>
+            <button class="card-tab" data-tabset="tableau" data-tab="t-ret" onclick="setTab('tableau','t-ret')">Retention</button>
+          </div>
+          <div class="tableau-placeholder" id="tableauLabel">Tableau Report — Overview</div>
+        </div>
+      </div>
+
+      <div id="pane-playbook-vips">
+        <div class="table-toolbar">
+          <div class="slds-input-wrap">
+            <svg viewBox="0 0 52 52"><path d="M48.9 46.1L35.3 32.5c2.5-3 4-6.9 4-11.1C39.3 11.6 31.7 4 22.3 4S5.3 11.6 5.3 21s7.6 17 17 17c4.2 0 8.1-1.5 11.1-4l13.6 13.6c.8.8 2 .8 2.8 0 .8-.8.8-2.1.1-2.5zM22.3 34c-7.2 0-13-5.8-13-13s5.8-13 13-13 13 5.8 13 13-5.8 13-13 13z"/></svg>
+            <input class="slds-input" id="vipSearch" type="search" placeholder="Search VIPs…" aria-label="Search VIPs" oninput="renderVips()">
+          </div>
+          <button class="filter-chip is-active" data-filter="all" onclick="setFilter(this,'all')">All VIPs</button>
+          <button class="filter-chip" data-filter="overdue" onclick="setFilter(this,'overdue')">Overdue Contact</button>
+          <button class="filter-chip" data-filter="overbonused" onclick="setFilter(this,'overbonused')">Overbonused</button>
+          <button class="filter-chip" data-filter="shield" onclick="setFilter(this,'shield')">Shield Select</button>
+        </div>
+        <div class="bulk-bar" id="bulkBar">
+          <span id="bulkCount" style="font-size:.75rem;font-weight:700;color:var(--brand-primary)"></span>
+          <button class="slds-button slds-button_brand slds-button_small" onclick="toast('Bulk contact logged')">Contact selected</button>
+          <button class="slds-button slds-button_neutral slds-button_small" onclick="clearSelection()">Clear</button>
+        </div>
+        <div class="slds-table-wrap">
+          <table class="slds-table" aria-label="My VIPs">
+            <thead>
+              <tr>
+                <th class="col-cb"><input class="slds-checkbox" type="checkbox" id="selectAll" onchange="toggleAll(this)"></th>
+                <th>Name</th><th>Segment</th><th>Tier</th><th>GGR L30</th>
+                <th>Last Contact</th><th>Last Bonus Issued</th><th>Status</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="vipTableBody"></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <span id="pageInfo">Showing 1–10 of 47 VIPs</span>
+          <div class="pagination-btns">
+            <button class="page-btn" disabled>‹</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slds-card">
+      <div class="slds-card__header">
+        <h2 class="slds-card__header-title">Real-Time Awareness <span class="demo-label">Mock</span></h2>
+      </div>
+      <div class="card-tabs">
+        <button class="card-tab is-active" data-tabset="rta" data-tab="swings" onclick="setTab('rta','swings')">Big Swings</button>
+        <button class="card-tab" data-tabset="rta" data-tab="payments" onclick="setTab('rta','payments')">Payment Alerts</button>
+        <button class="card-tab" data-tabset="rta" data-tab="streaks" onclick="setTab('rta','streaks')">Losing Streaks</button>
+      </div>
+      <div class="padded" id="pane-rta-swings">
+        <p class="section-title-sm">Top winners (24h)</p>
+        <div class="swing-head"><span>VIP</span><span>Product</span><span>$</span><span></span></div>
+        <div class="swing-row"><a class="vip-name-link" onclick="openVipModal('James Harrington')">James Harrington</a><span>SBK</span><span class="ggr-pos">+$18,400</span><button class="slds-button slds-button_neutral slds-button_small" onclick="toast('Opening wager')">View</button></div>
+        <div class="swing-row"><a class="vip-name-link" onclick="openVipModal('Morgan Davis')">Morgan Davis</a><span>CAS</span><span class="ggr-pos">+$9,340</span><button class="slds-button slds-button_neutral slds-button_small" onclick="toast('Opening wager')">View</button></div>
+        <p class="section-title-sm">Big losses (24h)</p>
+        <div class="swing-row"><a class="vip-name-link" onclick="openVipModal('Ethan Parker')">Ethan Parker</a><span>CAS</span><span class="ggr-neg">−$12,400</span><button class="slds-button slds-button_brand slds-button_small" onclick="toast('Welfare check queued')">Check-in</button></div>
+        <div class="swing-row"><a class="vip-name-link" onclick="openVipModal('Sarah Mitchell')">Sarah Mitchell</a><span>CAS</span><span class="ggr-neg">−$6,200</span><button class="slds-button slds-button_neutral slds-button_small" onclick="toast('Opening wager')">View</button></div>
+      </div>
+      <div class="padded" id="pane-rta-payments" hidden>
+        <div class="alert-row alert-error">
+          <div><a class="vip-name-link" onclick="openVipModal('Alex Jordan')">Alex Jordan</a> <span class="list-item__sub">Withdrawal hold — $4,200 · 2h ago</span></div>
+          <button class="slds-button slds-button_brand slds-button_small" onclick="toast('Opening payment case')">Review</button>
+        </div>
+        <div class="alert-row alert-error">
+          <div><a class="vip-name-link" onclick="openVipModal('Isla Hayes')">Isla Hayes</a> <span class="list-item__sub">Decline — $9,800 · KYC · 5h ago</span></div>
+          <button class="slds-button slds-button_brand slds-button_small" onclick="toast('Escalated')">Escalate</button>
+        </div>
+        <div class="alert-row alert-warn">
+          <div><a class="vip-name-link" onclick="openVipModal('Robert Chen')">Robert Chen</a> <span class="list-item__sub">Unusual method added · 8h ago</span></div>
+          <button class="slds-button slds-button_neutral slds-button_small" onclick="toast('Flagged')">Flag</button>
+        </div>
+      </div>
+      <div class="padded" id="pane-rta-streaks" hidden>
+        <div class="swing-head" style="grid-template-columns:1.2fr .7fr .7fr .8fr auto"><span>VIP</span><span>Sessions</span><span>Loss</span><span>Urgency</span><span></span></div>
+        <div class="swing-row" style="grid-template-columns:1.2fr .7fr .7fr .8fr auto"><a class="vip-name-link" onclick="openVipModal('Ethan Parker')">Ethan Parker</a><span>7</span><span class="ggr-neg">−$31,200</span><span class="tag tag-red">High</span><button class="slds-button slds-button_brand slds-button_small" onclick="openLogContact('Ethan Parker')">Contact</button></div>
+        <div class="swing-row" style="grid-template-columns:1.2fr .7fr .7fr .8fr auto"><a class="vip-name-link" onclick="openVipModal('Isla Hayes')">Isla Hayes</a><span>5</span><span class="ggr-neg">−$18,600</span><span class="tag tag-amber">Med</span><button class="slds-button slds-button_neutral slds-button_small" onclick="openLogContact('Isla Hayes')">Contact</button></div>
+        <div class="swing-row" style="grid-template-columns:1.2fr .7fr .7fr .8fr auto"><a class="vip-name-link" onclick="openVipModal('Sarah Mitchell')">Sarah Mitchell</a><span>4</span><span class="ggr-neg">−$8,100</span><span class="tag tag-amber">Med</span><button class="slds-button slds-button_neutral slds-button_small" onclick="openLogContact('Sarah Mitchell')">Contact</button></div>
+      </div>
+    </div>
+
+    <div class="slds-card">
+      <div class="slds-card__header">
+        <h2 class="slds-card__header-title">Onboarding &amp; Offboarding <span class="demo-label">Mock</span></h2>
+      </div>
+      <div class="card-tabs">
+        <button class="card-tab is-active" data-tabset="ob" data-tab="new" onclick="setTab('ob','new')">New VIPs</button>
+        <button class="card-tab" data-tabset="ob" data-tab="churn" onclick="setTab('ob','churn')">Churn Risk</button>
+      </div>
+      <div class="padded" id="pane-ob-new">
+        <div class="ob-head"><span>Name</span><span>Segment</span><span>Start</span><span>KYC</span><span>KAM</span></div>
+        <div class="ob-row"><a class="vip-name-link" onclick="openVipModal('Tyler Morgan')">Tyler Morgan</a><span>SBK</span><span>Sep 8</span><span class="slds-badge badge-suspended">Pending</span><span>Taylor Kim</span></div>
+        <div class="ob-row"><a class="vip-name-link" onclick="openVipModal('Uma Price')">Uma Price</a><span>CAS</span><span>Sep 2</span><span class="slds-badge badge-suspended">Pending</span><span>Morgan</span></div>
+        <div class="ob-row"><a class="vip-name-link" onclick="openVipModal('Victor Ward')">Victor Ward</a><span>DFS</span><span>Aug 26</span><span class="slds-badge badge-active">Verified</span><span>Casey</span></div>
+        <div class="ob-row"><a class="vip-name-link" onclick="openVipModal('Aaliyah Henderson')">Aaliyah Henderson</a><span>FDR</span><span>Aug 9</span><span class="slds-badge badge-deactivated" style="background:#fce4e4;color:var(--color-error)">Incomplete</span><span>Reese</span></div>
+      </div>
+      <div class="padded" id="pane-ob-churn" hidden>
+        <div class="list-item"><span class="urgency-bar bar-red"></span><div class="list-item__body"><div class="list-item__title"><a class="vip-name-link" onclick="openVipModal('Ethan Parker')">Ethan Parker</a></div><div class="list-item__sub lc-overdue">High — 22d no contact, −$12.4k</div></div><button class="slds-button slds-button_brand slds-button_small" onclick="openLogContact('Ethan Parker')">Contact</button></div>
+        <div class="list-item"><span class="urgency-bar bar-amber"></span><div class="list-item__body"><div class="list-item__title"><a class="vip-name-link" onclick="openVipModal('Isla Hayes')">Isla Hayes</a></div><div class="list-item__sub lc-warning">Med — 25d overdue</div></div><button class="slds-button slds-button_neutral slds-button_small" onclick="openLogContact('Isla Hayes')">Contact</button></div>
+        <div class="list-item"><span class="urgency-bar bar-red"></span><div class="list-item__body"><div class="list-item__title"><a class="vip-name-link" onclick="openVipModal('Parker Ortiz')">Parker Ortiz</a></div><div class="list-item__sub lc-overdue">High — 38d, deactivated</div></div><button class="slds-button slds-button_neutral slds-button_small" onclick="openVipModal('Parker Ortiz')">View</button></div>
+      </div>
+    </div>
+
+    <div class="slds-card">
+      <div class="slds-card__header">
+        <h2 class="slds-card__header-title">Last Contact Tracker <span class="demo-label">Mock</span></h2>
+        <span class="slds-badge badge-muted">20-Day Cadence</span>
+      </div>
+      <div class="cadence-wrap">
+        <div class="cadence-track"><div class="cadence-fill"></div></div>
+        <div class="cadence-lbl">62% in cadence (5/8 VIPs)</div>
+      </div>
+      <div id="lastContactList"></div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="console-sidebar">
+
+    <div class="slds-card">
+      <div class="slds-card__header">
+        <h2 class="slds-card__header-title">Next Best Action</h2>
+        <span class="slds-badge badge-count">4 Actions</span>
+        <span class="slds-badge badge-muted">AI-prioritized</span>
+      </div>
+      <div class="demo-label" style="margin:.5rem 1rem 0">Mock</div>
+
+      <div class="nba-card" id="nba1">
+        <div class="nba-card-header" onclick="toggleNba('nba1')">
+          <span class="urgency-bar bar-green"></span>
+          <div class="list-item__body">
+            <div><span class="nba-type">Birthday Alert</span> · <a class="vip-name-link" onclick="event.stopPropagation();openVipModal('Olivia Bennett')">Olivia Bennett</a> <span class="tag tag-green">Today</span></div>
+            <p class="nba-summary">Birthday today · $500 Profit Boost ready</p>
+          </div>
+          <svg class="nba-chevron" viewBox="0 0 52 52"><path d="M20 10l16 16-16 16"/></svg>
+        </div>
+        <div class="nba-card-body">
+          <div class="nba-meta-row">
+            <div><div class="nba-meta-lbl">Segment</div><div class="nba-meta-val">SBK</div></div>
+            <div><div class="nba-meta-lbl">Tier</div><div class="nba-meta-val">Tier 4</div></div>
+            <div><div class="nba-meta-lbl">GGR 30d</div><div class="nba-meta-val">$8,400</div></div>
+            <div><div class="nba-meta-lbl">Last Contact</div><div class="nba-meta-val">4d ago</div></div>
+          </div>
+          <div class="nba-bullet nba-bullet-green">Highest engagement window of the year for this VIP.</div>
+          <div class="nba-bullet nba-bullet-blue">$500 Profit Boost pre-approved within limit.</div>
+          <div class="nba-bullet nba-bullet-amber">Outreach + offer combo has 3× re-deposit vs offer alone.</div>
+          <div class="nba-actions-bar">
+            <button class="slds-button slds-button_brand slds-button_small" onclick="openLogContact('Olivia Bennett')">Contact</button>
+            <button class="slds-button slds-button_neutral slds-button_small" onclick="toast('Bonus queued for Olivia Bennett')">Send Bonus</button>
+            <button class="slds-button slds-button_neutral slds-button_small" onclick="openVipModal('Olivia Bennett')">View Profile</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="nba-card" id="nba2">
+        <div class="nba-card-header" onclick="toggleNba('nba2')">
+          <span class="urgency-bar bar-red"></span>
+          <div class="list-item__body">
+            <div><span class="nba-type">Churn Risk</span> · <a class="vip-name-link" onclick="event.stopPropagation();openVipModal('Ethan Parker')">Ethan Parker</a> <span class="tag tag-red">High</span></div>
+            <p class="nba-summary">Down $12,400 · welfare check before any offer</p>
+          </div>
+          <svg class="nba-chevron" viewBox="0 0 52 52"><path d="M20 10l16 16-16 16"/></svg>
+        </div>
+        <div class="nba-card-body">
+          <div class="nba-meta-row">
+            <div><div class="nba-meta-lbl">Segment</div><div class="nba-meta-val">CAS</div></div>
+            <div><div class="nba-meta-lbl">Tier</div><div class="nba-meta-val">Tier 1</div></div>
+            <div><div class="nba-meta-lbl">GGR 30d</div><div class="nba-meta-val ggr-neg">−$12,400</div></div>
+            <div><div class="nba-meta-lbl">Last Contact</div><div class="nba-meta-val">22d ago</div></div>
+          </div>
+          <div class="nba-bullet nba-bullet-amber">Loss velocity above weekly norm — RG check required.</div>
+          <div class="nba-bullet nba-bullet-amber">22 days silent; cadence for this tier is 14d.</div>
+          <div class="nba-bullet nba-bullet-blue">Warm personal check-in. No promo language until confirmed.</div>
+          <div class="nba-actions-bar">
+            <button class="slds-button slds-button_brand slds-button_small" onclick="openLogContact('Ethan Parker')">Contact</button>
+            <button class="slds-button slds-button_neutral slds-button_small" onclick="openVipModal('Ethan Parker')">View Profile</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="nba-card" id="nba3">
+        <div class="nba-card-header" onclick="toggleNba('nba3')">
+          <span class="urgency-bar bar-amber"></span>
+          <div class="list-item__body">
+            <div><span class="nba-type">No Contact</span> · <a class="vip-name-link" onclick="event.stopPropagation();openVipModal('Robert Chen')">Robert Chen</a> <span class="tag tag-amber">21d</span></div>
+            <p class="nba-summary">Past 20-day cadence · re-engagement overdue</p>
+          </div>
+          <svg class="nba-chevron" viewBox="0 0 52 52"><path d="M20 10l16 16-16 16"/></svg>
+        </div>
+        <div class="nba-card-body">
+          <div class="nba-meta-row">
+            <div><div class="nba-meta-lbl">Segment</div><div class="nba-meta-val">SBK, DFS</div></div>
+            <div><div class="nba-meta-lbl">Tier</div><div class="nba-meta-val">Tier 3</div></div>
+            <div><div class="nba-meta-lbl">GGR 30d</div><div class="nba-meta-val">$2,150</div></div>
+            <div><div class="nba-meta-lbl">Last Contact</div><div class="nba-meta-val">21d ago</div></div>
+          </div>
+          <div class="nba-bullet nba-bullet-amber">21 days exceeds the 20-day book cadence.</div>
+          <div class="nba-bullet nba-bullet-blue">Still active on DFS — window is open.</div>
+          <div class="nba-bullet nba-bullet-green">SMS first-touch has 68% open rate in this segment.</div>
+          <div class="nba-actions-bar">
+            <button class="slds-button slds-button_brand slds-button_small" onclick="openLogContact('Robert Chen')">Contact</button>
+            <button class="slds-button slds-button_neutral slds-button_small" onclick="openVipModal('Robert Chen')">View Profile</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="nba-card" id="nba4">
+        <div class="nba-card-header" onclick="toggleNba('nba4')">
+          <span class="urgency-bar bar-teal"></span>
+          <div class="list-item__body">
+            <div><span class="nba-type">New Feedback</span> · <a class="vip-name-link" onclick="event.stopPropagation();openVipModal('Luca Romano')">Luca Romano</a> <span class="tag tag-teal">Yesterday</span></div>
+            <p class="nba-summary">Monthly NPS · Neutral · bonus delays mentioned</p>
+          </div>
+          <svg class="nba-chevron" viewBox="0 0 52 52"><path d="M20 10l16 16-16 16"/></svg>
+        </div>
+        <div class="nba-card-body">
+          <div class="nba-meta-row">
+            <div><div class="nba-meta-lbl">Segment</div><div class="nba-meta-val">CAS</div></div>
+            <div><div class="nba-meta-lbl">Rating</div><div class="nba-meta-val">3 / 5</div></div>
+            <div><div class="nba-meta-lbl">GGR 30d</div><div class="nba-meta-val">$1,200</div></div>
+            <div><div class="nba-meta-lbl">Last Contact</div><div class="nba-meta-val">6d ago</div></div>
+          </div>
+          <div class="nba-bullet nba-bullet-amber">“Bonus turnaround taking longer than expected.”</div>
+          <div class="nba-bullet nba-bullet-blue">July survey was 5★ after UFC outreach — still engaged.</div>
+          <div class="nba-bullet nba-bullet-green">Acknowledge delay; a processing update can recover sentiment.</div>
+          <div class="nba-actions-bar">
+            <button class="slds-button slds-button_brand slds-button_small" onclick="toast('Response logged')">Respond</button>
+            <button class="slds-button slds-button_neutral slds-button_small" onclick="openVipModal('Luca Romano')">View Profile</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slds-card">
+      <div class="slds-card__header">
+        <h2 class="slds-card__header-title">Tasks &amp; WPC <span class="demo-label">Mock</span></h2>
+        <span class="slds-badge badge-muted">1 of 3 done</span>
+      </div>
+      <div class="card-tabs">
+        <button class="card-tab is-active" data-tabset="wpc" data-tab="tasks" onclick="setTab('wpc','tasks')">My Tasks</button>
+        <button class="card-tab" data-tabset="wpc" data-tab="wpc" onclick="setTab('wpc','wpc')">Weekly Priority Contacts</button>
+      </div>
+      <div id="pane-wpc-tasks">
+        <div class="list-item"><input type="checkbox" class="slds-checkbox" onchange="toggleDone(this)"><div class="list-item__body"><div class="list-item__title">Call James H. re: deposit limit</div><div class="list-item__sub">Due today · <a class="vip-name-link" onclick="openVipModal('James Harrington')">James Harrington</a></div></div></div>
+        <div class="list-item"><input type="checkbox" class="slds-checkbox" onchange="toggleDone(this)"><div class="list-item__body"><div class="list-item__title">Review Ethan Parker welfare flag</div><div class="list-item__sub lc-overdue">Urgent · <a class="vip-name-link" onclick="openVipModal('Ethan Parker')">Ethan Parker</a></div></div></div>
+        <div class="list-item" style="opacity:.55"><input type="checkbox" class="slds-checkbox" checked disabled><div class="list-item__body"><div class="list-item__title" style="text-decoration:line-through;color:var(--text-secondary)">Q3 bonus bank allocation</div><div class="list-item__sub">Completed</div></div></div>
+      </div>
+      <div id="pane-wpc-wpc" hidden>
+        <div class="list-item"><input type="checkbox" class="slds-checkbox" onchange="toggleDone(this)"><div class="list-item__body"><div class="list-item__title"><a class="vip-name-link" onclick="openVipModal('Ethan Parker')">Ethan Parker</a></div><div class="list-item__sub">CAS · 22 days · welfare check</div></div></div>
+        <div class="list-item"><input type="checkbox" class="slds-checkbox" onchange="toggleDone(this)"><div class="list-item__body"><div class="list-item__title"><a class="vip-name-link" onclick="openVipModal('Isla Hayes')">Isla Hayes</a></div><div class="list-item__sub">SBK · 25 days · RTC risk</div></div></div>
+        <div class="list-item" style="opacity:.55"><input type="checkbox" class="slds-checkbox" checked disabled><div class="list-item__body"><div class="list-item__title" style="text-decoration:line-through;color:var(--text-secondary)"><a class="vip-name-link" onclick="openVipModal('Morgan Davis')">Morgan Davis</a></div><div class="list-item__sub">SBK, CAS · completed</div></div></div>
+      </div>
+    </div>
+
+    <div class="slds-card">
+      <div class="slds-card__header">
+        <h2 class="slds-card__header-title">Birthdays This Week <span class="demo-label">Mock</span></h2>
+      </div>
+      <div class="list-item"><div class="list-item__body"><div class="list-item__title"><a class="vip-name-link" onclick="openVipModal('Olivia Bennett')">Olivia Bennett</a></div><div class="list-item__sub">Today · Sep 16</div></div><button class="slds-button slds-button_brand slds-button_small" onclick="toast('Celebration sent')">Send</button></div>
+      <div class="list-item"><div class="list-item__body"><div class="list-item__title"><a class="vip-name-link" onclick="openVipModal('Luca Romano')">Luca Romano</a></div><div class="list-item__sub">Tomorrow · Sep 17</div></div><button class="slds-button slds-button_neutral slds-button_small" onclick="toast('Celebration queued')">Send</button></div>
+      <div class="list-item"><div class="list-item__body"><div class="list-item__title"><a class="vip-name-link" onclick="openVipModal('James Harrington')">James Harrington</a></div><div class="list-item__sub">Thu · Sep 18</div></div><button class="slds-button slds-button_neutral slds-button_small" onclick="toast('Celebration queued')">Send</button></div>
+    </div>
+
+    <div class="slds-card">
+      <div class="slds-card__header">
+        <h2 class="slds-card__header-title">Upcoming Events <span class="demo-label">Mock</span></h2>
+      </div>
+      <div class="list-item"><span class="urgency-bar bar-amber"></span><div class="list-item__body"><div class="list-item__title">Nationals at Mets</div><div class="list-item__sub">Aug 15 · Hosted · 10 VIPs</div></div><button class="slds-button slds-button_brand slds-button_small" onclick="toast('Opening event manager')">Manage</button></div>
+      <div class="list-item"><span class="urgency-bar bar-blue"></span><div class="list-item__body"><div class="list-item__title">Kesha — Holmdel</div><div class="list-item__sub">Aug 19 · Invited · 4 tickets</div></div><button class="slds-button slds-button_neutral slds-button_small" onclick="toast('RSVP sent')">RSVP</button></div>
+      <div class="list-item"><span class="urgency-bar bar-blue"></span><div class="list-item__body"><div class="list-item__title">Jets vs Giants (pre-season)</div><div class="list-item__sub">Aug 28 · Invited · 6 tickets</div></div><button class="slds-button slds-button_neutral slds-button_small" onclick="toast('RSVP sent')">RSVP</button></div>
+    </div>
+
+    <div class="slds-card">
+      <div class="slds-card__header">
+        <h2 class="slds-card__header-title">Campaign Manager <span class="demo-label">Mock</span></h2>
+      </div>
+      <div class="list-item"><span class="urgency-bar bar-green"></span><div class="list-item__body"><div class="list-item__title">NFL Season Re-engagement</div><div class="list-item__sub">SBK · 42 VIPs</div></div><span class="slds-badge badge-active">Active</span></div>
+      <div class="list-item"><span class="urgency-bar bar-blue"></span><div class="list-item__body"><div class="list-item__title">Casino Reactivation — Q3</div><div class="list-item__sub">CAS · 18 VIPs</div></div><span class="slds-badge" style="background:#e8f4ff;color:var(--brand-primary)">Scheduled</span></div>
+      <div class="list-item"><span class="urgency-bar" style="background:#94a3b8"></span><div class="list-item__body"><div class="list-item__title">F1 Miami VIP Invite Wave</div><div class="list-item__sub">SBK · 8 VIPs</div></div><span class="slds-badge badge-deactivated">Draft</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div id="navNotifPanel">
+  <div class="notif-header">
+    <span class="notif-header-title">Notifications</span>
+    <button class="notif-link" onclick="markAllRead()">Mark all as read</button>
+  </div>
+  <div class="notif-list">
+    <div class="notif-item unread" onclick="this.classList.remove('unread')">
+      <span class="notif-dot" style="background:var(--color-error)"></span>
+      <div style="flex:1"><div class="notif-title">Ethan Parker large loss</div><div class="notif-desc">Down $12,400 in 24h — welfare check recommended</div></div>
+      <span class="notif-time">Just now</span>
+    </div>
+    <div class="notif-item unread" onclick="this.classList.remove('unread')">
+      <span class="notif-dot" style="background:var(--color-warning)"></span>
+      <div style="flex:1"><div class="notif-title">WPC overdue: Isla Hayes</div><div class="notif-desc">No contact in 25 days — RTC risk elevated</div></div>
+      <span class="notif-time">9:02 AM</span>
+    </div>
+    <div class="notif-item unread" onclick="this.classList.remove('unread')">
+      <span class="notif-dot" style="background:var(--brand-primary)"></span>
+      <div style="flex:1"><div class="notif-title">Birthday today: Olivia Bennett</div><div class="notif-desc">$500 Profit Boost awaiting issue</div></div>
+      <span class="notif-time">8:55 AM</span>
+    </div>
+    <div class="notif-item">
+      <span class="notif-dot" style="background:var(--color-success)"></span>
+      <div style="flex:1"><div class="notif-title">Bonus issued: Morgan Davis</div><div class="notif-desc">$1,000 postal gift sent</div></div>
+      <span class="notif-time">8:41 AM</span>
+    </div>
+  </div>
+  <div class="notif-footer"><button class="notif-link" onclick="toast('Notification centre — live org only')">View all</button></div>
+</div>
+
+<!-- VIP MODAL -->
+<div class="modal-backdrop" id="vipModal" onclick="if(event.target===this)closeModals()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="vipModalTitle">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="vipModalTitle"></div>
+        <div class="page-header__meta" id="vipModalMeta"></div>
+      </div>
+      <button class="slds-button slds-button_icon" onclick="closeModals()" aria-label="Close">
+        <svg viewBox="0 0 52 52" style="width:1rem;height:1rem;fill:#706e6b"><path d="M28.2 26l10.6-10.6c.6-.6.6-1.5 0-2.1s-1.5-.6-2.1 0L26 23.9 15.4 13.3c-.6-.6-1.5-.6-2.1 0s-.6 1.5 0 2.1L23.9 26 13.3 36.6c-.6.6-.6 1.5 0 2.1.3.3.7.4 1.1.4s.8-.1 1.1-.4L26 28.1l10.6 10.6c.3.3.7.4 1.1.4s.8-.1 1.1-.4c.6-.6.6-1.5 0-2.1L28.2 26z"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-stat-row" id="vipModalStats"></div>
+      <div class="section-title-sm">Contact History</div>
+      <ul class="timeline">
+        <li><div class="tl-title">Call — welfare check</div><div class="tl-meta">Taylor Kim · 12 days ago · 14 min</div></li>
+        <li><div class="tl-title">Email — event invite</div><div class="tl-meta">Taylor Kim · 19 days ago</div></li>
+        <li><div class="tl-title">In-person — suite night</div><div class="tl-meta">Avery · 34 days ago</div></li>
+      </ul>
+      <div class="section-title-sm" style="margin-top:1rem">Bonus History</div>
+      <div class="list-item__sub" id="vipModalBonus"></div>
+      <div class="section-title-sm" style="margin-top:1rem">Notes</div>
+      <div class="list-item__sub">Prefers SMS over email. Do not lead with bonus language after a losing streak.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="slds-button slds-button_neutral" onclick="closeModals()">Close</button>
+      <button class="slds-button slds-button_neutral" onclick="toast('Bonus composer — mock')">Send Bonus</button>
+      <button class="slds-button slds-button_brand" onclick="closeModals();openLogContact(currentVip && currentVip.name)">Log Contact</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOG CONTACT MODAL -->
+<div class="modal-backdrop" id="logModal" onclick="if(event.target===this)closeModals()">
+  <div class="modal modal--sm" role="dialog" aria-modal="true" aria-labelledby="logTitle">
+    <div class="modal-header">
+      <div class="modal-title" id="logTitle">Log Contact</div>
+      <button class="slds-button slds-button_icon" onclick="closeModals()" aria-label="Close">
+        <svg viewBox="0 0 52 52" style="width:1rem;height:1rem;fill:#706e6b"><path d="M28.2 26l10.6-10.6c.6-.6.6-1.5 0-2.1s-1.5-.6-2.1 0L26 23.9 15.4 13.3c-.6-.6-1.5-.6-2.1 0s-.6 1.5 0 2.1L23.9 26 13.3 36.6c-.6.6-.6 1.5 0 2.1.3.3.7.4 1.1.4s.8-.1 1.1-.4L26 28.1l10.6 10.6c.3.3.7.4 1.1.4s.8-.1 1.1-.4c.6-.6.6-1.5 0-2.1L28.2 26z"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label" for="logVip">VIP</label>
+        <input class="slds-input" id="logVip" style="padding-left:.75rem;width:100%" placeholder="VIP name">
+      </div>
+      <div class="form-row">
+        <label class="form-label" for="logType">Contact Type</label>
+        <select class="slds-select" id="logType">
+          <option>Call</option><option>Email</option><option>In-Person</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-label" for="logDate">Date</label>
+        <input class="slds-input" id="logDate" type="date" style="padding-left:.75rem;width:100%">
+      </div>
+      <div class="form-row">
+        <label class="form-label" for="logDur">Duration (min)</label>
+        <input class="slds-input" id="logDur" type="number" value="10" style="padding-left:.75rem;width:100%">
+      </div>
+      <div class="form-row">
+        <label class="form-label" for="logNotes">Notes</label>
+        <textarea class="slds-textarea" id="logNotes" placeholder="What happened on the contact?"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="slds-button slds-button_neutral" onclick="closeModals()">Cancel</button>
+      <button class="slds-button slds-button_brand" onclick="saveLog()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- AGENTFORCE PINNED OVERLAY -->
+<aside id="agentPanel" aria-label="Agentforce Companion">
+  <div class="companion-header">
+    <span class="c-name">Agentforce Companion</span>
+    <div class="c-header-right">
+      <button class="c-header-btn" title="Pinned overlay" onclick="toast('Pinned — 3-column layout later')">
+        <svg viewBox="0 0 20 20"><path d="M10 2l4 4-2 2-1-1-3 3v2l-1 1-3-3 1-1h2l3-3-1-1 2-2z"/><path d="M4 16l-2 2"/></svg>
+      </button>
+      <button class="c-header-btn" title="Close" onclick="toggleAgent(false)">
+        <svg viewBox="0 0 20 20"><path d="M5 5l10 10M15 5L5 15" stroke="#706e6b" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="c-idle" id="cIdle">
+    <h3>Let's Chat!</h3>
+    <p>Hi Taylor — I can search VIP records, summarize last contact, and draft outreach. I overlay this page so your playbook columns stay put.</p>
+  </div>
+  <div class="msg-thread" id="msgThread" style="display:none"></div>
+  <div class="suggested-wrap" id="suggestedWrap">
+    <button class="suggested-chip" onclick="askAgent('Who should I prioritize today?')">Who should I prioritize today?</button>
+    <button class="suggested-chip" onclick="askAgent('Which VIPs haven\u2019t been contacted in 30+ days?')">VIPs not contacted in 30+ days</button>
+    <button class="suggested-chip" onclick="askAgent('Show my pending bonus approvals')">Show my pending bonus approvals</button>
+  </div>
+  <div class="input-area">
+    <div class="input-wrap">
+      <textarea class="msg-input" id="chatInput" placeholder="Ask Agentforce…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+      <button class="slds-button slds-button_icon" onclick="sendChat()" aria-label="Send">
+        <svg viewBox="0 0 52 52" style="width:1rem;height:1rem;fill:#0176d3"><path d="M4 26l44-18-8 18 8 18z"/></svg>
+      </button>
+    </div>
+    <p class="input-hint">Agentforce is AI and can make mistakes. · Mock</p>
+  </div>
+</aside>
+
+<button id="agentFab" aria-label="Open Agentforce" onclick="toggleAgent(true)">
+  <svg viewBox="0 0 52 52"><path d="M26 4l5.2 12.4L44 18.2 34 27l2.8 13.8L26 34.4 15.2 40.8 18 27 8 18.2l12.8-1.8z"/></svg>
+</button>
+
+<div id="toast" role="status"></div>
+
+<script>
+const VIPS = [
+  { name:'James Harrington', segments:'SBK', tier:'Tier 4', shield:false, ggr:4820, days:3, bonus:{amount:500,type:'Bonus Bet',date:'Aug 28',ob:false}, status:'ACTIVE', nba:true, state:'NY' },
+  { name:'Sarah Mitchell', segments:'CAS', tier:'Shield Select', shield:true, ggr:-1240, days:12, bonus:{amount:250,type:'Event',date:'Aug 14',ob:false}, status:'ACTIVE', nba:false, state:'NJ' },
+  { name:'Robert Chen', segments:'SBK, DFS', tier:'Tier 3', shield:false, ggr:2150, days:21, bonus:null, status:'ACTIVE', nba:true, state:'PA' },
+  { name:'Alex Jordan', segments:'CAS', tier:'Tier 2', shield:false, ggr:-890, days:8, bonus:{amount:0,type:'Bonus Bet',date:'Aug 3',ob:true}, status:'ACTIVE', nba:false, state:'FL' },
+  { name:'Morgan Davis', segments:'SBK, CAS', tier:'Shield Select', shield:true, ggr:9340, days:1, bonus:{amount:1000,type:'Postal Gift',date:'Sep 1',ob:false}, status:'ACTIVE', nba:false, state:'NY' },
+  { name:'Olivia Bennett', segments:'SBK', tier:'Tier 4', shield:false, ggr:8400, days:4, bonus:{amount:500,type:'Bonus Bet',date:'Sep 10',ob:false}, status:'ACTIVE', nba:true, state:'MA' },
+  { name:'Ethan Parker', segments:'CAS', tier:'Tier 1', shield:false, ggr:-12400, days:22, bonus:{amount:200,type:'Event',date:'Jul 28',ob:false}, status:'ACTIVE', nba:true, state:'NV' },
+  { name:'Isla Hayes', segments:'SBK', tier:'Tier 3', shield:false, ggr:210, days:25, bonus:{amount:150,type:'Bonus Bet',date:'Aug 1',ob:false}, status:'ACTIVE', nba:false, state:'CT' },
+  { name:'Luca Romano', segments:'CAS', tier:'Tier 2', shield:false, ggr:1200, days:6, bonus:{amount:75,type:'Bonus Bet',date:'Sep 8',ob:false}, status:'SUSPENDED', nba:true, state:'NJ' },
+  { name:'Parker Ortiz', segments:'CAS', tier:'Tier 4', shield:false, ggr:-200, days:38, bonus:null, status:'DEACTIVATED', nba:false, state:'AZ' }
+];
+
+const AF = {
+  "Who should I prioritize today?": "Based on your book today:\n\n1. Ethan Parker (CAS) — Down $12,400, 22d silent. Welfare check first.\n2. Isla Hayes (SBK) — 25d overdue, RTC risk.\n3. Robert Chen (SBK, DFS) — 21d, just past cadence.\n\nWant a draft SMS for Ethan?",
+  "Which VIPs haven't been contacted in 30+ days?": "Beyond 30 days in this mock book:\n\n• Parker Ortiz (CAS) — 38 days · Deactivated\n\nIsla Hayes (25d) and Ethan Parker (22d) are next in line.",
+  "Which VIPs haven’t been contacted in 30+ days?": "Beyond 30 days in this mock book:\n\n• Parker Ortiz (CAS) — 38 days · Deactivated\n\nIsla Hayes (25d) and Ethan Parker (22d) are next in line.",
+  "Show my pending bonus approvals": "Pending in this mock book:\n\n• Olivia Bennett — $500 Profit Boost (birthday)\n• James Harrington — none pending\n\nI can queue Olivia's issue without leaving this overlay."
+};
+
+let vipFilter = 'all';
+let currentVip = null;
+
+function money(n) {
+  const abs = Math.abs(n).toLocaleString();
+  return (n >= 0 ? '+$' : '−$') + abs;
+}
+function ggrClass(n) { return n >= 0 ? 'ggr-pos' : 'ggr-neg'; }
+function lcClass(d) { return d > 20 ? 'lc-overdue' : d > 10 ? 'lc-warning' : 'lc-ok'; }
+function lcLabel(d) { return d + (d === 1 ? ' day ago' : ' days ago'); }
+function statusBadge(s) {
+  const cls = s === 'ACTIVE' ? 'badge-active' : s === 'SUSPENDED' ? 'badge-suspended' : 'badge-deactivated';
+  return '<span class="slds-badge ' + cls + '">' + s + '</span>';
+}
+function shieldSvg() {
+  return '<span class="tier-shield"><svg viewBox="0 0 52 52"><path d="M26 4L6 12v16c0 12.5 8.5 24.2 20 28 11.5-3.8 20-15.5 20-28V12L26 4z"/></svg>Shield Select</span>';
+}
+function nbaFlag() {
+  return '<span class="vip-nba-flag"><svg viewBox="0 0 52 52"><path d="M26 4L2 46h48L26 4zm0 8l18.8 30H7.2L26 12zm-2 18h4v4h-4v-4zm0-8h4v6h-4v-6z"/></svg><span class="nba-tooltip">NBA Action pending</span></span>';
+}
+
+function filteredVips() {
+  const q = (document.getElementById('vipSearch').value || '').toLowerCase();
+  return VIPS.filter(v => {
+    if (q && !v.name.toLowerCase().includes(q) && !v.segments.toLowerCase().includes(q)) return false;
+    if (vipFilter === 'overdue' && v.days <= 20) return false;
+    if (vipFilter === 'overbonused' && !(v.bonus && v.bonus.ob)) return false;
+    if (vipFilter === 'shield' && !v.shield) return false;
+    return true;
+  });
+}
+
+function bonusCell(v) {
+  if (!v.bonus) return '<span style="color:var(--text-secondary)">—</span>';
+  if (v.bonus.ob) {
+    return '<span style="font-weight:600">$0</span> <span class="slds-badge badge-overbonused">Overbonused</span><br><span style="font-size:.75rem;color:var(--text-secondary)">' + v.bonus.type + ' · ' + v.bonus.date + '</span>';
+  }
+  return '<span style="font-weight:600">$' + v.bonus.amount.toLocaleString() + '</span><br><span style="font-size:.75rem;color:var(--text-secondary)">' + v.bonus.type + ' · ' + v.bonus.date + '</span>';
+}
+
+function renderVips() {
+  const list = filteredVips();
+  const body = document.getElementById('vipTableBody');
+  body.innerHTML = list.map(v => {
+    const safe = v.name.replace(/'/g, "\\'");
+    const name = '<a class="vip-name-link" onclick="openVipModal(\'' + safe + '\')">' + v.name + '</a>' + (v.nba ? nbaFlag() : '');
+    return '<tr data-name="' + v.name + '">' +
+      '<td class="col-cb"><input class="slds-checkbox row-cb" type="checkbox" onchange="syncBulk()"></td>' +
+      '<td>' + name + '</td>' +
+      '<td>' + v.segments + '</td>' +
+      '<td>' + (v.shield ? shieldSvg() : v.tier) + '</td>' +
+      '<td><span class="' + ggrClass(v.ggr) + '">' + money(v.ggr) + '</span></td>' +
+      '<td><span class="' + lcClass(v.days) + '">' + lcLabel(v.days) + '</span></td>' +
+      '<td>' + bonusCell(v) + '</td>' +
+      '<td>' + statusBadge(v.status) + '</td>' +
+      '<td><div class="row-actions">' +
+        '<button class="slds-button slds-button_neutral slds-button_small" onclick="openLogContact(\'' + safe + '\')">Contact</button>' +
+        '<button class="slds-button slds-button_icon" style="height:1.5rem;width:1.5rem" aria-label="More" onclick="toast(\'More actions — mock\')">' +
+          '<svg viewBox="0 0 52 52" style="width:.875rem;height:.875rem;fill:#706e6b"><circle cx="26" cy="10" r="4"/><circle cx="26" cy="26" r="4"/><circle cx="26" cy="42" r="4"/></svg>' +
+        '</button></div></td></tr>';
+  }).join('');
+  document.getElementById('pageInfo').textContent = 'Showing 1–' + list.length + ' of 47 VIPs';
+  syncBulk();
+}
+
+function renderLastContact() {
+  const items = [
+    { name:'Isla Hayes', days:25 },
+    { name:'Ethan Parker', days:22 },
+    { name:'Robert Chen', days:21 },
+    { name:'Sarah Mitchell', days:12 },
+    { name:'Alex Jordan', days:8 },
+    { name:'James Harrington', days:3 }
+  ];
+  document.getElementById('lastContactList').innerHTML = items.map(i => {
+    const bar = i.days > 20 ? 'bar-red' : i.days > 10 ? 'bar-amber' : 'bar-green';
+    const safe = i.name.replace(/'/g, "\\'");
+    return '<div class="list-item"><span class="urgency-bar ' + bar + '"></span><div class="list-item__body">' +
+      '<div class="list-item__title"><a class="vip-name-link" onclick="openVipModal(\'' + safe + '\')">' + i.name + '</a></div>' +
+      '<div class="list-item__sub ' + lcClass(i.days) + '">' + lcLabel(i.days) + '</div></div>' +
+      '<button class="slds-button slds-button_neutral slds-button_small" onclick="openLogContact(\'' + safe + '\')">Contact</button></div>';
+  }).join('');
+}
+
+function setFilter(btn, f) {
+  vipFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('is-active', c === btn));
+  renderVips();
+}
+
+function setTab(set, tab) {
+  document.querySelectorAll('[data-tabset="' + set + '"]').forEach(b => {
+    b.classList.toggle('is-active', b.getAttribute('data-tab') === tab);
+  });
+  document.querySelectorAll('[id^="pane-' + set + '-"]').forEach(p => {
+    p.hidden = p.id !== 'pane-' + set + '-' + tab;
+  });
+  if (set === 'tableau') {
+    const labels = { 't-overview':'Tableau Report — Overview', 't-spend':'Tableau Report — Spend Trends', 't-seg':'Tableau Report — Segments', 't-ret':'Tableau Report — Retention' };
+    document.getElementById('tableauLabel').textContent = labels[tab] || 'Tableau Report';
+  }
+}
+
+function toggleReports() {
+  const p = document.getElementById('reportsPanel');
+  p.hidden = !p.hidden;
+  document.getElementById('reportsBtn').textContent = p.hidden ? 'View Reports' : 'Hide Reports';
+}
+
+function toggleNba(id) {
+  document.getElementById(id).classList.toggle('is-open');
+}
+
+function toggleAll(el) {
+  document.querySelectorAll('.row-cb').forEach(cb => { cb.checked = el.checked; });
+  syncBulk();
+}
+function syncBulk() {
+  const n = document.querySelectorAll('.row-cb:checked').length;
+  const bar = document.getElementById('bulkBar');
+  bar.classList.toggle('is-on', n > 0);
+  document.getElementById('bulkCount').textContent = n + ' selected';
+}
+function clearSelection() {
+  document.querySelectorAll('.row-cb, #selectAll').forEach(cb => { cb.checked = false; });
+  syncBulk();
+}
+
+function findVip(name) { return VIPS.find(v => v.name === name); }
+
+function openVipModal(name) {
+  currentVip = findVip(name) || { name:name, segments:'—', tier:'—', ggr:0, days:0, status:'ACTIVE', state:'—' };
+  document.getElementById('vipModalTitle').textContent = currentVip.name;
+  document.getElementById('vipModalMeta').textContent = [currentVip.tier || currentVip.segments, currentVip.segments, currentVip.state].filter(Boolean).join(' · ');
+  document.getElementById('vipModalStats').innerHTML =
+    [['GGR L30', money(currentVip.ggr || 0), ggrClass(currentVip.ggr || 0)],
+     ['Last Contact', currentVip.days != null ? lcLabel(currentVip.days) : '—', lcClass(currentVip.days || 0)],
+     ['Status', currentVip.status || '—', ''],
+     ['Segment', currentVip.segments || '—', '']].map(s =>
+      '<div class="modal-stat"><div class="ms-label">' + s[0] + '</div><div class="ms-val ' + s[2] + '">' + s[1] + '</div></div>'
+    ).join('');
+  document.getElementById('vipModalBonus').innerHTML = currentVip.bonus ? bonusCell(currentVip) : 'No bonus on file.';
+  document.getElementById('vipModal').classList.add('is-open');
+}
+
+function openLogContact(name) {
+  document.getElementById('logVip').value = name || (currentVip && currentVip.name) || '';
+  document.getElementById('logDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('logModal').classList.add('is-open');
+}
+function saveLog() {
+  const n = document.getElementById('logVip').value || 'VIP';
+  closeModals();
+  toast('Contact logged for ' + n + ' (mock)');
+}
+function closeModals() {
+  document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('is-open'));
+}
+
+function toggleNotif(e) {
+  e.stopPropagation();
+  document.getElementById('navNotifPanel').classList.toggle('is-open');
+}
+function markAllRead() {
+  document.querySelectorAll('.notif-item').forEach(i => i.classList.remove('unread'));
+  document.getElementById('bellBadge').style.display = 'none';
+}
+
+function toggleAgent(force) {
+  const open = typeof force === 'boolean' ? force : !document.body.classList.contains('agent-open');
+  document.body.classList.toggle('agent-open', open);
+  document.getElementById('agentPanel').classList.toggle('is-open', open);
+  document.getElementById('navAfBtn').classList.toggle('af-active', open);
+}
+function askAgent(q) {
+  document.getElementById('cIdle').style.display = 'none';
+  document.getElementById('suggestedWrap').style.display = 'none';
+  const t = document.getElementById('msgThread');
+  t.style.display = 'flex';
+  t.innerHTML += '<div class="msg msg-user">' + q + '</div>';
+  setTimeout(() => {
+    t.innerHTML += '<div class="msg">' + (AF[q] || 'In a live org I would pull this from your VIP records. This overlay is mock.') + '</div>';
+    t.scrollTop = t.scrollHeight;
+  }, 600);
+}
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  askAgent(q);
+}
+
+function toggleDone(cb) {
+  const row = cb.closest('.list-item');
+  row.style.opacity = cb.checked ? '.55' : '1';
+  const title = row.querySelector('.list-item__title');
+  if (title) title.style.textDecoration = cb.checked ? 'line-through' : '';
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('is-on');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove('is-on'), 2200);
+}
+
+document.addEventListener('click', (e) => {
+  const p = document.getElementById('navNotifPanel');
+  if (p.classList.contains('is-open') && !p.contains(e.target) && e.target.id !== 'navBellBtn' && !e.target.closest('#navBellBtn')) {
+    p.classList.remove('is-open');
+  }
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModals(); document.getElementById('navNotifPanel').classList.remove('is-open'); } });
+
+renderVips();
+renderLastContact();
+</script>
+</body>
+</html>
