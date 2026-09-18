@@ -62,7 +62,7 @@ flowchart LR
 |---|---|---|
 | 1 | Land | Hero “Hello, Jordan” · **VIP Playbook** Overview KPIs |
 | 2 | Scan book | Playbook tabs: Overview / My VIPs · segment chips SBK · Casino · DFS · Racing |
-| 3 | Read the queue | **Next Best Action** (4 Actions) — Birthday, Churn Risk, New Feedback |
+| 3 | Read the queue | **Next Best Action** (4 Actions) — No Contact, CS Alert, Big Loss, Bonus Opp — flat cards, actions always visible |
 | 4 | Check overnight money | **Real-Time Awareness → Big Swings** |
 | 5 | Open one human | VIP name → drawer / `openVipModal` |
 | 6 | Prepare, don’t send blind | **Agentforce** companion drafts; KAM edits |
@@ -146,8 +146,8 @@ flowchart LR
 | Step | KAM does | Console |
 |---|---|---|
 | 1 | Notice | **Notifications** “Critical: Ethan Parker large loss” *or* **Awareness → Big Swings** |
-| 2 | Context | NBA expand: GGR, last contact, RG bullet (“check required before any offer”) |
-| 3 | Decide | **Contact Now** / **View Wagers** / **View Profile** — not one generic Reach Out |
+| 2 | Context | **NBA Big Loss card** (flat) — loss amount · days since contact · RG welfare flag · 5.4× avg note visible inline without expand |
+| 3 | Decide | **Plan Outreach** / **View Wagers** / **Defer 24h** — inline action buttons on card |
 | 4 | RG | Losing Streaks tab **Welfare Check** (Ethan, 7 sessions, −$31,200) uses approved language |
 | 5 | Log | WPC row for Ethan stays Pending until Contact completes |
 
@@ -180,7 +180,7 @@ flowchart LR
 
 | Step | KAM does | Console **today** |
 |---|---|---|
-| 1 | See inventory | **Upcoming Events** → Manage |
+| 1 | See inventory | **Upcoming Events** → ⋮ menu → Manage Event |
 | 2 | Choose VIPs | Playbook / KYC — Agentforce rank is the ask, not built |
 | 3 | Issue seats | Ticket Manager path (liked in research) |
 | 4 | RSVP / attend | **Gap** — Splash and notes. Prototype does not write “attended Mets 8-16” |
