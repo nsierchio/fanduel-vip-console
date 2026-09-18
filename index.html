@@ -459,9 +459,8 @@
   /* ── NBA expandable cards — OOTB Salesforce Einstein NBA style ── */
   .nba-card { background:#fff;border:1px solid #dddbda;border-radius:0.25rem;box-shadow:0 2px 2px rgba(0,0,0,0.06);margin-bottom:0.5rem;overflow:hidden; }
   .nba-card:last-child { margin-bottom:0; }
-  .nba-card-header { display:flex;align-items:center;justify-content:space-between;padding:0.65rem 0.75rem;cursor:pointer;gap:0.5rem;transition:background 0.1s; }
-  .nba-card-header:hover { background:#f3f9ff; }
-  .nba-card-body { padding:0.5rem 0.75rem 0.65rem 0.75rem;border-top:1px solid #f3f2f2; }
+  .nba-card-header { display:flex;align-items:flex-start;padding:0.65rem 0.75rem;gap:0.5rem; }
+  .nba-card-body { display:none; }
   .nba-cat-tag { font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#706e6b;background:#f3f2f2;border-radius:0.18rem;padding:0.08rem 0.35rem;white-space:nowrap; }
   .nba-meta-row { display:grid;grid-template-columns:repeat(4,1fr);gap:0.3rem;margin-bottom:0.6rem;padding:0.5rem;background:#f9f9f9;border-radius:0.25rem; }
   .nba-meta-lbl { font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#706e6b;margin-bottom:0.1rem; }
@@ -1265,136 +1264,78 @@
 
       <!-- NBA Card 1: No Contact Alert -->
       <div class="nba-card" id="nbaCard1" style="border-left:4px solid #ba0517;">
-        <div class="nba-card-header" onclick="toggleNba('nbaCard1')">
+        <div class="nba-card-header">
           <div style="display:flex;flex-direction:column;gap:0.25rem;min-width:0;flex:1;">
             <span class="nba-cat-tag">No Contact</span>
             <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;">
               <span style="font-size:0.78rem;font-weight:700;color:#181818;">Contact Overdue —</span>
-              <a class="vip-link" onclick="event.stopPropagation();openVipModal('Ethan Parker')" style="font-size:0.78rem;font-weight:700;">Ethan Parker</a>
+              <a class="vip-link" onclick="openVipModal('Ethan Parker')" style="font-size:0.78rem;font-weight:700;">Ethan Parker</a>
             </div>
             <p style="font-size:0.7rem;color:#706e6b;margin:0;line-height:1.4;">No contact logged in 35 days. Last contact was August 13. Tier 1 Casino — cadence threshold exceeded.</p>
             <p style="font-size:0.67rem;color:#706e6b;margin:0;">Ethan Parker · Tier 1 · CAS · <span style="color:#ba0517;font-weight:600;">−$12,400 GGR L30</span> · <span style="color:#ba0517;font-weight:600;">35 days overdue</span></p>
-          </div>
-          <svg class="nba-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#706e6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="nba-card-body" id="nbaCard1-body" style="display:none;">
-          <div class="nba-meta-row">
-            <div><p class="nba-meta-lbl">Segment</p><p class="nba-meta-val">Casino</p></div>
-            <div><p class="nba-meta-lbl">Tier</p><p class="nba-meta-val">Tier 1</p></div>
-            <div><p class="nba-meta-lbl">GGR (30d)</p><p class="nba-meta-val" style="color:#ba0517;">−$12,400</p></div>
-            <div><p class="nba-meta-lbl">Last Contact</p><p class="nba-meta-val" style="color:#ba0517;">35d ago</p></div>
-          </div>
-          <div class="nba-analysis">
-            <div class="nba-bullet nba-bullet-red">35 days without contact exceeds the 14d Tier 1 Casino cadence threshold.</div>
-            <div class="nba-bullet nba-bullet-amber">6 consecutive losing sessions logged — welfare check recommended before outreach.</div>
-            <div class="nba-bullet nba-bullet-blue">Historical response: phone call has 2.4× higher engagement vs. email for this VIP.</div>
-          </div>
-          <div class="nba-actions-bar">
-            <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Contact logged for Ethan Parker ✓')">Log Contact</button>
-            <button class="btn btn-neutral btn-sm" onclick="openVipModal('Ethan Parker')">View Profile</button>
-            <button class="btn btn-neutral btn-sm" onclick="showToast('Ethan Parker deferred — reminder in 2 days')">Defer</button>
+            <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
+              <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Contact logged for Ethan Parker ✓')">Log Contact</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Ethan Parker deferred — reminder in 2 days')">Defer</button>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- NBA Card 2: CS/HVP Interaction Alert -->
       <div class="nba-card" id="nbaCard2" style="border-left:4px solid #ba0517;">
-        <div class="nba-card-header" onclick="toggleNba('nbaCard2')">
+        <div class="nba-card-header">
           <div style="display:flex;flex-direction:column;gap:0.25rem;min-width:0;flex:1;">
             <span class="nba-cat-tag">CS Alert</span>
             <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;">
               <span style="font-size:0.78rem;font-weight:700;color:#181818;">Open Case —</span>
-              <a class="vip-link" onclick="event.stopPropagation();openVipModal('Sophia Novak')" style="font-size:0.78rem;font-weight:700;">Sophia Novak</a>
+              <a class="vip-link" onclick="openVipModal('Sophia Novak')" style="font-size:0.78rem;font-weight:700;">Sophia Novak</a>
             </div>
             <p style="font-size:0.7rem;color:#706e6b;margin:0;line-height:1.4;">Sophia contacted Customer Service 4 hours ago. Case #00812 is open. Recommend KAM follow-up to maintain relationship continuity.</p>
             <p style="font-size:0.67rem;color:#706e6b;margin:0;">Sophia Novak · Tier 2 · SBK · <span style="color:#ba0517;font-weight:600;">Case Open</span> · 4h ago</p>
-          </div>
-          <svg class="nba-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#706e6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="nba-card-body" id="nbaCard2-body" style="display:none;">
-          <div class="nba-meta-row">
-            <div><p class="nba-meta-lbl">Case #</p><p class="nba-meta-val">00812</p></div>
-            <div><p class="nba-meta-lbl">Status</p><p class="nba-meta-val" style="color:#ba0517;">Open</p></div>
-            <div><p class="nba-meta-lbl">Opened</p><p class="nba-meta-val">4h ago</p></div>
-            <div><p class="nba-meta-lbl">Last Contact</p><p class="nba-meta-val">18d ago</p></div>
-          </div>
-          <div class="nba-analysis">
-            <div class="nba-bullet nba-bullet-red">Open case — CS resolution pending. Proactive KAM outreach can prevent escalation.</div>
-            <div class="nba-bullet nba-bullet-amber">No KAM contact in 18 days — approaching cadence threshold for Tier 2 SBK.</div>
-            <div class="nba-bullet nba-bullet-blue">Reaching out before case closes demonstrates proactive relationship management.</div>
-          </div>
-          <div class="nba-actions-bar">
-            <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Contact logged for Sophia Novak ✓')">Contact VIP</button>
-            <button class="btn btn-neutral btn-sm" onclick="showToast('Opening Case #00812…')">View Case</button>
-            <button class="btn btn-neutral btn-sm" onclick="showToast('Sophia Novak deferred — reminder when case closes')">Defer</button>
+            <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
+              <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Contact logged for Sophia Novak ✓')">Contact VIP</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Opening Case #00812…')">View Case</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Sophia Novak deferred — reminder when case closes')">Defer</button>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- NBA Card 3: Big Loss Alert -->
       <div class="nba-card" id="nbaCard3" style="border-left:4px solid #ba0517;">
-        <div class="nba-card-header" onclick="toggleNba('nbaCard3')">
+        <div class="nba-card-header">
           <div style="display:flex;flex-direction:column;gap:0.25rem;min-width:0;flex:1;">
             <span class="nba-cat-tag">Big Loss</span>
             <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;">
               <span style="font-size:0.78rem;font-weight:700;color:#181818;">Significant Loss —</span>
-              <a class="vip-link" onclick="event.stopPropagation();openVipModal('Noah Coleman')" style="font-size:0.78rem;font-weight:700;">Noah Coleman</a>
+              <a class="vip-link" onclick="openVipModal('Noah Coleman')" style="font-size:0.78rem;font-weight:700;">Noah Coleman</a>
             </div>
             <p style="font-size:0.7rem;color:#706e6b;margin:0;line-height:1.4;">Single-day loss of $46,200 yesterday — exceeds 5× average handle. Consider empathetic outreach within 24-hour window.</p>
             <p style="font-size:0.67rem;color:#706e6b;margin:0;">Noah Coleman · Shield Select · SBK · <span style="color:#ba0517;font-weight:600;">−$46,200 single day</span> · 5.4× avg handle</p>
-          </div>
-          <svg class="nba-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#706e6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="nba-card-body" id="nbaCard3-body" style="display:none;">
-          <div class="nba-meta-row">
-            <div><p class="nba-meta-lbl">Loss Amount</p><p class="nba-meta-val" style="color:#ba0517;">−$46,200</p></div>
-            <div><p class="nba-meta-lbl">vs Avg Handle</p><p class="nba-meta-val">5.4×</p></div>
-            <div><p class="nba-meta-lbl">Segment</p><p class="nba-meta-val">SBK</p></div>
-            <div><p class="nba-meta-lbl">Last Contact</p><p class="nba-meta-val">12d ago</p></div>
-          </div>
-          <div class="nba-analysis">
-            <div class="nba-bullet nba-bullet-red">Loss 5.4× above average single-day handle — outside normal risk tolerance range.</div>
-            <div class="nba-bullet nba-bullet-amber">24-hour cooling period recommended before bonus consideration — empathy outreach first.</div>
-            <div class="nba-bullet nba-bullet-blue">Noah's LTV is strong (+$46,200 GGR L30 avg) — retention priority is high.</div>
-          </div>
-          <div class="nba-actions-bar">
-            <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Outreach planned for Noah Coleman ✓')">Plan Outreach</button>
-            <button class="btn btn-neutral btn-sm" onclick="openWagerModal('Noah Coleman')">View Wagers</button>
-            <button class="btn btn-neutral btn-sm" onclick="showToast('Noah Coleman deferred — reminder in 24 hours')">Defer 24h</button>
+            <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
+              <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Outreach planned for Noah Coleman ✓')">Plan Outreach</button>
+              <button class="btn btn-neutral btn-sm" onclick="openWagerModal('Noah Coleman')">View Wagers</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Noah Coleman deferred — reminder in 24 hours')">Defer 24h</button>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- NBA Card 4: Bonus Opportunity -->
       <div class="nba-card" id="nbaCard4" style="border-left:4px solid #0176d3;">
-        <div class="nba-card-header" onclick="toggleNba('nbaCard4')">
+        <div class="nba-card-header">
           <div style="display:flex;flex-direction:column;gap:0.25rem;min-width:0;flex:1;">
             <span class="nba-cat-tag" style="color:#0176d3;background:#e8f4ff;">Bonus Opp</span>
             <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;">
               <span style="font-size:0.78rem;font-weight:700;color:#181818;">Bonus Opportunity —</span>
-              <a class="vip-link" onclick="event.stopPropagation();openVipModal('Luca Romano')" style="font-size:0.78rem;font-weight:700;">Luca Romano</a>
+              <a class="vip-link" onclick="openVipModal('Luca Romano')" style="font-size:0.78rem;font-weight:700;">Luca Romano</a>
             </div>
             <p style="font-size:0.7rem;color:#706e6b;margin:0;line-height:1.4;">No KAM-issued bonus in 22 days. RTC currently below target. Consider a retention offer before cadence slips further.</p>
             <p style="font-size:0.67rem;color:#706e6b;margin:0;">Luca Romano · Shield Select · CAS · <span style="color:#2e844a;font-weight:600;">+$22,100 GGR L30</span> · 22 days since last bonus</p>
-          </div>
-          <svg class="nba-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#706e6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="nba-card-body" id="nbaCard4-body" style="display:none;">
-          <div class="nba-meta-row">
-            <div><p class="nba-meta-lbl">Last Bonus</p><p class="nba-meta-val">22d ago</p></div>
-            <div><p class="nba-meta-lbl">Last Amount</p><p class="nba-meta-val">$1,000</p></div>
-            <div><p class="nba-meta-lbl">GGR (30d)</p><p class="nba-meta-val" style="color:#2e844a;">+$22,100</p></div>
-            <div><p class="nba-meta-lbl">RTC Status</p><p class="nba-meta-val" style="color:#dd7a01;">Below Target</p></div>
-          </div>
-          <div class="nba-analysis">
-            <div class="nba-bullet nba-bullet-blue">22 days since last KAM-issued bonus — threshold of 15d exceeded. Retention window open.</div>
-            <div class="nba-bullet nba-bullet-green">Luca's GGR is strong — a $500–$1,000 Bonus Bet is within discretionary limit and ROI-positive.</div>
-            <div class="nba-bullet nba-bullet-amber">RTC below target this month — bonus may help close the gap before month-end.</div>
-          </div>
-          <div class="nba-actions-bar">
-            <button class="btn btn-brand btn-sm" onclick="openBonusModal('Luca Romano')">Issue Bonus</button>
-            <button class="btn btn-neutral btn-sm" onclick="openVipModal('Luca Romano')">View Profile</button>
-            <button class="btn btn-neutral btn-sm" onclick="showToast('Luca Romano deferred — reminder in 3 days')">Defer</button>
+            <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
+              <button class="btn btn-brand btn-sm" onclick="openBonusModal('Luca Romano')">Issue Bonus</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Luca Romano deferred — reminder in 3 days')">Defer</button>
+            </div>
           </div>
         </div>
       </div>
@@ -2507,54 +2448,81 @@ function renderBook() {
 </div>
 
 <!-- ── Apply Bonus Modal ── -->
-<div id="bonusModal" onclick="if(event.target===this)closeBonusModal()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:0.75rem;width:min(420px,92vw);box-shadow:0 8px 40px rgba(0,0,0,0.22);overflow:hidden;">
-    <div style="background:linear-gradient(135deg,#0b1f45 0%,#0060a3 100%);padding:0.85rem 1rem;display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-weight:800;font-size:1rem;color:#fff;">Apply Bonus</div>
-        <div style="font-size:0.72rem;color:rgba(255,255,255,0.8);margin-top:0.1rem;" id="bonusVipName">—</div>
-      </div>
-      <button onclick="closeBonusModal()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;border-radius:0.4rem;width:1.8rem;height:1.8rem;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-    </div>
-    <div style="padding:1rem;">
-      <!-- Bonus Bank Balance -->
-      <div style="background:#f0f7ff;border:1.5px solid #bfdbfe;border-radius:0.5rem;padding:0.65rem 0.85rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;">
+<div id="bonusModal" onclick="if(event.target===this)closeBonusModal()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.52);align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:0.65rem;width:min(400px,94vw);box-shadow:0 12px 48px rgba(0,0,0,0.35);overflow:hidden;">
+    <div style="padding:1.25rem 1.4rem 0.6rem;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;">
         <div>
-          <div style="font-size:0.68rem;font-weight:700;color:#1e40af;text-transform:uppercase;letter-spacing:0.04em;">Bonus Bank Balance</div>
-          <div style="font-size:1.35rem;font-weight:800;color:#0060a3;margin-top:0.1rem;" id="bonusBankDisplay">$2,500.00</div>
+          <div style="font-size:1.3rem;font-weight:700;color:#111;line-height:1.2;">Bonus Bet Credit</div>
+          <div style="font-size:0.75rem;color:#706e6b;margin-top:0.2rem;" id="bonusVipName"></div>
         </div>
-        <div style="font-size:1.75rem;">🏦</div>
+        <button onclick="closeBonusModal()" style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:#706e6b;padding:0.1rem 0.2rem;line-height:1;margin-top:0.15rem;">✕</button>
       </div>
-      <!-- Type Toggle -->
-      <div style="margin-bottom:0.75rem;">
-        <div style="font-size:0.72rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.35rem;">Bonus Type</div>
-        <div style="display:flex;gap:0.4rem;">
-          <button id="bonusTypeFlatBtn" onclick="setBonusType('flat')" style="flex:1;padding:0.4rem 0;font-size:0.78rem;font-weight:700;border-radius:0.4rem;border:2px solid #0060a3;background:#0060a3;color:#fff;cursor:pointer;">$ Flat Amount</button>
-          <button id="bonusTypePctBtn" onclick="setBonusType('pct')" style="flex:1;padding:0.4rem 0;font-size:0.78rem;font-weight:700;border-radius:0.4rem;border:2px solid #d0d5dd;background:#fff;color:#475569;cursor:pointer;">% Percentage</button>
+      <!-- Form card -->
+      <div style="border:1.5px solid #d4e3f5;border-radius:0.5rem;padding:1rem 1.1rem;">
+        <!-- Wallet -->
+        <div style="display:grid;grid-template-columns:130px 1fr;gap:0.6rem;align-items:center;margin-bottom:0.85rem;">
+          <label style="font-size:0.82rem;font-weight:600;color:#3e3e3c;">Wallet</label>
+          <select id="bbWallet" onchange="onBBWalletChange()" style="border:1.5px solid #dddbda;border-radius:0.3rem;padding:0.42rem 0.55rem;font-size:0.82rem;background:#fff;cursor:pointer;outline:none;width:100%;">
+            <option value=""> ▼</option>
+            <option>Sportsbook</option>
+            <option>Casino</option>
+            <option>FanDuel Racing</option>
+            <option>Fantasy</option>
+          </select>
+        </div>
+        <!-- Bonus Bet Label -->
+        <div style="display:grid;grid-template-columns:130px 1fr;gap:0.6rem;align-items:center;margin-bottom:0.85rem;">
+          <label style="font-size:0.82rem;font-weight:600;color:#3e3e3c;">Bonus Bet<br>Label</label>
+          <select id="bbLabel" onchange="onBBLabelChange()" disabled style="border:1.5px solid #dddbda;border-radius:0.3rem;padding:0.42rem 0.55rem;font-size:0.82rem;background:#f3f2f2;cursor:not-allowed;outline:none;width:100%;color:#706e6b;">
+            <option value=""> ▼</option>
+            <option>VIP Bonus Bet - Any Sport</option>
+            <option>VIP Bonus Bet - NFL</option>
+            <option>VIP Bonus Bet - NBA</option>
+            <option>VIP Casino Bonus</option>
+            <option>VIP Racing Credit</option>
+          </select>
+        </div>
+        <!-- Expiration -->
+        <div id="bbExpirationRow" style="display:none;grid-template-columns:130px 1fr;gap:0.6rem;align-items:center;margin-bottom:0.85rem;">
+          <label style="font-size:0.82rem;font-weight:600;color:#3e3e3c;">Expiration</label>
+          <select id="bbExpiration" onchange="updateBBButton()" style="border:1.5px solid #0176d3;border-radius:0.3rem;padding:0.42rem 0.55rem;font-size:0.82rem;background:#fff;cursor:pointer;outline:none;width:100%;">
+            <option>7 Days</option>
+            <option selected>14 Days</option>
+            <option>30 Days</option>
+          </select>
+        </div>
+        <!-- Value -->
+        <div style="display:grid;grid-template-columns:130px 1fr;gap:0.6rem;align-items:center;margin-bottom:0.85rem;">
+          <label style="font-size:0.82rem;font-weight:600;color:#3e3e3c;">Value</label>
+          <input id="bbValue" type="text" value="$0.00" onfocus="if(this.value==='$0.00')this.value='$';" onblur="if(this.value==='$'||this.value==='')this.value='$0.00';" oninput="updateBBButton()" style="border:1.5px solid #dddbda;border-radius:0.3rem;padding:0.42rem 0.55rem;font-size:0.82rem;background:#fff;outline:none;width:100%;box-sizing:border-box;" />
+        </div>
+        <!-- Credit Description -->
+        <div style="display:grid;grid-template-columns:130px 1fr;gap:0.6rem;align-items:center;margin-bottom:0.85rem;">
+          <label style="font-size:0.82rem;font-weight:600;color:#3e3e3c;">Credit<br>Description</label>
+          <select id="bbDesc" onchange="updateBBButton()" style="border:1.5px solid #dddbda;border-radius:0.3rem;padding:0.42rem 0.55rem;font-size:0.82rem;background:#fff;cursor:pointer;outline:none;width:100%;">
+            <option value=""> ▼</option>
+            <option>VIP: Make It Right</option>
+            <option>VIP: Deposit Match</option>
+            <option>VIP: Loyalty</option>
+            <option>VIP: Welcome - Initial</option>
+            <option>VIP: Welcome - Onboarded</option>
+            <option>VIP: Technical Issues</option>
+            <option>VIP: Make it Count</option>
+          </select>
+        </div>
+        <!-- On Behalf Of -->
+        <div style="display:grid;grid-template-columns:130px 1fr;gap:0.6rem;align-items:center;">
+          <label style="font-size:0.82rem;font-weight:600;color:#3e3e3c;">On Behalf Of</label>
+          <div style="position:relative;">
+            <input id="bbOnBehalf" type="text" placeholder="Search..." style="border:1.5px solid #dddbda;border-radius:0.3rem;padding:0.42rem 2rem 0.42rem 0.55rem;font-size:0.82rem;background:#fff;outline:none;width:100%;box-sizing:border-box;" />
+            <svg style="position:absolute;right:0.5rem;top:50%;transform:translateY(-50%);width:14px;height:14px;fill:none;stroke:#706e6b;stroke-width:2;pointer-events:none;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+          </div>
         </div>
       </div>
-      <!-- Amount Input -->
-      <div style="margin-bottom:0.75rem;">
-        <div style="font-size:0.72rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.35rem;" id="bonusAmountLabel">Bonus Amount ($)</div>
-        <div style="display:flex;align-items:center;border:2px solid #d0d5dd;border-radius:0.5rem;overflow:hidden;transition:border-color 0.15s;" id="bonusInputWrap">
-          <span style="background:#f8fafc;padding:0.45rem 0.65rem;font-size:0.9rem;font-weight:700;color:#94a3b8;border-right:1.5px solid #d0d5dd;" id="bonusSymbol">$</span>
-          <input id="bonusAmountInput" type="number" min="0" placeholder="0.00" oninput="updateBonusPreview()" style="border:none;outline:none;padding:0.45rem 0.6rem;font-size:0.95rem;font-weight:700;color:#0b1220;width:100%;background:#fff;" />
-        </div>
-      </div>
-      <!-- Calculated Preview -->
-      <div id="bonusPreviewBlock" style="display:none;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:0.5rem;padding:0.5rem 0.75rem;margin-bottom:0.85rem;font-size:0.78rem;color:#065f46;">
-        <span style="font-weight:700;">Applied amount:</span> <span id="bonusAppliedAmt" style="font-weight:800;">—</span>
-        &nbsp;·&nbsp; <span style="font-weight:700;">Remaining bank:</span> <span id="bonusRemainingAmt" style="font-weight:800;">—</span>
-      </div>
-      <!-- Notes -->
-      <div style="margin-bottom:1rem;">
-        <div style="font-size:0.72rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.35rem;">Notes (optional)</div>
-        <textarea id="bonusNotes" rows="2" placeholder="Birthday offer, profit boost, retention credit…" style="width:100%;box-sizing:border-box;border:2px solid #d0d5dd;border-radius:0.5rem;padding:0.4rem 0.6rem;font-size:0.78rem;color:#334155;resize:none;outline:none;"></textarea>
-      </div>
-      <!-- Actions -->
-      <div style="display:flex;gap:0.5rem;">
-        <button onclick="applyBonus()" style="flex:1;padding:0.5rem;font-size:0.82rem;font-weight:800;background:#0060a3;color:#fff;border:none;border-radius:0.5rem;cursor:pointer;">Apply Bonus</button>
-        <button onclick="closeBonusModal()" style="padding:0.5rem 1rem;font-size:0.82rem;font-weight:700;background:#fff;color:#475569;border:2px solid #d0d5dd;border-radius:0.5rem;cursor:pointer;">Cancel</button>
+      <!-- Submit -->
+      <div style="text-align:center;padding:1rem 0 0.5rem;">
+        <button id="bbSubmitBtn" onclick="submitBonusBet()" disabled style="background:#c8d4df;color:#fff;border:none;border-radius:0.4rem;padding:0.6rem 3rem;font-size:0.88rem;font-weight:600;cursor:not-allowed;min-width:170px;transition:background 0.15s;">Add Bonus Bet</button>
       </div>
     </div>
   </div>

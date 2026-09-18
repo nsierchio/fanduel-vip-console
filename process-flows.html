@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FanDuel VIP KAM Console — System Process Flows</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #f4f6fa; color: #1a202c; }
+  .page-header { background: #0060a3; color: #fff; padding: 2rem 2.5rem; }
+  .page-header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+  .page-header p { font-size: 0.8rem; opacity: 0.75; margin-top: 0.25rem; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 1.75rem; }
+  .flow-card { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); overflow: hidden; }
+  .flow-card-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid #e8edf3; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .flow-number { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #0060a3; background: #e8f0fe; border-radius: 999px; padding: 0.2rem 0.6rem; flex-shrink: 0; margin-top: 0.15rem; }
+  .flow-title-wrap { flex: 1; }
+  .flow-title { font-size: 1rem; font-weight: 700; color: #0060a3; }
+  .flow-desc { font-size: 0.75rem; color: #64748b; margin-top: 0.2rem; line-height: 1.4; }
+  .tab-group { display: flex; gap: 0.4rem; flex-shrink: 0; }
+  .tab-btn { font-size: 0.7rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1.5px solid #0060a3; cursor: pointer; transition: all 0.12s; }
+  .tab-btn.active { background: #0060a3; color: #fff; }
+  .tab-btn:not(.active) { background: #fff; color: #0060a3; }
+  .flow-body { padding: 1.25rem 1.5rem; overflow-x: auto; }
+  .flow-pane { display: none; }
+  .flow-pane.visible { display: block; }
+  .mermaid { min-width: 600px; }
+  .legend { display: flex; gap: 1rem; flex-wrap: wrap; padding: 0.75rem 1.5rem; border-top: 1px solid #f1f5f9; background: #fafbfc; }
+  .legend-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.65rem; color: #64748b; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>FanDuel VIP KAM Console — System Process Flows</h1>
+  <p>Technical &amp; Stakeholder Reference · August 2026 · For internal use only</p>
+</div>
+
+<div class="container">
+
+  <!-- ── Flow 1: NBA Recommendation Engine ── -->
+  <div class="flow-card">
+    <div class="flow-card-header">
+      <div style="display:flex;align-items:flex-start;gap:0.75rem;flex:1;">
+        <span class="flow-number">Flow 1</span>
+        <div class="flow-title-wrap">
+          <div class="flow-title">NBA Recommendation Engine</div>
+          <div class="flow-desc">How Agentforce generates, scores, and delivers a Next Best Action to the KAM — from raw platform data to a prioritised recommendation card.</div>
+        </div>
+      </div>
+      <div class="tab-group">
+        <button class="tab-btn active" onclick="switchTab('f1','stakeholder',this)">Stakeholder</button>
+        <button class="tab-btn" onclick="switchTab('f1','technical',this)">Technical</button>
+      </div>
+    </div>
+    <div class="flow-body">
+      <div id="f1-stakeholder" class="flow-pane visible">
+        <div class="mermaid">
+flowchart LR
+  subgraph DS["📊 Data Sources"]
+    SB["Sportsbook\nPlatform"]
+    CS["Casino CRM"]
+    DFS["DFS Platform"]
+    RC["TVG + FD Racing\n⚠ Sparse Data"]
+  end
+  subgraph AF["🤖 Agentforce"]
+    COL["Collect Activity\n& Signals"]
+    RG{"RG Flag\nActive?"}
+    SCORE["Score &\nRank VIPs"]
+    GEN["Generate\nRecommendation"]
+    PRI["Set Priority\nP1 / P2 / P3"]
+    BLOCK["🚫 Block NBA\nRoute to RG"]
+  end
+  subgraph KAM["👤 KAM Console"]
+    ALERT["New NBA\nAlert Badge"]
+    REVIEW["KAM Reviews\nCard"]
+    DEC{"Accept or\nDismiss?"}
+    ACT["Action Taken\nin Console"]
+    LOG["Outcome\nLogged"]
+    FEED["Feedback Loop\n→ Model Improves"]
+  end
+  SB & CS & DFS & RC --> COL
+  COL --> RG
+  RG -->|No| SCORE
+  RG -->|Yes| BLOCK
+  SCORE --> GEN --> PRI --> ALERT
+  ALERT --> REVIEW --> DEC
+  DEC -->|Accept| ACT --> LOG --> FEED
+  DEC -->|Dismiss| LOG --> FEED
+  style RC fill:#fff7ed,stroke:#f59e0b
+  style BLOCK fill:#fee2e2,stroke:#ef4444
+  style RG fill:#fef3c7,stroke:#d97706
+        </div>
+      </div>
+      <div id="f1-technical" class="flow-pane">
+        <div class="mermaid">
+flowchart TD
+  T1["⏱ Trigger\nSportsbook/Casino: 4h batch\nDFS: Contest-completion event\nRacing: Nightly batch"]
+  FE["Feature Engineering\nRecency · Frequency · GGR delta\nContact gap · RG flag · Segment weight\nRacing: confidence dampener if data &lt; 70%"]
+  ESP["Einstein Prediction Service\nREST API callout\nReturns: score 0–100, recommended_action, confidence"]
+  RGCHECK{"RG_Classification__c\n= Flagged?"}
+  BLOCK2["Route to RG_Referral__c\nDo not create NBA record"]
+  CREATE["Create NBA_Recommendation__c\nvip_id · action_type · score\npriority_tier · expiry_timestamp"]
+  PE["Platform Event fired\nNBA_Notification__e"]
+  UI["KAM Console updates\nNBA badge + card rendered"]
+  FB{"KAM Decision"}
+  ACCEPT["NBA_Feedback__c\noutcome = Accepted\naction_taken logged"]
+  DISMISS["NBA_Feedback__c\noutcome = Dismissed\ndismiss_reason captured"]
+  RETRAIN["Feedback batch → Einstein\nretraining pipeline (weekly)"]
+  ERR["⚠ Einstein timeout\nFallback: rule-based score\nAlert ops team"]
+
+  T1 --> FE --> ESP
+  ESP -->|Success| RGCHECK
+  ESP -->|Timeout| ERR
+  RGCHECK -->|Yes| BLOCK2
+  RGCHECK -->|No| CREATE --> PE --> UI --> FB
+  FB -->|Accept| ACCEPT --> RETRAIN
+  FB -->|Dismiss| DISMISS --> RETRAIN
+  style ERR fill:#fff7ed,stroke:#f59e0b
+  style BLOCK2 fill:#fee2e2,stroke:#ef4444
+  style RGCHECK fill:#fef3c7,stroke:#d97706
+        </div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#fef3c7;border:1px solid #d97706;"></div> RG decision gate</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#fff7ed;border:1px solid #f59e0b;"></div> Open scoping item / sparse data</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#fee2e2;border:1px solid #ef4444;"></div> Blocked / error path</div>
+    </div>
+  </div>
+
+  <!-- ── Flow 2: Awareness Center Alert Flow ── -->
+  <div class="flow-card">
+    <div class="flow-card-header">
+      <div style="display:flex;align-items:flex-start;gap:0.75rem;flex:1;">
+        <span class="flow-number">Flow 2</span>
+        <div class="flow-title-wrap">
+          <div class="flow-title">Awareness Center Alert Flow</div>
+          <div class="flow-desc">How Big Swings, Payment Alerts, and Losing Streak signals are detected, classified, RG-gated, and surfaced to the KAM — with auto-escalation if unresolved.</div>
+        </div>
+      </div>
+      <div class="tab-group">
+        <button class="tab-btn active" onclick="switchTab('f2','stakeholder',this)">Stakeholder</button>
+        <button class="tab-btn" onclick="switchTab('f2','technical',this)">Technical</button>
+      </div>
+    </div>
+    <div class="flow-body">
+      <div id="f2-stakeholder" class="flow-pane visible">
+        <div class="mermaid">
+flowchart LR
+  subgraph PLAT["📡 Platform Events"]
+    WE["Large Wager\nDetected"]
+    PAY["Payment\nIssue Flagged"]
+    LS["Sustained\nLoss Detected"]
+  end
+  subgraph DET["🔍 Detection & Classification"]
+    TYPE{"Alert\nType?"}
+    BS["Big Swing"]
+    PA["Payment Alert"]
+    LST["Losing Streak"]
+    RGGATE{"🛡 RG Threshold\nCrossed?"}
+    RGREF["RG Referral\nPath Only"]
+    COMP{"Compliance\nClearance?"}
+    NOCON["⛔ Do Not\nContact VIP"]
+  end
+  subgraph KAM2["👤 KAM Awareness Center"]
+    SHOW["Alert appears\nin correct tab"]
+    KAMACT{"KAM\nDecision"}
+    RESPOND["Respond\nNow"]
+    MONITOR["Monitor\n& Snooze"]
+    ESCALATE["Escalate\nto Manager"]
+  end
+  subgraph RES["✅ Resolution"]
+    RESOLVE["Alert Resolved\n& Logged"]
+    AUTOESC["⚠ Auto-Escalate\nif unresolved 48h"]
+  end
+
+  WE --> TYPE
+  PAY --> TYPE
+  LS --> TYPE
+  TYPE -->|Big Swing| BS --> SHOW
+  TYPE -->|Payment| PA --> COMP
+  TYPE -->|Losing Streak| LST --> RGGATE
+  RGGATE -->|Yes| RGREF
+  RGGATE -->|No| SHOW
+  COMP -->|Pending| NOCON
+  COMP -->|Cleared| SHOW
+  SHOW --> KAMACT
+  KAMACT -->|Respond| RESPOND --> RESOLVE
+  KAMACT -->|Monitor| MONITOR --> AUTOESC
+  KAMACT -->|Escalate| ESCALATE --> RESOLVE
+  style RGGATE fill:#fef3c7,stroke:#d97706
+  style RGREF fill:#fee2e2,stroke:#ef4444
+  style NOCON fill:#fee2e2,stroke:#ef4444
+  style AUTOESC fill:#fff7ed,stroke:#f59e0b
+        </div>
+      </div>
+      <div id="f2-technical" class="flow-pane">
+        <div class="mermaid">
+flowchart TD
+  TRIG["Trigger\nSportsbook/Casino: Platform Event near-real-time\nRacing: Scheduled Batch T+1\nPayment: Payment_Event__c trigger"]
+  THRESH["Apex: Compare vs VIP_Baseline__c\nSegment-weighted thresholds\nBig Swing: wager &gt; Nx rolling avg\nLosing Streak: cumulative loss &gt; threshold over Nd\nPayment: event_type IN blocked list"]
+  RGCHECK2{"RG_Classification__c\nflag = true?"}
+  RGPATH["Create RG_Referral__c\nLock Contact action\nShow approved RG template only"]
+  COMPCHECK{"Payment_Compliance\n_Status = Pending?"}
+  NOACT["Alert_Record__c created\ncontact_allowed = false\nKAM sees read-only view"]
+  CREATE2["Alert_Record__c created\nalert_type · severity P1/P2/P3\nvip_id · expiry_timestamp\ncontact_allowed = true"]
+  NOTIFY["Platform Event: Alert_Created__e\nKAM console tab badge increments"]
+  KAMRES{"KAM sets\nstatus"}
+  RESPONDED["status = Responded\nActivity logged to VIP timeline"]
+  SNOOZED["status = Monitoring\nReminder task created\ncreated_date + snooze_hours"]
+  ESC["Escalation_Record__c created\nManager notification via Platform Event"]
+  AUTOBATCH["Scheduled Apex (hourly)\nIF status != Resolved\nAND created_date &lt; NOW()-48h\nAND severity = P1\nTHEN auto-escalate"]
+  CLOSED["Alert_Record__c status = Resolved\nresolution_notes · resolved_by · resolved_date"]
+
+  TRIG --> THRESH --> RGCHECK2
+  RGCHECK2 -->|Yes| RGPATH
+  RGCHECK2 -->|No| COMPCHECK
+  COMPCHECK -->|Yes| NOACT
+  COMPCHECK -->|No/NA| CREATE2 --> NOTIFY --> KAMRES
+  KAMRES -->|Responded| RESPONDED --> CLOSED
+  KAMRES -->|Snooze| SNOOZED --> AUTOBATCH
+  KAMRES -->|Escalate| ESC --> CLOSED
+  AUTOBATCH -->|Triggered| ESC
+  style RGCHECK2 fill:#fef3c7,stroke:#d97706
+  style RGPATH fill:#fee2e2,stroke:#ef4444
+  style NOACT fill:#fff7ed,stroke:#f59e0b
+  style AUTOBATCH fill:#fff7ed,stroke:#f59e0b
+        </div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#fef3c7;border:1px solid #d97706;"></div> RG decision gate</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#fff7ed;border:1px solid #f59e0b;"></div> Open scoping item / auto-escalation</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#fee2e2;border:1px solid #ef4444;"></div> Blocked path</div>
+    </div>
+  </div>
+
+  <!-- ── Flow 3: Feedback Pulse ── -->
+  <div class="flow-card">
+    <div class="flow-card-header">
+      <div style="display:flex;align-items:flex-start;gap:0.75rem;flex:1;">
+        <span class="flow-number">Flow 3</span>
+        <div class="flow-title-wrap">
+          <div class="flow-title">VIP Feedback Pulse — Survey Data Flow</div>
+          <div class="flow-desc">How survey responses travel from Tableau into the VIP Feedback Pulse card — including the open integration question and sentiment scoring.</div>
+        </div>
+      </div>
+      <div class="tab-group">
+        <button class="tab-btn active" onclick="switchTab('f3','stakeholder',this)">Stakeholder</button>
+        <button class="tab-btn" onclick="switchTab('f3','technical',this)">Technical</button>
+      </div>
+    </div>
+    <div class="flow-body">
+      <div id="f3-stakeholder" class="flow-pane visible">
+        <div class="mermaid">
+flowchart LR
+  subgraph SURVEY["📋 Survey"]
+    SEND["Survey sent\nto VIP"]
+    VIP_R["VIP responds"]
+    TAB["Response lands\nin Tableau"]
+  end
+  subgraph INT["🔗 Integration ⚠ TBD"]
+    OPT{"Method?"}
+    DIRECT["Option A\nTableau Connector\n24h latency"]
+    MIDDLE["Option B\nMuleSoft / Middleware\nNear real-time"]
+    SF["Salesforce\nSurvey_Response__c"]
+  end
+  subgraph PROC["⚙️ Processing"]
+    SENT["Einstein Sentiment\nPositive / Neutral / Negative"]
+    STARS["Star Rating\nCaptured"]
+    VIP_UPD["VIP Record\nUpdated"]
+  end
+  subgraph KAM3["👤 KAM Console"]
+    BADGE["Feedback Pulse\nBadge Updated"]
+    OPEN["KAM Opens\nCard"]
+    DEC3{"Action?"}
+    REV["Mark Reviewed"]
+    RESP["Respond\nto VIP"]
+    NEG{"Negative\nSentiment?"}
+    NBA_Q["Surface in\nNBA Queue"]
+  end
+
+  SEND --> VIP_R --> TAB --> OPT
+  OPT -->|Connector| DIRECT --> SF
+  OPT -->|Middleware| MIDDLE --> SF
+  SF --> SENT & STARS --> VIP_UPD --> BADGE
+  BADGE --> OPEN --> DEC3
+  DEC3 -->|Review| REV
+  DEC3 -->|Respond| RESP
+  REV & RESP --> NEG
+  NEG -->|Yes| NBA_Q
+  NEG -->|No| done["✅ Logged & Closed"]
+  style OPT fill:#fff7ed,stroke:#f59e0b
+  style DIRECT fill:#fff7ed,stroke:#f59e0b
+  style MIDDLE fill:#fff7ed,stroke:#f59e0b
+        </div>
+      </div>
+      <div id="f3-technical" class="flow-pane">
+        <div class="mermaid">
+flowchart TD
+  SRC["Survey Dispatch\nSource TBD: Tableau native OR 3rd party via Tableau\n⚠ Confirm with FanDuel data team"]
+  TAB2["Tableau\nResponse data structured in dataset"]
+  INT2{"Integration\nMethod ⚠ TBD"}
+  CONN["Option A: Tableau CRM / Analytics connector\nScheduled sync — ~24h latency\nLOE: LOW · no middleware needed"]
+  MUL["Option B: MuleSoft or custom middleware\nNear real-time push via REST API\nLOE: HIGH · requires MuleSoft license + config"]
+  CREATE3["Survey_Response__c created\nvip_id · response_text · star_rating\nsurvey_type · response_date · source"]
+  EINST["Einstein NLP: sentiment analysis\nCalls Einstein Language API\nReturns: sentiment_label, sentiment_score 0–1"]
+  ERR2["⚠ Sentiment service unavailable\nlabel = Unscored\nSurface for manual KAM review"]
+  WRITE["Write to Survey_Response__c\nsentiment_label · sentiment_score\nreviewed = false"]
+  COUNT["Increment VIP_Account__c\nfeedback_unreviewed_count"]
+  PE2["Platform Event: Feedback_New__e\nKAM console Feedback Pulse badge updates"]
+  KAMREV{"KAM marks\nreviewed"}
+  STAMP["Stamp reviewed_by · reviewed_date\nDecrement unreviewed_count"]
+  NEGNBA{"sentiment_label\n= Negative?"}
+  CRTNBA["Create NBA_Recommendation__c\naction_type = Feedback Response\npriority = P1"]
+  DONE2["Record closed\nAudit trail complete"]
+
+  SRC --> TAB2 --> INT2
+  INT2 -->|Connector| CONN --> CREATE3
+  INT2 -->|Middleware| MUL --> CREATE3
+  CREATE3 --> EINST
+  EINST -->|Success| WRITE --> COUNT --> PE2 --> KAMREV
+  EINST -->|Fail| ERR2 --> PE2
+  KAMREV -->|Yes| STAMP --> NEGNBA
+  NEGNBA -->|Yes| CRTNBA --> DONE2
+  NEGNBA -->|No| DONE2
+  style INT2 fill:#fff7ed,stroke:#f59e0b
+  style CONN fill:#fff7ed,stroke:#f59e0b
+  style MUL fill:#fff7ed,stroke:#f59e0b
+  style ERR2 fill:#fff7ed,stroke:#f59e0b
+        </div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#fff7ed;border:1px solid #f59e0b;"></div> ⚠ Open scoping question — integration method TBD</div>
+    </div>
+  </div>
+
+  <!-- ── Flow 4: VIP Onboarding Automation ── -->
+  <div class="flow-card">
+    <div class="flow-card-header">
+      <div style="display:flex;align-items:flex-start;gap:0.75rem;flex:1;">
+        <span class="flow-number">Flow 4</span>
+        <div class="flow-title-wrap">
+          <div class="flow-title">VIP Onboarding Automation</div>
+          <div class="flow-desc">From candidate identification through first contact to active book graduation — with SLA tracking, milestone automation, and manager oversight throughout.</div>
+        </div>
+      </div>
+      <div class="tab-group">
+        <button class="tab-btn active" onclick="switchTab('f4','stakeholder',this)">Stakeholder</button>
+        <button class="tab-btn" onclick="switchTab('f4','technical',this)">Technical</button>
+      </div>
+    </div>
+    <div class="flow-body">
+      <div id="f4-stakeholder" class="flow-pane visible">
+        <div class="mermaid">
+flowchart LR
+  subgraph ID["🔍 Identification"]
+    THRESH2["Platform threshold\nalert fires"]
+    MAN["Manual\nnomination"]
+    CAND["Candidate\nQueue"]
+  end
+  subgraph ASSIGN["👥 Assignment"]
+    SCORE2["Agentforce\nReadiness Score"]
+    KAPFIT["KAM capacity\n+ segment match"]
+    MGR["Manager\napproves"]
+    NOTIFY2["KAM\nnotified"]
+  end
+  subgraph FC["📞 First Contact"]
+    SLA["48h SLA\ntimer starts"]
+    TASK["Task\nauto-created"]
+    CONTACT["KAM makes\nfirst contact"]
+    MILE["Milestone\nlogged"]
+  end
+  subgraph MON["📈 Monitoring"]
+    D30["30d check"]
+    D60["60d check"]
+    D90["90d check"]
+    CRIT{"Meeting\ncriteria?"}
+    REENGAGE["Re-engage\nNBA created"]
+    GRAD["Graduate to\nActive Playbook"]
+  end
+  subgraph MGR2["👔 Manager Layer"]
+    BREACH["SLA breach\nalert"]
+    DIGEST["Weekly\ndigest report"]
+    GRADAPP["Graduation\napproval"]
+  end
+
+  THRESH2 & MAN --> CAND --> SCORE2 --> KAPFIT --> MGR --> NOTIFY2
+  NOTIFY2 --> SLA --> TASK --> CONTACT --> MILE
+  MILE --> D30 --> D60 --> D90 --> CRIT
+  CRIT -->|No| REENGAGE --> CONTACT
+  CRIT -->|Yes| GRADAPP --> GRAD
+  SLA -.->|Breached| BREACH --> DIGEST
+  style BREACH fill:#fff7ed,stroke:#f59e0b
+        </div>
+      </div>
+      <div id="f4-technical" class="flow-pane">
+        <div class="mermaid">
+flowchart TD
+  CAND2["VIP_Candidate__c created\nSource: platform webhook OR manual entry\nRacing: may be retroactive from in-person event"]
+  READY["Agentforce Readiness Score\nEinstein model: wagering history, segment,\naccount age, deposit pattern\nOutputs: readiness_score, recommended_segment"]
+  ASSIGN2["Salesforce Flow: Assignment Logic\nQuery KAM_Capacity__c + Segment_Specialty__c\nRank available KAMs\nCreate Manager_Approval_Task__c"]
+  MGRAPPR["Manager approves in console\nKAM_Assignment__c record created\nKAM notified via Platform Event"]
+  MILECREATE["Create Onboarding_Milestone__c series\nFirst Contact (SLA: 48h)\n30d Engagement Check\n60d Engagement Check\n90d Engagement Check\nGraduation"]
+  SLAMON["Scheduled Apex (hourly)\nMonitor milestone due dates\nIF overdue: create Task on KAM\nIF 24h past due: alert Manager"]
+  FIRSTCON["KAM logs first contact\nActivity_History__c created\nMilestone status = Complete\nLast_Contact__c updated on VIP_Account__c"]
+  ENGBATCH["30/60/90d Scheduled Batch\nEvaluate Engagement_Score__c\nvs Graduation_Criteria__c (segment-specific thresholds)\nCasino: RG check included in criteria"]
+  GRADCHECK{"All graduation\ncriteria met?"}
+  REENGAGE2["Create NBA_Recommendation__c\naction_type = Re-engage\nLink to Onboarding_Milestone__c"]
+  PROMOTE["VIP_Account__c status = Active\nOnboarding_Tracker__c = Closed\nAgentforce: generate first post-onboarding NBA\nManager notified of graduation"]
+  ERR3["⚠ KAM assignment conflict\nEscalate to Manager queue\nHold SLA timer"]
+
+  CAND2 --> READY --> ASSIGN2
+  ASSIGN2 -->|Conflict| ERR3
+  ASSIGN2 -->|Assigned| MGRAPPR --> MILECREATE --> SLAMON
+  SLAMON --> FIRSTCON --> ENGBATCH --> GRADCHECK
+  GRADCHECK -->|No| REENGAGE2 --> FIRSTCON
+  GRADCHECK -->|Yes| PROMOTE
+  style ERR3 fill:#fff7ed,stroke:#f59e0b
+        </div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#fff7ed;border:1px solid #f59e0b;"></div> Open scoping item / error path</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d1fae5;border:1px solid #10b981;"></div> Successful graduation path</div>
+    </div>
+  </div>
+
+  <!-- ── Flow 5: Data Integration Architecture ── -->
+  <div class="flow-card">
+    <div class="flow-card-header">
+      <div style="display:flex;align-items:flex-start;gap:0.75rem;flex:1;">
+        <span class="flow-number">Flow 5</span>
+        <div class="flow-title-wrap">
+          <div class="flow-title">Data Integration Architecture</div>
+          <div class="flow-desc">How all external systems feed into Salesforce to power the console — with data freshness expectations and open integration questions flagged.</div>
+        </div>
+      </div>
+      <div class="tab-group">
+        <button class="tab-btn active" onclick="switchTab('f5','stakeholder',this)">Stakeholder</button>
+        <button class="tab-btn" onclick="switchTab('f5','technical',this)">Technical</button>
+      </div>
+    </div>
+    <div class="flow-body">
+      <div id="f5-stakeholder" class="flow-pane visible">
+        <div class="mermaid">
+flowchart LR
+  subgraph SRC2["📡 Source Systems"]
+    SBP["Sportsbook\nPlatform\n⚡ Near real-time"]
+    CCRM["Casino\nCRM\n⚡ Near real-time"]
+    DFSP["DFS\nPlatform\n🔄 Contest batch"]
+    TVG2["TVG\n⚠ TBD · T+1"]
+    FDR["FanDuel Racing\n⚠ TBD · T+1"]
+    TABL["Tableau\n⚠ TBD · 24h+"]
+  end
+  subgraph SF2["☁️ Salesforce"]
+    INGEST["Data Ingest Layer\nDedup · Validate · Normalise"]
+    UNIFIED["Unified VIP\nData Layer"]
+    AGENT["Agentforce\nEinstein"]
+    CONS["KAM Console\nVIP Playbook · NBA · Awareness\nFeedback Pulse · Onboarding"]
+  end
+  subgraph USERS["👤 Users"]
+    KAM4["VIP KAM\nTaylor · Morgan · Casey · Reese"]
+    AVY["Avery\nKAM Manager"]
+    PAT["Pat\nDirector"]
+  end
+
+  SBP & CCRM & DFSP --> INGEST
+  TVG2 & FDR --> INGEST
+  TABL --> INGEST
+  INGEST --> UNIFIED --> AGENT --> CONS
+  CONS --> KAM4 & AVY & PAT
+  style TVG2 fill:#fff7ed,stroke:#f59e0b
+  style FDR fill:#fff7ed,stroke:#f59e0b
+  style TABL fill:#fff7ed,stroke:#f59e0b
+        </div>
+      </div>
+      <div id="f5-technical" class="flow-pane">
+        <div class="mermaid">
+flowchart TD
+  subgraph INGEST2["Ingest Patterns"]
+    SBP2["Sportsbook Platform\nREST API + Platform Events\nWagering_Event__c · GGR_Record__c\nRefresh: near real-time"]
+    CCRM2["Casino CRM\nREST API + Platform Events\nCasino_Session__c · Game_Affinity__c\nRefresh: near real-time"]
+    DFSP2["DFS Platform\nScheduled Batch (post-contest)\nDFS_Contest_Entry__c · DFS_Prize__c\nRefresh: contest completion"]
+    TVG3["TVG ⚠ TBD\nLikely: file extract or REST API\nTVG_Activity__c\nRefresh: T+1 minimum\n⚠ Critical scoping item"]
+    FDR2["FanDuel Racing ⚠ TBD\nLikely: internal REST API\nFD_Racing_Activity__c\nRefresh: T+1 minimum\n⚠ Critical scoping item"]
+    TABL2["Tableau ⚠ TBD\nOption A: Tableau Connector — 24h\nOption B: MuleSoft — near real-time\nSurvey_Response__c\n⚠ Confirm integration method"]
+  end
+  subgraph QUAL["Data Quality Layer"]
+    DEDUP["Dedup: match on canonical VIP id\nMerge duplicates into VIP_Account__c"]
+    NULL["Null-fill: Racing records flagged\nif coverage &lt; 70%\nConfidence dampener applied"]
+    VAL["Validation rules on ingest\nReject malformed records\nAlert ops via Platform Event"]
+  end
+  subgraph UNIFIED2["Unified Data Layer"]
+    VIP2["VIP_Account__c\n(master record)"]
+    OBJS["Child objects:\nWagering_Event__c · Casino_Session__c\nDFS_Contest_Entry__c · Racing_Activity__c\nSurvey_Response__c · Alert_Record__c\nNBA_Recommendation__c · Onboarding_Milestone__c"]
+  end
+  subgraph AI["Agentforce / Einstein"]
+    DC["Data Cloud\n(if in scope) OR standard SOQL"]
+    MODELS["Models: NBA Scoring · Sentiment\nRG Classification · Readiness Score"]
+  end
+  CONS2["KAM Console\nReads from unified layer\nAll modules powered from same objects"]
+
+  SBP2 & CCRM2 & DFSP2 & TVG3 & FDR2 & TABL2 --> DEDUP
+  DEDUP --> NULL --> VAL --> VIP2 --> OBJS
+  OBJS --> DC --> MODELS --> CONS2
+  style TVG3 fill:#fff7ed,stroke:#f59e0b
+  style FDR2 fill:#fff7ed,stroke:#f59e0b
+  style TABL2 fill:#fff7ed,stroke:#f59e0b
+        </div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#fff7ed;border:1px solid #f59e0b;"></div> ⚠ Open scoping question — Racing (TVG + FD Racing) and Tableau integration methods TBD</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e8f0fe;border:1px solid #0060a3;"></div> Confirmed integration pattern</div>
+    </div>
+  </div>
+
+</div><!-- end container -->
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#e8f0fe',
+      primaryBorderColor: '#0060a3',
+      primaryTextColor: '#0b1f45',
+      lineColor: '#0060a3',
+      secondaryColor: '#f0fdf4',
+      tertiaryColor: '#fff7ed',
+      fontSize: '13px'
+    }
+  });
+
+  function switchTab(flowId, view, btn) {
+    const stakeholderPane = document.getElementById(flowId + '-stakeholder');
+    const technicalPane = document.getElementById(flowId + '-technical');
+    stakeholderPane.classList.remove('visible');
+    technicalPane.classList.remove('visible');
+    if (view === 'stakeholder') {
+      stakeholderPane.classList.add('visible');
+    } else {
+      technicalPane.classList.add('visible');
+    }
+    // Update button states
+    btn.closest('.tab-group').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // Re-init mermaid for the newly visible pane
+    const pane = document.getElementById(flowId + '-' + view);
+    const el = pane.querySelector('.mermaid');
+    if (el && !el.getAttribute('data-processed')) {
+      mermaid.init(undefined, el);
+    }
+  }
+</script>
+</body>
+</html>

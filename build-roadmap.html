@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FanDuel VIP KAM Console — Build Roadmap</title>
+<style>
+@page { size: Letter; margin: 0.7in 0.75in 0.85in 0.75in; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 10pt;
+  line-height: 1.48;
+  color: #1a1a1a;
+  margin: 0;
+  background: #f4f6f9;
+}
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 36px 48px 48px;
+}
+.cover {
+  border-top: 6px solid #0176d3;
+  padding-top: 22px;
+  margin-bottom: 22px;
+}
+.cover .kicker {
+  font-size: 8.5pt;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0176d3;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+.cover .title {
+  font-size: 20pt;
+  font-weight: 700;
+  color: #032d60;
+  margin: 0 0 6px 0;
+  line-height: 1.15;
+}
+.cover .subtitle {
+  font-size: 11.5pt;
+  color: #444;
+  margin: 0 0 12px 0;
+}
+.cover .meta {
+  font-size: 8.5pt;
+  color: #666;
+  line-height: 1.5;
+}
+h1 {
+  font-size: 15pt;
+  color: #032d60;
+  border-bottom: 2px solid #0176d3;
+  padding-bottom: 4px;
+  margin-top: 26px;
+  margin-bottom: 10px;
+  page-break-after: avoid;
+}
+h2 {
+  font-size: 12.5pt;
+  color: #032d60;
+  margin-top: 18px;
+  margin-bottom: 7px;
+  page-break-after: avoid;
+}
+p { margin: 5px 0 9px 0; }
+strong { color: #032d60; }
+code {
+  font-family: Menlo, Monaco, 'Courier New', monospace;
+  background: #f4f6f9;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 8.5pt;
+  color: #b83a10;
+}
+ul, ol { margin: 5px 0 9px 0; padding-left: 22px; }
+li { margin: 3px 0; }
+hr {
+  border: none;
+  border-top: 1px solid #dddfe2;
+  margin: 16px 0;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8px 0 14px 0;
+  font-size: 8.5pt;
+  page-break-inside: avoid;
+}
+thead { background: #032d60; color: #fff; }
+th {
+  padding: 6px 8px;
+  font-weight: 600;
+  text-align: left;
+  vertical-align: bottom;
+}
+td {
+  padding: 5px 8px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+tbody tr:nth-child(even) { background: #f8fafc; }
+a { color: #0176d3; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 20px 0;
+}
+.toc a {
+  display: inline-block;
+  font-size: 8.5pt;
+  font-weight: 600;
+  padding: 5px 10px;
+  background: #eef4fb;
+  color: #032d60;
+  border-radius: 3px;
+}
+.toc a:hover { background: #d8e6f7; text-decoration: none; }
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 14px 0 18px 0;
+}
+.metric {
+  border: 1px solid #dddfe2;
+  padding: 12px 14px;
+  page-break-inside: avoid;
+  background: #fff;
+}
+.metric .phase {
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0176d3;
+  margin: 0 0 4px 0;
+}
+.metric h3 {
+  font-size: 11pt;
+  color: #032d60;
+  margin: 0 0 8px 0;
+  font-weight: 700;
+}
+.metric .num {
+  font-size: 18pt;
+  font-weight: 700;
+  color: #032d60;
+  line-height: 1;
+  margin: 0 0 2px 0;
+}
+.metric .unit {
+  font-size: 8pt;
+  color: #666;
+  margin: 0 0 8px 0;
+}
+.metric .dur { font-size: 8.5pt; color: #444; margin: 0; }
+
+.loe-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 8.5pt;
+  color: #444;
+  margin: 0 0 14px 0;
+}
+.badge {
+  display: inline-block;
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 1px 6px;
+  border-radius: 2px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.badge.s { background: #eef4fb; color: #032d60; }
+.badge.m { background: #fef3c7; color: #92400e; }
+.badge.l { background: #ffcdc2; color: #8e030f; }
+.badge.xl { background: #ba0517; color: #fff; }
+.badge.mock { background: #f3f3f3; color: #444; }
+.badge.seeded { background: #eef4fb; color: #032d60; }
+.badge.live { background: #ebf7e6; color: #2e844a; }
+.badge.blocked { background: #fef6f6; color: #ba0517; }
+.risk {
+  display: inline-block;
+  font-size: 7.5pt;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.risk.high { background: #fef6f6; color: #ba0517; }
+.risk.med { background: #fff4e5; color: #8c4b02; }
+.risk.low { background: #ebf7e6; color: #2e844a; }
+.risk.none { background: #f3f3f3; color: #444; }
+
+.callout {
+  background: #f4f6f9;
+  border-left: 3px solid #0176d3;
+  padding: 8px 12px;
+  margin: 8px 0 12px 0;
+  page-break-inside: avoid;
+}
+.callout.warn {
+  border-left-color: #ba0517;
+  background: #fef6f6;
+}
+.callout .label {
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0176d3;
+  margin: 0 0 3px 0;
+}
+.callout.warn .label { color: #ba0517; }
+
+.phase-meta {
+  font-size: 9pt;
+  color: #444;
+  margin: 0 0 10px 0;
+}
+.phase-meta strong { color: #032d60; }
+.totals {
+  font-size: 9.5pt;
+  font-weight: 600;
+  color: #032d60;
+  margin: 4px 0 0 0;
+}
+
+.actions ol { margin-top: 6px; }
+.actions li { margin: 6px 0; }
+
+.footer {
+  margin-top: 28px;
+  padding-top: 10px;
+  border-top: 1px solid #dddfe2;
+  font-size: 8pt;
+  color: #888;
+  text-align: center;
+}
+
+@media screen {
+  body { padding: 24px 16px 48px; }
+}
+@media print {
+  body { background: #fff; }
+  .page { max-width: none; padding: 0; }
+  .toc { display: none; }
+  h1 { page-break-before: auto; }
+  a[href]::after { content: none !important; }
+}
+@media (max-width: 800px) {
+  .page { padding: 24px 20px 36px; }
+  .metrics { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="cover">
+  <p class="kicker">FanDuel VIP · Build planning · v1.1</p>
+  <div class="title">VIP KAM Console — Build Roadmap</div>
+  <div class="subtitle">4-week increments · Friday POC every week · capability phases are the backlog, not the calendar</div>
+  <div class="meta">
+    Prepared for sprint planning, resourcing, and stakeholder alignment<br/>
+    Prepared by Salesforce · September 2026 · Roadmap v1.1<br/>
+    Based on Figma component screens, prototype, user stories, and <code>data-points-validation.md</code><br/>
+    To be reviewed by Ren (AI Experience Architect) + FanDuel VIP Technology
+  </div>
+</div>
+
+<nav class="toc">
+  <a href="#tracks">Two tracks</a>
+  <a href="#calendar">Committed calendar</a>
+  <a href="#summary">Capability map</a>
+  <a href="#phase-1">Phase 1 — Foundation</a>
+  <a href="#phase-2">Phase 2 — Live Core Data</a>
+  <a href="#phase-3">Phase 3 — Agentforce</a>
+  <a href="#phase-4">Phase 4 — Full Operations</a>
+  <a href="#blockers">Build blockers</a>
+  <a href="#actions">Immediate actions</a>
+</nav>
+
+<div class="callout warn">
+  <p class="label">Operating model</p>
+  <p style="margin:0">Weekly demos are the cadence. Compressing all four phases into 4-week boxes is not. <strong>Only Increment 1 is committed to a 4-week clock</strong> (demo-complete mock console). Phases 3–4 stay off the calendar until Track B has named owners and dates. Label every Friday screen <span class="badge mock">Mock</span> <span class="badge seeded">Seeded CRM</span> <span class="badge live">Live</span> <span class="badge blocked">Blocked</span>.</p>
+</div>
+
+<p>A 2–3 engineer Salesforce team typically lands ~15–20 story points per week. Hitting Phase 1 (~126 pts) in 4 weeks is ~31 pts/week — a <strong>demo-complete sandbox</strong>, not production-hardened LWC. It assumes the existing prototype, mock data only, AI-paired build, and almost no design churn. Full production remains <strong>~495 points / 28–42 weeks</strong>.</p>
+
+<div class="loe-key">
+  <span><span class="badge s">S</span> Small · 1–2 sprints</span>
+  <span><span class="badge m">M</span> Medium · 2–4 sprints</span>
+  <span><span class="badge l">L</span> Large · 4–6 sprints</span>
+  <span><span class="badge xl">XL</span> Extra Large · 6+ sprints</span>
+</div>
+
+<div class="metrics">
+  <div class="metric">
+    <p class="phase">Increment 1 · committed</p>
+    <h3>Mock console</h3>
+    <p class="num">4</p>
+    <p class="unit">weeks · Friday POC</p>
+    <p class="dur">Phase 1 demo-complete. No DataPoints.</p>
+  </div>
+  <div class="metric">
+    <p class="phase">Increment 2 · conditional</p>
+    <h3>Live CRM only</h3>
+    <p class="num">~46</p>
+    <p class="unit">pts · weeks 5–8</p>
+    <p class="dur">GGR / overbonused stay mock until Track B.</p>
+  </div>
+  <div class="metric">
+    <p class="phase">Phase 3 · parked</p>
+    <h3>Agentforce</h3>
+    <p class="num">115</p>
+    <p class="unit">pts · not on 4-week clock</p>
+    <p class="dur">Needs Andy / NBA use cases + real-time feeds.</p>
+  </div>
+  <div class="metric">
+    <p class="phase">Phase 4 · parked</p>
+    <h3>Full operations</h3>
+    <p class="num">151</p>
+    <p class="unit">pts · not on 4-week clock</p>
+    <p class="dur">Needs event catalog, marketing, Tableau method.</p>
+  </div>
+</div>
+
+<h1 id="tracks">Two tracks (run in parallel)</h1>
+<p>Weekly POCs only work if integration unblocking is a separate track. Mixing them produces prettier mocks and no live data.</p>
+<table>
+<thead><tr>
+  <th>Track</th>
+  <th>Cadence</th>
+  <th>What it is</th>
+  <th>Success</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><strong>A — Experience POC</strong></td>
+  <td>Friday demo. 4-week packages.</td>
+  <td>LWC, SLDS, flows, seeded data. Owned by the console build pair.</td>
+  <td>A KAM can click it.</td>
+</tr>
+<tr>
+  <td><strong>B — Integration readiness</strong></td>
+  <td>Not weekly-demoable.</td>
+  <td>DataPoints API, Agentforce NBA with Andy, event catalog source, Tableau method.</td>
+  <td>A signed contract, not a screenshot.</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="calendar">Committed calendar</h1>
+<h2>Increment 1 — weeks 1–4 (committed)</h2>
+<p class="phase-meta"><strong>Scope:</strong> Phase 1 mock console. No DataPoints. No Agentforce. Demo is the product.<br/>
+<strong>Gate:</strong> A KAM can click the console in sandbox and say the workflow is right.</p>
+<table>
+<thead><tr>
+  <th>Week</th>
+  <th>Friday POC</th>
+  <th>Label</th>
+</tr></thead>
+<tbody>
+<tr><td>1</td><td>SLDS shell, nav, My VIPs table with mock rows</td><td><span class="badge mock">Mock</span></td></tr>
+<tr><td>2</td><td>Search, filters, row actions, Log Contact modal</td><td><span class="badge mock">Mock</span></td></tr>
+<tr><td>3</td><td>Last Contact, Birthdays, WPC — still mock</td><td><span class="badge mock">Mock</span></td></tr>
+<tr><td>4</td><td>Contact card + visual indicators. Stakeholder gate.</td><td><span class="badge mock">Mock</span></td></tr>
+</tbody>
+</table>
+<div class="callout warn">
+  <p class="label">Kickoff risk</p>
+  <p style="margin:0">If Salesforce sandbox + SLDS/LWC access is not day 1, Week 1 is a Figma click-through, not a POC.</p>
+</div>
+
+<h2>Increment 2 — weeks 5–8 (conditional)</h2>
+<p class="phase-meta">Only if Contact, Activity, and Task are mapped and writable. Do not call this “live core data” if DataPoints is still unconfirmed.</p>
+<table>
+<thead><tr>
+  <th>Ship live</th>
+  <th>Keep mock (Track B)</th>
+</tr></thead>
+<tbody>
+<tr><td>Contact master (name, tier, DOB, KAM)</td><td>GGR L30 coloring</td></tr>
+<tr><td>Activity dates → Last Contact</td><td>Overbonused / bonus cap</td></tr>
+<tr><td>Log Contact writes Activity</td><td>NBA amber triangle</td></tr>
+<tr><td>Birthdays from real DOB</td><td>Overview GGR by segment</td></tr>
+<tr><td>Onboarding tracker *(if objects exist)*</td><td></td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+  <p class="label">After week 8</p>
+  <p style="margin:0">Phases 3–4 stay off the 4-week calendar until Track B has named owners and dates for DataPoints, Agentforce NBA, event catalog, and Tableau. Friday demos of that UI stay <span class="badge mock">Mock</span> / <span class="badge blocked">Blocked</span>. Static amber triangles are not NBA.</p>
+</div>
+
+<h1 id="summary">Capability map (backlog, not calendar)</h1>
+<p>Four capability phases. Business value still stacks in this order. Duration below is production-hardening effort, not the Increment 1 demo clock.</p>
+<table>
+<thead><tr>
+  <th>Capability</th>
+  <th>Theme</th>
+  <th>Story Points</th>
+  <th>LOE</th>
+  <th>Production effort</th>
+  <th>Lands on calendar when</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><strong>Phase 1</strong></td>
+  <td>Foundation (Mock-Ready)</td>
+  <td>~126</td>
+  <td><span class="badge l">L</span></td>
+  <td>6–8 weeks if hardened</td>
+  <td><strong>Increment 1</strong> (4 weeks as demo-complete)</td>
+</tr>
+<tr>
+  <td><strong>Phase 2</strong></td>
+  <td>Live Core Data</td>
+  <td>~103</td>
+  <td><span class="badge l">L</span>–<span class="badge xl">XL</span></td>
+  <td>6–10 weeks</td>
+  <td>Increment 2 = CRM-only; DataPoints after Track B</td>
+</tr>
+<tr>
+  <td><strong>Phase 3</strong></td>
+  <td>Agentforce Intelligence</td>
+  <td>~115</td>
+  <td><span class="badge xl">XL</span></td>
+  <td>8–12 weeks</td>
+  <td>Track B: Agentforce config + real-time feeds</td>
+</tr>
+<tr>
+  <td><strong>Phase 4</strong></td>
+  <td>Full Operations</td>
+  <td>~151</td>
+  <td><span class="badge xl">XL</span></td>
+  <td>8–12 weeks</td>
+  <td>Track B: event catalog + marketing + Tableau</td>
+</tr>
+<tr>
+  <td><strong>Total</strong></td>
+  <td></td>
+  <td><strong>~495 story points</strong></td>
+  <td></td>
+  <td><strong>~28–42 weeks to full production</strong></td>
+  <td>Not 16 weeks of 4-week boxes</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="phase-1">Phase 1 — Foundation (Mock-Ready)</h1>
+<p class="phase-meta"><strong>Goal:</strong> Working Salesforce component in sandbox, all UI states implemented, seeded with mock data. Sufficient for stakeholder demos and UX validation.<br/>
+<strong>Dependency:</strong> Salesforce org access + SLDS/LWC setup. No external data integrations required.<br/>
+<strong>Calendar:</strong> Increment 1 (4 weeks, demo-complete). Production-hardened: 6–8 weeks.</p>
+
+<table>
+<thead><tr>
+  <th>Component</th>
+  <th>Key Features</th>
+  <th>LOE</th>
+  <th>Pts</th>
+  <th>Data Source</th>
+  <th>Blocker Risk</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><strong>SLDS Shell + Nav</strong></td>
+  <td>Global nav bar, app launcher, notification panel, settings panel</td>
+  <td><span class="badge s">S</span></td>
+  <td>13</td>
+  <td>Static</td>
+  <td><span class="risk none">None</span></td>
+</tr>
+<tr>
+  <td><strong>VIP Playbook — Table</strong></td>
+  <td>My VIPs table, columns, sorting, pagination, loading/empty states</td>
+  <td><span class="badge m">M</span></td>
+  <td>29</td>
+  <td>Mock VIP records</td>
+  <td><span class="risk none">None</span></td>
+</tr>
+<tr>
+  <td><strong>VIP Playbook — Search &amp; Filter</strong></td>
+  <td>Search input, SLDS list filters</td>
+  <td><span class="badge s">S</span></td>
+  <td>10</td>
+  <td>Mock</td>
+  <td><span class="risk none">None</span></td>
+</tr>
+<tr>
+  <td><strong>VIP Playbook — Row Actions</strong></td>
+  <td>Hover actions, Log Contact modal, single/multi-row select, bulk bar</td>
+  <td><span class="badge m">M</span></td>
+  <td>21</td>
+  <td>Mock</td>
+  <td><span class="risk none">None</span></td>
+</tr>
+<tr>
+  <td><strong>VIP Playbook — Status &amp; Visual Indicators</strong></td>
+  <td>GGR coloring, Last Contact urgency, status pills, NBA amber triangle (static)</td>
+  <td><span class="badge s">S</span></td>
+  <td>8</td>
+  <td>Mock</td>
+  <td><span class="risk none">None</span></td>
+</tr>
+<tr>
+  <td><strong>Last Contact Tracker</strong></td>
+  <td>Cadence list, urgency coloring, Log Contact modal</td>
+  <td><span class="badge s">S</span></td>
+  <td>13</td>
+  <td>Mock</td>
+  <td><span class="risk none">None</span></td>
+</tr>
+<tr>
+  <td><strong>Birthdays This Week</strong></td>
+  <td>Birthday list, Send Celebration flow</td>
+  <td><span class="badge s">S</span></td>
+  <td>9</td>
+  <td>Mock (DOB from record)</td>
+  <td><span class="risk none">None</span></td>
+</tr>
+<tr>
+  <td><strong>WPC Tracker — Basic</strong></td>
+  <td>WPC list, mark complete, filter tabs</td>
+  <td><span class="badge s">S</span></td>
+  <td>15</td>
+  <td>Mock</td>
+  <td><span class="risk none">None</span></td>
+</tr>
+<tr>
+  <td><strong>VIP Contact Card Modal</strong></td>
+  <td>Full VIP detail modal, stats, history</td>
+  <td><span class="badge s">S</span></td>
+  <td>8</td>
+  <td>Mock</td>
+  <td><span class="risk none">None</span></td>
+</tr>
+</tbody>
+</table>
+<p class="totals">Phase 1 total: ~126 story points · LOE L · Increment 1 = 4 weeks demo-complete · 6–8 weeks if production-hardened</p>
+
+<h1 id="phase-2">Phase 2 — Live Core Data</h1>
+<p class="phase-meta"><strong>Goal:</strong> Replace mock data with live Salesforce CRM + DataPoints feeds. KAMs can use the console for real work.<br/>
+<strong>Dependency:</strong> DataPoints API access confirmed + field mapping validated (see <code>data-points-validation.md</code>). Salesforce CRM objects mapped (Contact, Activity, Task, Opportunity).<br/>
+<strong>Calendar:</strong> Increment 2 (weeks 5–8) ships <strong>Low-risk CRM only</strong>. High-risk DataPoints rows stay Mock/Blocked until Track B confirms access.</p>
+
+<div class="callout warn">
+  <p class="label">Critical path</p>
+  <p style="margin:0">DataPoints API access + field validation is Track B. It does not start Increment 2. Do not wait on it to ship CRM-live rows. GGR and overbonused/bonus cap remain the high-risk items.</p>
+</div>
+
+<table>
+<thead><tr>
+  <th>Component</th>
+  <th>Key Features</th>
+  <th>LOE</th>
+  <th>Pts</th>
+  <th>Data Source</th>
+  <th>Blocker Risk</th>
+  <th>Increment</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><strong>VIP Master Record integration</strong></td>
+  <td>Live Contact data: name, segment, tier, state, DOB, KAM assignment</td>
+  <td><span class="badge s">S</span></td>
+  <td>8</td>
+  <td>Salesforce CRM</td>
+  <td><span class="risk low">Low — standard objects</span></td>
+  <td><span class="badge live">2 — Live</span></td>
+</tr>
+<tr>
+  <td><strong>Last Contact — Live Activities</strong></td>
+  <td>Cadence status from real Activity object dates</td>
+  <td><span class="badge s">S</span></td>
+  <td>8</td>
+  <td>Salesforce CRM</td>
+  <td><span class="risk low">Low</span></td>
+  <td><span class="badge live">2 — Live</span></td>
+</tr>
+<tr>
+  <td><strong>Contact Logging — Live Write</strong></td>
+  <td>Log Contact writes real Activity records to Salesforce</td>
+  <td><span class="badge m">M</span></td>
+  <td>13</td>
+  <td>Salesforce CRM</td>
+  <td><span class="risk low">Low</span></td>
+  <td><span class="badge live">2 — Live</span></td>
+</tr>
+<tr>
+  <td><strong>Onboarding Tracker — Live</strong></td>
+  <td>Real new VIP records, KYC status, onboarding start date</td>
+  <td><span class="badge s">S</span></td>
+  <td>13</td>
+  <td>Salesforce CRM</td>
+  <td><span class="risk low">Low</span></td>
+  <td><span class="badge live">2 — Live if objects exist</span></td>
+</tr>
+<tr>
+  <td><strong>Birthdays — Live DOB</strong></td>
+  <td>Birthday detection from real Contact DOB field</td>
+  <td><span class="badge s">S</span></td>
+  <td>4</td>
+  <td>Salesforce CRM</td>
+  <td><span class="risk low">Low</span></td>
+  <td><span class="badge live">2 — Live</span></td>
+</tr>
+<tr>
+  <td><strong>Bonus Data</strong></td>
+  <td>Last Bonus Issued: amount, type, date from real records</td>
+  <td><span class="badge m">M</span></td>
+  <td>13</td>
+  <td>Salesforce CRM / DataPoints</td>
+  <td><span class="risk med">Medium — bonus object mapping TBD</span></td>
+  <td><span class="badge seeded">2 — Live if CRM; else Mock</span></td>
+</tr>
+<tr>
+  <td><strong>WPC — Live Task Integration</strong></td>
+  <td>WPC list driven by real Tasks, completion writes back</td>
+  <td><span class="badge m">M</span></td>
+  <td>15</td>
+  <td>Salesforce CRM</td>
+  <td><span class="risk med">Medium — WPC generation logic TBD</span></td>
+  <td><span class="badge seeded">2 — Live if logic defined</span></td>
+</tr>
+<tr>
+  <td><strong>Overview Metrics — Live</strong></td>
+  <td>Total VIPs, Active count, promotions/demotions from real data</td>
+  <td><span class="badge s">S</span></td>
+  <td>8</td>
+  <td>Salesforce CRM + DataPoints</td>
+  <td><span class="risk med">Medium</span></td>
+  <td><span class="badge seeded">2 — CRM counts Live; GGR Mock</span></td>
+</tr>
+<tr>
+  <td><strong>GGR L30 + Session Data</strong></td>
+  <td>Live GGR coloring, sortable, accurate values</td>
+  <td><span class="badge m">M</span></td>
+  <td>13</td>
+  <td>DataPoints</td>
+  <td><span class="risk high">High — DataPoints access must be confirmed</span></td>
+  <td><span class="badge blocked">Blocked — Track B</span></td>
+</tr>
+<tr>
+  <td><strong>Overbonused Flag</strong></td>
+  <td>Live bonus cap + overbonused detection</td>
+  <td><span class="badge m">M</span></td>
+  <td>8</td>
+  <td>DataPoints</td>
+  <td><span class="risk high">High — cap data source unconfirmed</span></td>
+  <td><span class="badge blocked">Blocked — Track B</span></td>
+</tr>
+</tbody>
+</table>
+<p class="totals">Phase 2 total: ~103 story points · LOE L–XL · Increment 2 ≈ 46 pts CRM-live · remainder waits on DataPoints</p>
+
+<h1 id="phase-3">Phase 3 — Agentforce Intelligence</h1>
+<p class="phase-meta"><strong>Goal:</strong> Surface AI-generated recommendations, risk signals, and sentiment analysis throughout the console. Transforms it from a data view into an intelligent action engine.<br/>
+<strong>Dependency:</strong> Agentforce org configuration, Einstein AI features enabled, DataPoints real-time signals available.<br/>
+<strong>Calendar:</strong> Not on a 4-week clock until Track B has named owners and dates. Friday demos of this UI stay <span class="badge mock">Mock</span> / <span class="badge blocked">Blocked</span>.</p>
+
+<div class="callout warn">
+  <p class="label">Critical path</p>
+  <p style="margin:0">Agentforce use case configuration is the longest lead item. Scope it on Track B during Increment 1 — not after Increment 2.</p>
+</div>
+
+<table>
+<thead><tr>
+  <th>Component</th>
+  <th>Key Features</th>
+  <th>LOE</th>
+  <th>Pts</th>
+  <th>Data Source</th>
+  <th>Blocker Risk</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><strong>NBA Queue — Live Recommendations</strong></td>
+  <td>Real Agentforce NBA actions: priority, type, recommended message, contact window</td>
+  <td><span class="badge xl">XL</span></td>
+  <td>29</td>
+  <td>Agentforce NBA</td>
+  <td><span class="risk high">High — requires Agentforce config + use case setup</span></td>
+</tr>
+<tr>
+  <td><strong>NBA — RG Signal Actions</strong></td>
+  <td>Live RG flag surfacing, welfare check workflow</td>
+  <td><span class="badge l">L</span></td>
+  <td>13</td>
+  <td>Agentforce + Compliance rules</td>
+  <td><span class="risk high">High — RG threshold ownership TBD</span></td>
+</tr>
+<tr>
+  <td><strong>Real-Time Awareness — Big Swings</strong></td>
+  <td>Live large win/loss detection from DataPoints session data</td>
+  <td><span class="badge l">L</span></td>
+  <td>16</td>
+  <td>DataPoints (real-time)</td>
+  <td><span class="risk high">High — real-time feed vs. batch TBD</span></td>
+</tr>
+<tr>
+  <td><strong>Real-Time Awareness — Payment Alerts</strong></td>
+  <td>Live withdrawal status, decline detection, escalation workflow</td>
+  <td><span class="badge m">M</span></td>
+  <td>13</td>
+  <td>Payments platform</td>
+  <td><span class="risk high">High — payments data source TBD</span></td>
+</tr>
+<tr>
+  <td><strong>Real-Time Awareness — Losing Streaks</strong></td>
+  <td>Live streak detection from session data</td>
+  <td><span class="badge m">M</span></td>
+  <td>8</td>
+  <td>DataPoints</td>
+  <td><span class="risk med">Medium — threshold config needed</span></td>
+</tr>
+<tr>
+  <td><strong>Churn Risk Scoring</strong></td>
+  <td>Agentforce-powered churn risk on Onboarding/Offboarding tracker</td>
+  <td><span class="badge l">L</span></td>
+  <td>18</td>
+  <td>Agentforce Einstein</td>
+  <td><span class="risk high">High — model training required</span></td>
+</tr>
+<tr>
+  <td><strong>VIP Feedback Pulse — Sentiment</strong></td>
+  <td>Einstein NLP sentiment classification on feedback items</td>
+  <td><span class="badge m">M</span></td>
+  <td>13</td>
+  <td>Agentforce Einstein</td>
+  <td><span class="risk med">Medium — feedback capture mechanism TBD</span></td>
+</tr>
+<tr>
+  <td><strong>NBA Amber Triangle — Live</strong></td>
+  <td>Real NBA pending flag on My VIPs table rows</td>
+  <td><span class="badge s">S</span></td>
+  <td>5</td>
+  <td>Agentforce NBA</td>
+  <td><span class="risk med">Dependent on NBA Queue being live</span></td>
+</tr>
+</tbody>
+</table>
+<p class="totals">Phase 3 total: ~115 story points · LOE XL · Est. 8–12 weeks after Track B unblocks</p>
+
+<h1 id="phase-4">Phase 4 — Full Operations</h1>
+<p class="phase-meta"><strong>Goal:</strong> Manager views, approval workflows, campaign management, event coordination, advanced analytics. Full production-ready console for all personas.<br/>
+<strong>Dependency:</strong> Phases 1–3 stable. Campaign tooling and event catalog integrations confirmed.<br/>
+<strong>Calendar:</strong> Not on a 4-week clock until Track B confirms event catalog, marketing platform, and Tableau method.</p>
+
+<table>
+<thead><tr>
+  <th>Component</th>
+  <th>Key Features</th>
+  <th>LOE</th>
+  <th>Pts</th>
+  <th>Data Source</th>
+  <th>Blocker Risk</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><strong>Campaign Manager — Full</strong></td>
+  <td>Create/activate/approve campaigns, target VIP selector, performance metrics</td>
+  <td><span class="badge l">L</span></td>
+  <td>26</td>
+  <td>Salesforce CRM + Marketing platform</td>
+  <td><span class="risk med">Medium — marketing platform integration TBD</span></td>
+</tr>
+<tr>
+  <td><strong>Upcoming Events — Full</strong></td>
+  <td>Event catalog, invite management, ticket assignment, RSVP tracking</td>
+  <td><span class="badge l">L</span></td>
+  <td>21</td>
+  <td>Event catalog (source TBD)</td>
+  <td><span class="risk high">High — event catalog source unconfirmed</span></td>
+</tr>
+<tr>
+  <td><strong>Manager Cockpit</strong></td>
+  <td>Team WPC progress, contact health, alert summaries, churn rates</td>
+  <td><span class="badge m">M</span></td>
+  <td>18</td>
+  <td>Aggregated from Phases 1–3</td>
+  <td><span class="risk low">Low — derived from existing data</span></td>
+</tr>
+<tr>
+  <td><strong>KAM Director Views</strong></td>
+  <td>Team performance dashboards, demotion approval queue, export tools</td>
+  <td><span class="badge m">M</span></td>
+  <td>15</td>
+  <td>Salesforce CRM + Tableau</td>
+  <td><span class="risk med">Medium — Tableau integration method TBD</span></td>
+</tr>
+<tr>
+  <td><strong>Tableau Integration</strong></td>
+  <td>Embedded analytics: Overview, Spend Trends, Segments, Retention</td>
+  <td><span class="badge l">L</span></td>
+  <td>13</td>
+  <td>Tableau + DataPoints</td>
+  <td><span class="risk med">Medium — direct vs. middleware TBD</span></td>
+</tr>
+<tr>
+  <td><strong>VIP Feedback Pulse — Respond Flow</strong></td>
+  <td>KAM response channel, full feedback history, team sentiment view</td>
+  <td><span class="badge m">M</span></td>
+  <td>19</td>
+  <td>Salesforce CRM + feedback platform</td>
+  <td><span class="risk med">Medium — feedback platform TBD</span></td>
+</tr>
+<tr>
+  <td><strong>Demotion Approval Workflow</strong></td>
+  <td>Manager review queue, approve/reject, compliance notification</td>
+  <td><span class="badge s">S</span></td>
+  <td>13</td>
+  <td>Salesforce Flows</td>
+  <td><span class="risk low">Low</span></td>
+</tr>
+<tr>
+  <td><strong>Bulk Actions — Full</strong></td>
+  <td>Bulk log contact, send bonus, export</td>
+  <td><span class="badge s">S</span></td>
+  <td>13</td>
+  <td>Salesforce CRM</td>
+  <td><span class="risk low">Low</span></td>
+</tr>
+<tr>
+  <td><strong>Mobile — VIP Table</strong></td>
+  <td>Mobile card view, urgency signals on mobile</td>
+  <td><span class="badge m">M</span></td>
+  <td>13</td>
+  <td>Same as desktop</td>
+  <td><span class="risk low">Low</span></td>
+</tr>
+</tbody>
+</table>
+<p class="totals">Phase 4 total: ~151 story points · LOE XL · Est. 8–12 weeks after Track B unblocks</p>
+
+<h1 id="blockers">Readiness Assessment — Build Blockers by Component</h1>
+<table>
+<thead><tr>
+  <th>Component</th>
+  <th>Earliest viable increment</th>
+  <th>Key Blocker Before Build Can Start</th>
+</tr></thead>
+<tbody>
+<tr><td>VIP Playbook (My VIPs table)</td><td>Increment 1</td><td>None — start now</td></tr>
+<tr><td>Last Contact Tracker</td><td>Increment 1</td><td>None — start now</td></tr>
+<tr><td>Birthdays This Week</td><td>Increment 1</td><td>None — start now</td></tr>
+<tr><td>WPC Tracker</td><td>Increment 1 (mock) / 2 (live)</td><td>WPC list generation logic needs definition</td></tr>
+<tr><td>Onboarding &amp; Offboarding</td><td>Increment 1 (mock) / 2 (live)</td><td>None for mock; KYC + survey platform for live</td></tr>
+<tr><td>VIP Contact Card Modal</td><td>Increment 1</td><td>None — start now</td></tr>
+<tr><td>GGR / DataPoints fields</td><td>After Track B</td><td>DataPoints access confirmed + API scoped</td></tr>
+<tr><td>Overbonused / Bonus Cap</td><td>After Track B</td><td>Bonus cap data source confirmed</td></tr>
+<tr><td>NBA Queue</td><td>After Track B</td><td>Agentforce NBA use cases configured</td></tr>
+<tr><td>Real-Time Awareness</td><td>After Track B</td><td>Real-time DataPoints feed vs. batch confirmed</td></tr>
+<tr><td>Churn Risk</td><td>After Track B</td><td>Einstein churn model scoped or existing model identified</td></tr>
+<tr><td>Campaign Manager</td><td>After Track B</td><td>Marketing/campaign platform integration defined</td></tr>
+<tr><td>Upcoming Events</td><td>After Track B</td><td>Event catalog source defined</td></tr>
+<tr><td>Tableau Integration</td><td>After Track B</td><td>Tableau connection method (direct vs. middleware) decided</td></tr>
+<tr><td>VIP Feedback Pulse</td><td>After Track B</td><td>Feedback capture mechanism built or sourced</td></tr>
+</tbody>
+</table>
+
+<h1 id="actions">Recommended Immediate Actions</h1>
+<div class="actions">
+<ol>
+  <li><strong>Kick Increment 1 on Monday</strong> — Salesforce sandbox + SLDS shell + LWC scaffolding. Friday 1 demo is the table. No data dependencies.</li>
+  <li><strong>Label every Friday screen</strong> Mock / Seeded CRM / Live / Blocked. Do not let polish read as production.</li>
+  <li><strong>Share <code>data-points-validation.md</code> with FanDuel data/platform team (Track B)</strong> — validate field sources. This unblocks GGR/overbonused, not Increment 1.</li>
+  <li><strong>Scope Agentforce NBA use cases with Andy Geissler / FanDuel VIP Technology (Track B)</strong> — longest lead item. Start during Increment 1, not after Increment 2.</li>
+  <li><strong>Confirm event catalog source and Tableau connection method (Track B)</strong> — required before Phase 4 gets a calendar date.</li>
+</ol>
+</div>
+
+<div class="footer">
+  Roadmap version 1.1 — September 2026 · Recut from 6–12 week phases-as-calendar to 4-week increments + weekly Friday POCs<br/>
+  Phases 3–4 stay off the 4-week clock until Track B has owners and dates · Prepared by Salesforce · Confidential · For internal FanDuel review<br/>
+  Open in a browser · Cmd+P → Save as PDF for a shareable copy
+</div>
+
+</div>
+</body>
+</html>

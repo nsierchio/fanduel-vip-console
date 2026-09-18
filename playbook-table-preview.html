@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My VIPs Table — Preview</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Salesforce Sans', Arial, sans-serif; background: #f3f3f3; padding: 1.5rem; color: #1e1e1e; }
+  .preview-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.35rem; }
+  .preview-note { font-size: 0.67rem; color: #94a3b8; margin-bottom: 0.75rem; }
+  .card { background: #fff; border-radius: 0.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1); overflow: hidden; max-width: 1080px; }
+
+  /* Header bar: search + filter button */
+  .search-bar { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.75rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+  .search-wrap { position: relative; }
+  .search-wrap svg { position: absolute; left: 0.45rem; top: 50%; transform: translateY(-50%); pointer-events: none; }
+  .search-bar input { border: 1.5px solid #d0d5dd; border-radius: 0.35rem; padding: 0.28rem 0.6rem 0.28rem 1.8rem; font-size: 0.73rem; width: 14rem; outline: none; }
+  .search-bar input:focus { border-color: #0060a3; }
+  .btn-filter { display: flex; align-items: center; gap: 0.25rem; font-size: 0.7rem; font-weight: 700; color: #475569; background: #fff; border: 1.5px solid #d0d5dd; border-radius: 0.35rem; padding: 0.25rem 0.65rem; cursor: pointer; }
+  .btn-filter:hover { border-color: #0060a3; color: #0060a3; }
+
+  /* Grid: ☐ | Name | Segment | Tier | State | GGR L30 | Last Contact | Last Bonus Issued | Status | Actions */
+  .tbl-grid { display: grid; grid-template-columns: 1.5rem 1.45fr 0.6fr 0.65fr 0.8fr 0.72fr 0.68fr 1.55fr 0.58fr 0.8fr; gap: 0.5rem; align-items: center; }
+
+  .tbl-head { padding: 0.28rem 0.75rem; font-size: 0.61rem; text-transform: uppercase; letter-spacing: 0.04em; color: #3e3e3c; font-weight: 700; border-bottom: 1px solid #e5e5e5; background: #f3f3f3; }
+  .tbl-head .col { display: flex; align-items: center; gap: 0.18rem; white-space: nowrap; cursor: pointer; user-select: none; }
+  .tbl-head .col:hover { color: #0060a3; }
+  .sort-icon { font-size: 0.55rem; color: #94a3b8; }
+  .sort-icon.active { color: #0060a3; }
+
+  .tbl-body { max-height: 22rem; overflow-y: auto; }
+  .tbl-row { padding: 0.38rem 0.75rem; border-bottom: 1px solid #f1f5f9; transition: background 0.1s; }
+  .tbl-row:hover { background: #f8fafc; }
+
+  /* Name + NBA alert */
+  .name-cell { display: flex; align-items: center; gap: 0.28rem; min-width: 0; }
+  .cell-name { color: #0b5fc5; font-weight: 600; font-size: 0.73rem; text-decoration: underline; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nba-alert { position: relative; display: inline-flex; align-items: center; flex-shrink: 0; cursor: default; }
+  .nba-alert svg { display: block; }
+  .nba-alert .nba-popover { display: none; position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); background: #1e293b; color: #fff; font-size: 0.62rem; font-weight: 600; white-space: nowrap; padding: 0.3rem 0.55rem; border-radius: 0.3rem; z-index: 100; pointer-events: none; }
+  .nba-alert .nba-popover::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: #1e293b; }
+  .nba-alert:hover .nba-popover { display: block; }
+
+  /* Segment — plain text */
+  .seg-text { font-size: 0.7rem; color: #475569; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Tier */
+  .tier-val { font-size: 0.71rem; color: #334155; font-weight: 600; }
+  .tier-shield { display: inline-flex; align-items: center; gap: 0.18rem; font-size: 0.65rem; color: #0060a3; font-weight: 700; }
+  .tier-shield svg { flex-shrink: 0; }
+
+  /* Region */
+  .region-val { font-size: 0.66rem; color: #475569; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Last Contact */
+  .days-green  { background: #f0fdf4; color: #166534; font-size: 0.62rem; font-weight: 700; border-radius: 0.25rem; padding: 0.08rem 0.3rem; white-space: nowrap; }
+  .days-yellow { background: #fef3c7; color: #92400e; font-size: 0.62rem; font-weight: 700; border-radius: 0.25rem; padding: 0.08rem 0.3rem; white-space: nowrap; }
+  .days-red    { background: #fee2e2; color: #991b1b; font-size: 0.62rem; font-weight: 700; border-radius: 0.25rem; padding: 0.08rem 0.3rem; white-space: nowrap; }
+
+  /* Last Bonus */
+  .bonus-cell { display: flex; flex-direction: column; gap: 0.05rem; }
+  .bonus-amount { font-size: 0.71rem; font-weight: 700; color: #334155; }
+  .bonus-meta   { font-size: 0.59rem; color: #64748b; white-space: nowrap; }
+  .bonus-ob     { font-size: 0.59rem; font-weight: 700; background: #fee2e2; color: #991b1b; border-radius: 999px; padding: 0.05rem 0.35rem; display: inline-block; white-space: nowrap; }
+  .bonus-none   { font-size: 0.7rem; color: #d1d5db; }
+
+  /* GGR */
+  .ggr-pos { font-size: 0.71rem; font-weight: 700; color: #065f46; }
+  .ggr-neg { font-size: 0.71rem; font-weight: 700; color: #991b1b; }
+
+  /* Status */
+  .pill { font-size: 0.56rem; font-weight: 700; border-radius: 999px; padding: 0.04rem 0.22rem; display: inline-block; white-space: nowrap; letter-spacing: 0.01em; text-transform: uppercase; }
+  .pill-active      { background: #d1fae5; color: #065f46; }
+  .pill-deactivated { background: #f1f5f9; color: #64748b; }
+  .pill-suspended   { background: #fee2e2; color: #991b1b; }
+
+  /* Actions */
+  .actions { display: flex; gap: 0.2rem; }
+  .btn-contact { font-size: 0.63rem; font-weight: 600; border-radius: 0.3rem; padding: 0.18rem 0.4rem; border: 1.5px solid #0060a3; background: #0060a3; color: #fff; cursor: pointer; white-space: nowrap; }
+  .btn-bonus   { font-size: 0.63rem; font-weight: 600; border-radius: 0.3rem; padding: 0.18rem 0.4rem; border: 1.5px solid #10b981; background: #10b981; color: #fff; cursor: pointer; white-space: nowrap; }
+
+  /* Footer */
+  .tbl-footer { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.75rem; border-top: 1px solid #e2e8f0; background: #f8fafc; }
+  .page-info { font-size: 0.68rem; color: #64748b; }
+  .page-btns { display: flex; gap: 0.3rem; }
+  .page-btn { font-size: 0.67rem; font-weight: 600; border: 1.5px solid #d0d5dd; background: #fff; border-radius: 0.3rem; padding: 0.2rem 0.5rem; cursor: pointer; }
+
+  /* Annotations */
+  .annotations { max-width: 1080px; margin-top: 1.25rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  .ann { background: #fff; border-radius: 0.4rem; border-left: 3px solid #0060a3; padding: 0.6rem 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+  .ann-title { font-size: 0.68rem; font-weight: 800; color: #0060a3; margin-bottom: 0.25rem; }
+  .ann-body  { font-size: 0.67rem; color: #475569; line-height: 1.5; }
+  .ann.new { border-left-color: #10b981; }
+  .ann.new .ann-title { color: #065f46; }
+  .ann.removed { border-left-color: #f59e0b; }
+  .ann.removed .ann-title { color: #92400e; }
+</style>
+</head>
+<body>
+
+<div class="preview-label">Preview · My VIPs Table — Final Column Set</div>
+<div class="preview-note">Filters removed in favor of OOTB Salesforce list view filters · State abbreviated · GGR renamed L30</div>
+
+<div class="card">
+
+  <!-- Search + Filter button -->
+  <div class="search-bar">
+    <div class="search-wrap">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="#94a3b8" stroke-width="1.6"/><path d="M10.5 10.5l3 3" stroke="#94a3b8" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input type="search" placeholder="Search by name…" />
+    </div>
+    <button class="btn-filter">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M1 3h14M4 8h8M7 13h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Filter
+    </button>
+  </div>
+
+  <!-- Header -->
+  <div class="tbl-head tbl-grid">
+    <input type="checkbox" style="cursor:pointer;accent-color:#0060a3;" />
+    <div class="col">Name <span class="sort-icon active">▲</span></div>
+    <div class="col">Segment <span class="sort-icon">⇅</span></div>
+    <div class="col">Tier <span class="sort-icon">⇅</span></div>
+    <div class="col">State <span class="sort-icon">⇅</span></div>
+    <div class="col">GGR L30 <span class="sort-icon">⇅</span></div>
+    <div class="col">Last Contact <span class="sort-icon">⇅</span></div>
+    <div class="col">Last Bonus Issued <span class="sort-icon">⇅</span></div>
+    <div class="col">Status <span class="sort-icon">⇅</span></div>
+    <div class="col">Actions</div>
+  </div>
+
+  <div class="tbl-body" id="rows"></div>
+
+  <div class="tbl-footer">
+    <span class="page-info">1–10 of 353</span>
+    <div class="page-btns">
+      <button class="page-btn" disabled>‹ Prev</button>
+      <button class="page-btn">Next ›</button>
+    </div>
+  </div>
+</div>
+
+<div class="annotations">
+  <div class="ann removed">
+    <div class="ann-title">Filters → Salesforce OOTB</div>
+    <div class="ann-body">Custom pill filter bar removed. Segment, Tier, and Status filtering handled natively by Salesforce list view filter rules — no custom code needed.</div>
+  </div>
+  <div class="ann new">
+    <div class="ann-title">Name + Segment Count Badge</div>
+    <div class="ann-body">If a VIP belongs to more than one segment, a small circled count badge appears next to their name (e.g. ② for SBK + CAS). Single-segment VIPs show no badge.</div>
+  </div>
+  <div class="ann new">
+    <div class="ann-title">State (abbreviated)</div>
+    <div class="ann-body">Location column back in, trimmed to state abbreviation only (NY, FL, CA…) to save horizontal space while keeping geographic context visible at a glance.</div>
+  </div>
+  <div class="ann new">
+    <div class="ann-title">Last Bonus: $$ · Type · Date</div>
+    <div class="ann-body">Amount bold on top · Type and date in smaller text below. Types: Bonus Bet · Postal Gift · Event. Overbonused renders as a red badge. No prior bonus = "—".</div>
+  </div>
+  <div class="ann new">
+    <div class="ann-title">GGR L30</div>
+    <div class="ann-body">Gross Gaming Revenue last 30 days — how much FanDuel made from this VIP. Positive = house up (green). Negative = player winning this period (red). KAMs use it to guide bonus decisions.</div>
+  </div>
+  <div class="ann new">
+    <div class="ann-title">Status: Active · Deactivated · Suspended</div>
+    <div class="ann-body">Correct account-level statuses replacing the old activity-based set (Active / Due Contact / Lapsed).</div>
+  </div>
+</div>
+
+<script>
+const SAMPLE_ROWS = [
+  { name:'Jordan Williams',  segs:['SBK'],            tier:'Shield Select', state:'NJ', days:3,  ggr:4820,  nba:true,  bonus:{amount:500,  type:'Bonus Bet',   date:'Aug 14'}, status:'Active'      },
+  { name:'Alex Johnson',     segs:['SBK','CAS'],      tier:'Tier 2',        state:'NY', days:8,  ggr:1230,  nba:false, bonus:{ob:true, amount:0, type:'Bonus Bet',   date:'Aug 3'},  status:'Active'      },
+  { name:'Morgan Smith',     segs:['CAS'],            tier:'Tier 3',        state:'FL', days:22, ggr:-340,  nba:true,  bonus:{amount:126,  type:'Postal Gift', date:'Jul 30'}, status:'Active'      },
+  { name:'Taylor Brown',     segs:['DFS','SBK'],      tier:'Tier 1',        state:'TX', days:14, ggr:980,   nba:false, bonus:{amount:47,   type:'Bonus Bet',   date:'Aug 10'}, status:'Active'      },
+  { name:'Casey Davis',      segs:['FDR'],            tier:'Tier 2',        state:'PA', days:38, ggr:210,   nba:false, bonus:null,                                             status:'Deactivated' },
+  { name:'Reese Wilson',     segs:['SBK','CAS','DFS'],tier:'Shield Select', state:'IL', days:5,  ggr:7650,  nba:true,  bonus:{amount:715,  type:'Event',       date:'Aug 1'},  status:'Active'      },
+  { name:'Sam Moore',        segs:['CAS'],            tier:'Tier 1',        state:'IL', days:29, ggr:-820,  nba:false, bonus:{ob:true, amount:0, type:'Postal Gift', date:'Jul 22'}, status:'Active'      },
+  { name:'Jamie Taylor',     segs:['SBK'],            tier:'Tier 4',        state:'MI', days:11, ggr:2100,  nba:true,  bonus:{amount:293,  type:'Bonus Bet',   date:'Aug 18'}, status:'Active'      },
+  { name:'Riley Anderson',   segs:['DFS'],            tier:'Tier 3',        state:'AZ', days:43, ggr:180,   nba:false, bonus:null,                                             status:'Suspended'   },
+  { name:'Chris Thomas',     segs:['SBK','CAS'],      tier:'Tier 2',        state:'VA', days:17, ggr:3400,  nba:true,  bonus:{amount:200,  type:'Postal Gift', date:'Aug 5'},  status:'Active'      },
+];
+
+function daysClass(d) { return d > 35 ? 'days-red' : d > 20 ? 'days-yellow' : 'days-green'; }
+
+function renderSegs(segs) {
+  return `<span class="seg-text">${segs.join(', ')}</span>`;
+}
+
+const SHIELD_SVG = `<svg width="11" height="13" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1L1.5 3.5V8c0 3.3 2.3 6.2 5.5 7 3.2-.8 5.5-3.7 5.5-7V3.5L7 1z" fill="#0060a3" opacity="0.15" stroke="#0060a3" stroke-width="1.3" stroke-linejoin="round"/><path d="M4.5 8l1.8 1.8L9.5 6" stroke="#0060a3" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+function renderTier(t) {
+  return t === 'Shield Select'
+    ? `<span class="tier-shield">${SHIELD_SVG} Shield Select</span>`
+    : `<span class="tier-val">${t}</span>`;
+}
+
+function renderBonus(b) {
+  if (!b) return `<span class="bonus-none">—</span>`;
+  if (b.ob) {
+    return `<div class="bonus-cell">
+      <span class="bonus-amount">$0 <span class="bonus-ob">Overbonused</span></span>
+      <span class="bonus-meta">${b.type} · ${b.date}</span>
+    </div>`;
+  }
+  return `<div class="bonus-cell"><span class="bonus-amount">$${b.amount.toLocaleString()}</span><span class="bonus-meta">${b.type} · ${b.date}</span></div>`;
+}
+
+function renderStatus(s) {
+  const cls = {Active:'pill-active',Deactivated:'pill-deactivated',Suspended:'pill-suspended'};
+  return `<span class="pill ${cls[s]}">${s}</span>`;
+}
+
+const NBA_ICON = `<span class="nba-alert">
+  <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+    <path d="M8 1.5L1.5 13h13L8 1.5z" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" stroke-linejoin="round"/>
+    <path d="M8 6v3.5" stroke="#d97706" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="8" cy="11.5" r="0.75" fill="#d97706"/>
+  </svg>
+  <span class="nba-popover">NBA Action pending</span>
+</span>`;
+
+document.getElementById('rows').innerHTML = SAMPLE_ROWS.map(v => {
+  return `<div class="tbl-row tbl-grid">
+    <input type="checkbox" style="cursor:pointer;accent-color:#0060a3;" />
+    <div class="name-cell"><span class="cell-name">${v.name}</span>${v.nba ? NBA_ICON : ''}</div>
+    ${renderSegs(v.segs)}
+    ${renderTier(v.tier)}
+    <span class="region-val">${v.state}</span>
+    <span class="${v.ggr >= 0 ? 'ggr-pos' : 'ggr-neg'}">${v.ggr >= 0 ? '+' : ''}$${Math.abs(v.ggr).toLocaleString()}</span>
+    <span class="${daysClass(v.days)}">${v.days}d ago</span>
+    ${renderBonus(v.bonus)}
+    ${renderStatus(v.status)}
+    <div class="actions"><button class="btn-contact">Contact</button><button class="btn-bonus">Bonus</button></div>
+  </div>`;
+}).join('');
+</script>
+</body>
+</html>

@@ -454,11 +454,10 @@
   .send-btn { width: 1.35rem; height: 1.35rem; border: none; background: none; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #0176d3; flex-shrink: 0; font-size: 0.85rem; padding: 0; transition: opacity 0.12s; }
   .send-btn:hover { opacity: 0.7; }
   .input-hint { font-size: 0.59rem; color: #9e9e9e; margin: 0.3rem 0 0; text-align: left; }
-  /* ── NBA expandable cards ── */
+  /* ── NBA flat cards ── */
   .nba-card { border-bottom: 1px solid #f3f2f2; }
-  .nba-card-header { display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.75rem;cursor:pointer;gap:0.5rem;transition:background 0.1s; }
-  .nba-card-header:hover { background:#fafafa; }
-  .nba-card-body { padding:0.5rem 0.75rem 0.65rem 1.1rem;border-top:1px solid #f3f2f2; }
+  .nba-card-header { display:flex;align-items:flex-start;padding:0.65rem 0.75rem;gap:0.5rem; }
+  .nba-card-body { display:none; }
   .nba-meta-row { display:grid;grid-template-columns:repeat(4,1fr);gap:0.3rem;margin-bottom:0.6rem;padding:0.5rem;background:#f9f9f9;border-radius:0.25rem; }
   .nba-meta-lbl { font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#706e6b;margin-bottom:0.1rem; }
   .nba-meta-val { font-size:0.74rem;font-weight:600;color:#181818; }
@@ -1367,148 +1366,80 @@
         <span style="font-size:0.62rem;color:#706e6b;">AI-prioritized</span>
       </div>
 
-      <!-- NBA Card 1: Birthday -->
-      <div class="nba-card" id="nbaCard1">
-        <div class="nba-card-header" onclick="toggleNba('nbaCard1')" style="cursor:pointer;">
-          <div style="display:flex;align-items:center;gap:0.55rem;min-width:0;">
-            <div style="width:0.25rem;min-height:2rem;border-radius:999px;background:#10b981;flex-shrink:0;align-self:stretch;"></div>
-            <div style="min-width:0;">
-              <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">
-                <span style="font-size:0.75rem;font-weight:700;color:#181818;">Birthday Alert</span>
-                <a class="vip-link" onclick="event.stopPropagation();openVipModal('Olivia Bennett')" style="font-size:0.75rem;">Olivia Bennett</a>
-                <span class="chip chip-sbk" style="font-size:0.6rem;">Shield Select</span>
-                <span style="font-size:0.6rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.08rem 0.4rem;">Today</span>
-              </div>
-              <p style="font-size:0.7rem;color:#64748b;margin:0.1rem 0 0;">Birthday TODAY · offer $500 Profit Boost &amp; plan outreach</p>
+      <!-- NBA Card 1: No Contact -->
+      <div class="nba-card" id="nbaCard1" style="border-left:4px solid #ba0517;">
+        <div class="nba-card-header">
+          <div style="display:flex;flex-direction:column;gap:0.25rem;min-width:0;flex:1;">
+            <span class="nba-cat-tag" style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#ba0517;">No Contact</span>
+            <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;">
+              <span style="font-size:0.78rem;font-weight:700;color:#181818;">Contact Overdue —</span>
+              <a class="vip-link" onclick="openVipModal('Ethan Parker')" style="font-size:0.78rem;font-weight:700;">Ethan Parker</a>
             </div>
-          </div>
-          <svg class="nba-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#706e6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="nba-card-body" id="nbaCard1-body" style="display:none;">
-          <div class="nba-meta-row">
-            <div><p class="nba-meta-lbl">Segment</p><p class="nba-meta-val">Sportsbook</p></div>
-            <div><p class="nba-meta-lbl">Tier</p><p class="nba-meta-val">Shield Select</p></div>
-            <div><p class="nba-meta-lbl">GGR (30d)</p><p class="nba-meta-val">$8,400</p></div>
-            <div><p class="nba-meta-lbl">Last Contact</p><p class="nba-meta-val">4d ago</p></div>
-          </div>
-          <div class="nba-analysis">
-            <div class="nba-bullet nba-bullet-green">Birthday today — highest engagement window of the year for this VIP segment.</div>
-            <div class="nba-bullet nba-bullet-blue">$500 Profit Boost pre-approved within discretionary limit.</div>
-            <div class="nba-bullet nba-bullet-amber">Personalized outreach + offer combo has 3× re-deposit rate vs. offer alone.</div>
-          </div>
-          <div class="nba-actions-bar">
-            <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Outreach initiated for Olivia Bennett ✓')">Contact</button>
-            <button class="btn btn-neutral btn-sm" onclick="openBonusModal('Olivia Bennett')">Send Bonus</button>
-            <button class="btn btn-neutral btn-sm" onclick="showToast('Postal gift queued for Olivia Bennett ✓')">Send Postal Gift</button>
-            <button class="btn btn-neutral btn-sm" onclick="openVipModal('Olivia Bennett')">View Profile</button>
+            <p style="font-size:0.7rem;color:#706e6b;margin:0;line-height:1.4;">No contact logged in 35 days. Last contact was August 13. Tier 1 Casino — cadence threshold exceeded.</p>
+            <p style="font-size:0.67rem;color:#706e6b;margin:0;">Ethan Parker · Tier 1 · CAS · <span style="color:#ba0517;font-weight:600;">−$12,400 GGR L30</span> · <span style="color:#ba0517;font-weight:600;">35 days overdue</span></p>
+            <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
+              <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Contact logged for Ethan Parker ✓')">Log Contact</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Ethan Parker deferred — reminder in 2 days')">Defer</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- NBA Card 2: Churn Risk -->
-      <div class="nba-card" id="nbaCard2">
-        <div class="nba-card-header" onclick="toggleNba('nbaCard2')">
-          <div style="display:flex;align-items:center;gap:0.55rem;min-width:0;">
-            <div style="width:0.25rem;min-height:2rem;border-radius:999px;background:#ef4444;flex-shrink:0;align-self:stretch;"></div>
-            <div style="min-width:0;">
-              <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">
-                <span style="font-size:0.75rem;font-weight:700;color:#181818;">Churn Risk</span>
-                <a class="vip-link" onclick="event.stopPropagation();openVipModal('Ethan Parker')" style="font-size:0.75rem;">Ethan Parker</a>
-                <span class="chip chip-casino" style="font-size:0.6rem;">Casino VIP</span>
-                <span style="font-size:0.6rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.08rem 0.4rem;">High</span>
-              </div>
-              <p style="font-size:0.7rem;color:#64748b;margin:0.1rem 0 0;">Down $12,400 yesterday · 40% below avg stake · welfare check needed</p>
+      <!-- NBA Card 2: CS Alert -->
+      <div class="nba-card" id="nbaCard2" style="border-left:4px solid #ba0517;">
+        <div class="nba-card-header">
+          <div style="display:flex;flex-direction:column;gap:0.25rem;min-width:0;flex:1;">
+            <span class="nba-cat-tag" style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#ba0517;">CS Alert</span>
+            <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;">
+              <span style="font-size:0.78rem;font-weight:700;color:#181818;">Open Case —</span>
+              <a class="vip-link" onclick="openVipModal('Sophia Novak')" style="font-size:0.78rem;font-weight:700;">Sophia Novak</a>
             </div>
-          </div>
-          <svg class="nba-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#706e6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="nba-card-body" id="nbaCard2-body" style="display:none;">
-          <div class="nba-meta-row">
-            <div><p class="nba-meta-lbl">Segment</p><p class="nba-meta-val">Casino</p></div>
-            <div><p class="nba-meta-lbl">Tier</p><p class="nba-meta-val">VIP Gold</p></div>
-            <div><p class="nba-meta-lbl">GGR (30d)</p><p class="nba-meta-val" style="color:#ba0517;">−$12,400</p></div>
-            <div><p class="nba-meta-lbl">Last Contact</p><p class="nba-meta-val">22d ago</p></div>
-          </div>
-          <div class="nba-analysis">
-            <div class="nba-bullet nba-bullet-red">Loss velocity 40% above weekly norm — responsible gaming check required before any offer.</div>
-            <div class="nba-bullet nba-bullet-amber">No contact in 22 days; standard welfare cadence is 14d for this tier.</div>
-            <div class="nba-bullet nba-bullet-blue">Warm personal check-in recommended — avoid promotional language until welfare confirmed.</div>
-          </div>
-          <div class="nba-actions-bar">
-            <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Outreach initiated for Ethan Parker ✓')">Contact Now</button>
-            <button class="btn btn-neutral btn-sm" onclick="openWagerModal('Ethan Parker')">View Wagers</button>
-            <button class="btn btn-neutral btn-sm" onclick="openVipModal('Ethan Parker')">View Profile</button>
+            <p style="font-size:0.7rem;color:#706e6b;margin:0;line-height:1.4;">Case #00812 opened 4 hours ago. Withdrawal delay — funds not received after 48h. Shield Select SBK.</p>
+            <p style="font-size:0.67rem;color:#706e6b;margin:0;">Sophia Novak · Shield Select · SBK · <span style="color:#ba0517;font-weight:600;">Case open 4h</span> · <span style="color:#706e6b;">Priority: High</span></p>
+            <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
+              <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Sophia Novak contacted re: Case #00812 ✓')">Contact VIP</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Opening Case #00812…')">View Case</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Sophia Novak deferred — reminder in 2 days')">Defer</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- NBA Card 3: No Contact -->
-      <!-- NBA Card 4: New Survey Feedback -->
-      <div class="nba-card" id="nbaCard4">
-        <div class="nba-card-header" onclick="toggleNba('nbaCard4')">
-          <div style="display:flex;align-items:center;gap:0.55rem;min-width:0;">
-            <div style="width:0.25rem;min-height:2rem;border-radius:999px;background:#06a59a;flex-shrink:0;align-self:stretch;"></div>
-            <div style="min-width:0;">
-              <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">
-                <span style="font-size:0.75rem;font-weight:700;color:#181818;">New Feedback</span>
-                <a class="vip-link" onclick="event.stopPropagation();openVipModal('Luca Romano')" style="font-size:0.75rem;">Luca Romano</a>
-                <span class="chip chip-casino" style="font-size:0.6rem;">Casino</span>
-                <span style="font-size:0.6rem;font-weight:700;background:#ccfdf7;color:#0f766e;border-radius:999px;padding:0.08rem 0.4rem;border:1px solid #5eead4;">Yesterday</span>
-              </div>
-              <p style="font-size:0.7rem;color:#64748b;margin:0.1rem 0 0;">Monthly NPS · Neutral · ★★★ — bonus processing delays mentioned</p>
+      <!-- NBA Card 3: Big Loss -->
+      <div class="nba-card" id="nbaCard3" style="border-left:4px solid #ba0517;">
+        <div class="nba-card-header">
+          <div style="display:flex;flex-direction:column;gap:0.25rem;min-width:0;flex:1;">
+            <span class="nba-cat-tag" style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#ba0517;">Big Loss</span>
+            <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;">
+              <span style="font-size:0.78rem;font-weight:700;color:#181818;">Significant Loss Event —</span>
+              <a class="vip-link" onclick="openVipModal('Noah Coleman')" style="font-size:0.78rem;font-weight:700;">Noah Coleman</a>
             </div>
-          </div>
-          <svg class="nba-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#706e6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="nba-card-body" id="nbaCard4-body" style="display:none;">
-          <div class="nba-meta-row">
-            <div><p class="nba-meta-lbl">Segment</p><p class="nba-meta-val">Casino</p></div>
-            <div><p class="nba-meta-lbl">Survey</p><p class="nba-meta-val">Monthly NPS</p></div>
-            <div><p class="nba-meta-lbl">Rating</p><p class="nba-meta-val">3 / 5 ★</p></div>
-            <div><p class="nba-meta-lbl">Sentiment</p><p class="nba-meta-val">Neutral</p></div>
-          </div>
-          <div class="nba-analysis">
-            <div class="nba-bullet nba-bullet-amber">"Bonus turnaround taking longer than expected lately — it affects my weekend plays."</div>
-            <div class="nba-bullet nba-bullet-blue">Luca's prior feedback (Jul) was strongly positive (5★) after the UFC event outreach — still engaged.</div>
-            <div class="nba-bullet nba-bullet-green">Acknowledge the delay and set expectation; a bonus processing update or courtesy credit could recover sentiment.</div>
-          </div>
-          <div class="nba-actions-bar">
-            <button class="btn btn-brand btn-sm" style="background:#06a59a;border-color:#06a59a;" onclick="taskAction(this,'Review','Feedback reviewed for Luca Romano ✓')">Review &amp; Respond</button>
-            <button class="btn btn-neutral btn-sm" onclick="showToast('Opening profile for Luca Romano…')">View Profile</button>
+            <p style="font-size:0.7rem;color:#706e6b;margin:0;line-height:1.4;">−$46,200 single-day loss. 5.4× daily average. Empathy outreach recommended — no promotional messaging.</p>
+            <p style="font-size:0.67rem;color:#706e6b;margin:0;">Noah Coleman · Tier 2 · CAS · <span style="color:#ba0517;font-weight:600;">−$46,200 today</span> · <span style="color:#ba0517;font-weight:600;">5.4× avg</span></p>
+            <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
+              <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Outreach planned for Noah Coleman ✓')">Plan Outreach</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Opening wager history for Noah Coleman…')">View Wagers</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Noah Coleman deferred 24h')">Defer 24h</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="nba-card" id="nbaCard3" style="border-bottom:none;">
-        <div class="nba-card-header" onclick="toggleNba('nbaCard3')">
-          <div style="display:flex;align-items:center;gap:0.55rem;min-width:0;">
-            <div style="width:0.25rem;min-height:2rem;border-radius:999px;background:#f59e0b;flex-shrink:0;align-self:stretch;"></div>
-            <div style="min-width:0;">
-              <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">
-                <span style="font-size:0.75rem;font-weight:700;color:#181818;">No Contact 34d</span>
-                <a class="vip-link" onclick="event.stopPropagation();openVipModal('Carolina Hayes')" style="font-size:0.75rem;">Carolina Hayes</a>
-                <span class="chip chip-dfs" style="font-size:0.6rem;">DFS VIP</span>
-              </div>
-              <p style="font-size:0.7rem;color:#64748b;margin:0.1rem 0 0;">Last contact June 24 · re-engagement cadence overdue</p>
+      <!-- NBA Card 4: Bonus Opportunity -->
+      <div class="nba-card" id="nbaCard4" style="border-left:4px solid #0176d3;border-bottom:none;">
+        <div class="nba-card-header">
+          <div style="display:flex;flex-direction:column;gap:0.25rem;min-width:0;flex:1;">
+            <span class="nba-cat-tag" style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#0176d3;">Bonus Opp</span>
+            <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;">
+              <span style="font-size:0.78rem;font-weight:700;color:#181818;">Re-engagement Opportunity —</span>
+              <a class="vip-link" onclick="openVipModal('Luca Romano')" style="font-size:0.78rem;font-weight:700;">Luca Romano</a>
             </div>
-          </div>
-          <svg class="nba-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#706e6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="nba-card-body" id="nbaCard3-body" style="display:none;">
-          <div class="nba-meta-row">
-            <div><p class="nba-meta-lbl">Segment</p><p class="nba-meta-val">DFS</p></div>
-            <div><p class="nba-meta-lbl">Tier</p><p class="nba-meta-val">Elite</p></div>
-            <div><p class="nba-meta-lbl">GGR (30d)</p><p class="nba-meta-val">$3,200</p></div>
-            <div><p class="nba-meta-lbl">Last Contact</p><p class="nba-meta-val">34d ago</p></div>
-          </div>
-          <div class="nba-analysis">
-            <div class="nba-bullet nba-bullet-amber">34 days without contact exceeds the 21d Elite cadence threshold.</div>
-            <div class="nba-bullet nba-bullet-blue">DFS season activity is still healthy — re-engagement window is open.</div>
-            <div class="nba-bullet nba-bullet-green">SMS re-engagement has 68% open rate for this segment; recommend as first touch.</div>
-          </div>
-          <div class="nba-actions-bar">
-            <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Outreach initiated for Carolina Hayes ✓')">Contact Now</button>
-            <button class="btn btn-neutral btn-sm" onclick="showToast('Opening profile for Carolina Hayes…')">View Profile</button>
+            <p style="font-size:0.7rem;color:#706e6b;margin:0;line-height:1.4;">22 days since last bonus issued. RTC handle below target — a Bonus Bet Credit could re-activate play.</p>
+            <p style="font-size:0.67rem;color:#706e6b;margin:0;">Luca Romano · Tier 3 · CAS · <span style="color:#706e6b;">Last bonus: 22d ago</span> · <span style="color:#dd7a01;font-weight:600;">RTC below target</span></p>
+            <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
+              <button class="btn btn-brand btn-sm" onclick="openBonusModal('Luca Romano')">Issue Bonus</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Luca Romano deferred — reminder in 3 days')">Defer</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1630,7 +1561,14 @@
               <span style="font-size:0.62rem;color:#706e6b;">10 invites</span>
             </div>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="showToast('Opening event manager…')">Manage</button></div>
+          <div class="nba-actions" style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('evtMenu-1')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="evtMenu-1" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:152px;">
+              <div onclick="event.stopPropagation();showToast('Opening event manager…');document.getElementById('evtMenu-1').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Manage Event</div>
+              <div onclick="event.stopPropagation();showToast('Viewing RSVPs…');document.getElementById('evtMenu-1').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View RSVPs</div>
+              <div onclick="event.stopPropagation();showToast('Reminder sent to pending invitees ✓');document.getElementById('evtMenu-1').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Send Reminder</div>
+            </div>
+          </div>
         </div>
         <!-- My Mets Kesha -->
         <div class="nba-item-slim">
@@ -1639,7 +1577,14 @@
             <p class="nba-item-title">Kesha</p>
             <p class="nba-context">Aug 19 · PNC Bank Arts Center · Holmdel, NJ · <span style="color:#2e844a;font-weight:600;">4 tickets avail</span></p>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="issueInvite(this,'My Mets — Kesha')">Invite</button></div>
+          <div class="nba-actions" style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('evtMenu-2')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="evtMenu-2" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:152px;">
+              <div onclick="event.stopPropagation();issueInvite(this,'My Mets — Kesha');document.getElementById('evtMenu-2').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Invite VIP</div>
+              <div onclick="event.stopPropagation();showToast('Opening Kesha event details…');document.getElementById('evtMenu-2').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Event</div>
+              <div onclick="event.stopPropagation();showToast('Event removed from list');document.getElementById('evtMenu-2').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#ba0517;" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">Remove</div>
+            </div>
+          </div>
         </div>
         <!-- Jets vs Giants preseason -->
         <div class="nba-item-slim" style="border-bottom:none;">
@@ -1648,7 +1593,14 @@
             <p class="nba-item-title">Jets vs. New York Giants <span style="font-size:0.6rem;color:#706e6b;font-weight:400;">(Pre-Season)</span></p>
             <p class="nba-context">Aug 28 · MetLife Stadium · <span style="color:#2e844a;font-weight:600;">6 tickets avail</span></p>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="issueInvite(this,'Jets vs Giants Preseason')">Invite</button></div>
+          <div class="nba-actions" style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('evtMenu-3')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="evtMenu-3" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:152px;">
+              <div onclick="event.stopPropagation();issueInvite(this,'Jets vs Giants Preseason');document.getElementById('evtMenu-3').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Invite VIP</div>
+              <div onclick="event.stopPropagation();showToast('Opening Jets vs Giants event details…');document.getElementById('evtMenu-3').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Event</div>
+              <div onclick="event.stopPropagation();showToast('Event removed from list');document.getElementById('evtMenu-3').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#ba0517;" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">Remove</div>
+            </div>
+          </div>
         </div>
       </div>
       <div style="padding:0.55rem 0.75rem;border-top:1px solid #f1f5f9;">
@@ -1680,7 +1632,14 @@
             <p class="nba-item-title">NFL Season Re-engagement</p>
             <p class="nba-context">42 VIPs · Email + SMS · Ends Aug 31 · <span style="color:#2e844a;font-weight:600;">Live</span></p>
           </div>
-          <div class="nba-actions"><button class="btn btn-neutral btn-sm" onclick="showToast('Opening NFL campaign…')">View</button></div>
+          <div class="nba-actions" style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('campMenu-1')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="campMenu-1" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:152px;">
+              <div onclick="event.stopPropagation();showToast('Opening NFL campaign…');document.getElementById('campMenu-1').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Campaign</div>
+              <div onclick="event.stopPropagation();showToast('Adding VIP to NFL campaign…');document.getElementById('campMenu-1').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Add VIP</div>
+              <div onclick="event.stopPropagation();showToast('Campaign duplicated ✓');document.getElementById('campMenu-1').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Duplicate</div>
+            </div>
+          </div>
         </div>
         <!-- Campaign row 2 -->
         <div class="nba-item-slim">
@@ -1689,7 +1648,14 @@
             <p class="nba-item-title">Birthday Celebration Series</p>
             <p class="nba-context">12 VIPs · Personalised offer · Rolling · <span style="color:#2e844a;font-weight:600;">Live</span></p>
           </div>
-          <div class="nba-actions"><button class="btn btn-neutral btn-sm" onclick="showToast('Opening Birthday campaign…')">View</button></div>
+          <div class="nba-actions" style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('campMenu-2')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="campMenu-2" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:152px;">
+              <div onclick="event.stopPropagation();showToast('Opening Birthday campaign…');document.getElementById('campMenu-2').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Campaign</div>
+              <div onclick="event.stopPropagation();showToast('Adding VIP to Birthday campaign…');document.getElementById('campMenu-2').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Add VIP</div>
+              <div onclick="event.stopPropagation();showToast('Campaign duplicated ✓');document.getElementById('campMenu-2').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Duplicate</div>
+            </div>
+          </div>
         </div>
         <!-- Campaign row 3 -->
         <div class="nba-item-slim">
@@ -1698,7 +1664,14 @@
             <p class="nba-item-title">Casino Reactivation — Q3</p>
             <p class="nba-context">18 VIPs · Bonus offer · Starts Aug 5 · <span style="color:#dd7a01;font-weight:600;">Scheduled</span></p>
           </div>
-          <div class="nba-actions"><button class="btn btn-neutral btn-sm" onclick="showToast('Opening Casino campaign…')">View</button></div>
+          <div class="nba-actions" style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('campMenu-3')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="campMenu-3" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:152px;">
+              <div onclick="event.stopPropagation();showToast('Opening Casino Reactivation campaign…');document.getElementById('campMenu-3').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Campaign</div>
+              <div onclick="event.stopPropagation();showToast('Adding VIP to Casino Reactivation campaign…');document.getElementById('campMenu-3').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Add VIP</div>
+              <div onclick="event.stopPropagation();showToast('Campaign duplicated ✓');document.getElementById('campMenu-3').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Duplicate</div>
+            </div>
+          </div>
         </div>
         <!-- Campaign row 4 -->
         <div class="nba-item-slim" style="border-bottom:none;">
@@ -1707,7 +1680,14 @@
             <p class="nba-item-title">F1 Miami VIP Invite Wave</p>
             <p class="nba-context">8 VIPs · Event invite · <span style="color:#706e6b;font-weight:600;">Draft</span></p>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="showToast('Opening draft campaign…')">Edit</button></div>
+          <div class="nba-actions" style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('campMenu-4')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="campMenu-4" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:152px;">
+              <div onclick="event.stopPropagation();showToast('Opening draft campaign…');document.getElementById('campMenu-4').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Edit Campaign</div>
+              <div onclick="event.stopPropagation();showToast('Opening campaign preview…');document.getElementById('campMenu-4').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Preview</div>
+              <div onclick="event.stopPropagation();showToast('Draft deleted');document.getElementById('campMenu-4').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#ba0517;" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">Delete Draft</div>
+            </div>
+          </div>
         </div>
       </div>
       <div style="padding:0.55rem 0.75rem;border-top:1px solid #f1f5f9;">
@@ -2510,6 +2490,17 @@ function closeAllRowMenus() {
 }
 
 document.addEventListener('click', closeAllRowMenus);
+
+function toggleGenMenu(id) {
+  const menu = document.getElementById(id);
+  if (!menu) return;
+  const isOpen = menu.style.display !== 'none';
+  document.querySelectorAll('.gen-menu').forEach(m => m.style.display = 'none');
+  if (!isOpen) menu.style.display = 'block';
+}
+document.addEventListener('click', function() {
+  document.querySelectorAll('.gen-menu').forEach(m => m.style.display = 'none');
+});
 
 function toggleObMenu(id) {
   const menu = document.getElementById(id);
@@ -4081,9 +4072,14 @@ function renderBdays() {
         ? '<span style="font-size:0.62rem;font-weight:700;background:#fef3c7;color:#92400e;border-radius:999px;padding:0.08rem 0.4rem;">Tomorrow</span>'
         : '<span style="font-size:0.62rem;color:#706e6b;border-radius:999px;padding:0.08rem 0.4rem;">' + v.when + '</span>';
     const nameColor = isSent ? '#706e6b' : '#0060a3';
-    const actionBtn = isSent
-      ? '<button class="btn btn-neutral btn-sm" disabled style="opacity:0.4;cursor:default;">Sent</button>'
-      : '<button class="btn btn-brand btn-sm" onclick="bdaySend(\'' + v.name + '\')">Send</button>';
+    const menuId = 'bdayMenu-' + v.name.replace(/\s+/g, '-');
+    const actionBtn = '<div style="position:relative;flex-shrink:0;">'
+      + '<button onclick="event.stopPropagation();toggleGenMenu(\'' + menuId + '\')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>'
+      + '<div id="' + menuId + '" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:152px;">'
+      + (!isSent ? '<div onclick="event.stopPropagation();bdaySend(\'' + v.name + '\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Send Celebration</div>' : '')
+      + '<div onclick="event.stopPropagation();openVipModal(\'' + v.name + '\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Profile</div>'
+      + '<div onclick="event.stopPropagation();showToast(\'Note logged for ' + v.name + ' ✓\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Note</div>'
+      + '</div></div>';
     const statusLine = isSent
       ? '<div style="font-size:0.67rem;color:#2e844a;font-weight:600;">Gift sent ✓</div>'
       : '<div style="font-size:0.67rem;color:#706e6b;">No celebration sent yet</div>';

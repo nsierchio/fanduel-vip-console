@@ -418,47 +418,33 @@ Skeleton shimmer rows
 
 ### Page 05 — Next Best Action Queue
 
-**Artboard 5A — All cards collapsed (default)**
+**Artboard 5A — Flat cards (default)**
 Card header: Agentforce icon · "Next Best Action" · "4 Actions" red badge · "AI-prioritized" · "MVP Static NBA Recco" gray tag
 
-4 collapsed cards:
-- 🟢 Birthday Alert · Olivia Bennett · Shield Select · Act within 4h · "Send birthday offer — turns 32 today"
-- 🔴 Churn Risk · Ethan Parker · Tier 1 · Urgent · "Down $12,400 — welfare check recommended"
-- 🟠 No Contact · Isla Hayes · Tier 3 · Overdue · "No contact in 32 days — WPC flagged"
-- 🩵 New Feedback · Carolina Hayes · Tier 2 · Today · "Submitted negative feedback — review and respond"
+4 flat cards (no expand/collapse — actions always visible):
+- 🔴 **No Contact** · Ethan Parker · Tier 1 · CAS · "No contact logged in 35 days. Last contact Aug 13. Cadence threshold exceeded." · −$12,400 GGR L30 · 35 days overdue · [Log Contact] [Defer]
+- 🔴 **CS Alert** · Sophia Novak · Shield Select · SBK · "Case #00812 opened 4 hours ago. Withdrawal delay — funds not received after 48h." · Case open 4h · Priority: High · [Contact VIP] [View Case] [Defer]
+- 🔴 **Big Loss** · Noah Coleman · Tier 2 · CAS · "−$46,200 single-day loss. 5.4× daily average. Empathy outreach — no promo messaging." · −$46,200 today · 5.4× avg · [Plan Outreach] [View Wagers] [Defer 24h]
+- 🔵 **Bonus Opp** · Luca Romano · Tier 3 · CAS · "22 days since last bonus. RTC handle below target — Bonus Bet Credit could re-activate play." · Last bonus: 22d ago · RTC below target · [Issue Bonus] [Defer]
 
-**Artboard 5B — Churn Risk card expanded**
-Same 4 cards, Ethan Parker card expanded:
-- Meta row: Casino · Tier 1 · -$12,400 GGR · 35d last contact
-- 3 insight bullets (red/amber/blue left borders):
-  - "6 consecutive losing sessions, down 40% vs avg stake" (red)
-  - "Withdrawal attempt flagged yesterday" (amber)
-  - "Last contacted 35 days ago — cadence overdue" (blue)
-- Action buttons: [Contact] [Send Bonus] [View Profile]
-
-**Artboard 5C — Birthday Alert card expanded**
-Olivia Bennett expanded:
-- Meta: SBK · Shield Select · +$3,200 GGR · 3d last contact
-- Insight: "Birthday today — recommend personalized bonus + handwritten note"
-- Actions: [Send Birthday Offer] [Log Contact] [View Profile]
-
-**Artboard 5D — Empty state**
+**Artboard 5B — Empty state**
 Agentforce icon + "You're all caught up. No pending actions." green check
 
-**Artboard 5E — Mobile (390px)**
-Cards stack full width. Expanded card scrollable.
+**Artboard 5C — Mobile (390px)**
+Cards stack full width. Action buttons wrap below description.
 
 **Annotations:**
-1. Color bar — left edge of each card: green=Birthday · red=Churn · amber=No Contact · teal=Feedback
-2. Urgency tag — "Act within 4h" / "Urgent" / "Overdue" / "Today"
-3. "MVP Static NBA Recco" tag — static hardcoded for prototype; dynamic in Phase 2
-4. Expanded card meta row — key VIP stats at a glance
-5. AI insight bullets — color-coded by severity (red/amber/blue)
-6. Action buttons — Contact / Send Bonus / View Profile
+1. Colored left border (4px) — red=urgent scenarios (No Contact/CS Alert/Big Loss) · blue=opportunity (Bonus Opp)
+2. Category tag — "No Contact" / "CS Alert" / "Big Loss" / "Bonus Opp" uppercase label, color-matched to border
+3. "MVP Static NBA Recco" tag — static hardcoded for prototype; dynamic Agentforce NBA in Phase 2
+4. No expand/collapse — all card content and actions visible by default (flat card pattern)
+5. Action buttons inline — always visible; Log Contact/Plan Outreach/Contact VIP/Issue Bonus as primary; Defer as secondary
+6. Issue Bonus → opens Bonus Bet Credit modal (Wallet → Label → Expiration → Value → Description → On Behalf Of)
 
 **User notes:**
 - "MVP: static hardcoded recommendations — dynamic Agentforce NBA in Phase 2"
-- "RG Signal cards: red border + pinned to top — welfare check required field before dismiss"
+- "4 scenarios selected for MVP: No Contact, CS Alert, Big Loss, Bonus Opp — all feasible without AWS Agent dependency"
+- "RG Signal (Big Loss): no promo before empathy outreach confirmed — welfare protocol enforced"
 - "Dismiss with reason: needed for Agentforce feedback loop — confirm data model with architect"
 
 ---
@@ -515,17 +501,17 @@ Card header: calendar icon · "Upcoming Events" · "3" purple badge · "Ticket M
 Event 1: My Hosted Event [Host orange badge] [Not MVP gray tag]
 - Washington Nationals at NY Mets · Aug 15 · Citi Field
 - 6 Accepted · 1 Declined · 3 Pending · 10 invites
-- [Manage] button
+- ⋮ 3-dot menu → Manage Event / View RSVPs / Send Reminder
 
 Event 2: Invited Event
 - NFL Season Opener VIP Suite · Sep 8 · MetLife Stadium
 - RSVP: Accepted [green badge] · 4 tickets remaining
-- [View Details] button
+- ⋮ 3-dot menu → Invite VIP / View Event / Remove
 
 Event 3: Upcoming Event
 - FanDuel Golf Classic · Oct 12 · TPC Sawgrass
 - 12 tickets available · Invitations not yet sent
-- [Invite VIPs] button
+- ⋮ 3-dot menu → Invite VIP / View Event / Remove
 
 **Artboard 7B — Manage Event modal**
 Modal: "My Hosted Event — Guest List"
@@ -557,10 +543,10 @@ Event cards stacked. RSVP chips visible. Action button full width.
 Card header: chart icon · "Campaign Manager" · "3 Active" blue badge · "Use Existing" teal tag
 
 Campaigns:
-- NFL Season Opener Promo · SBK · **ACTIVE** green · 24 VIPs · Sent Sep 1 · [View]
-- Shield Select Loyalty Reward · All · **ACTIVE** green · 6 VIPs · Sends Sep 20 · [View]
-- DFS Reactivation · DFS · **SCHEDULED** blue · 12 VIPs · Sends Oct 1 · [Activate]
-- Q4 Casino Retention · CAS · **DRAFT** gray · 18 VIPs · Not scheduled · [Edit]
+- NFL Season Opener Promo · SBK · **ACTIVE** green · 24 VIPs · Sent Sep 1 · ⋮ → View Campaign / Add VIP / Duplicate
+- Shield Select Loyalty Reward · All · **ACTIVE** green · 6 VIPs · Sends Sep 20 · ⋮ → View Campaign / Add VIP / Duplicate
+- DFS Reactivation · DFS · **SCHEDULED** blue · 12 VIPs · Sends Oct 1 · ⋮ → View Campaign / Add VIP / Duplicate
+- Q4 Casino Retention · CAS · **DRAFT** gray · 18 VIPs · Not scheduled · ⋮ → Edit Campaign / Preview / Delete Draft
 
 New button top-right.
 
@@ -595,30 +581,31 @@ Card header: barcode-style blue icon · "My Customer Bdays Within 30 Days"
 Week navigator: [‹] **Sep 9 – Sep 15** [›]
 
 Birthday list:
-- Olivia Bennett · SBK · **Today** · [Send Celebration] button (brand blue)
-- Luca Romano · CAS · **Tomorrow** · [Send Celebration] button
+- Olivia Bennett · SBK · **Today** · ⋮ 3-dot menu → Send Celebration / View Profile / Log Note
+- Luca Romano · CAS · **Tomorrow** · ⋮ 3-dot menu → Send Celebration / View Profile / Log Note
 
 Today row: amber left border highlight.
 
 **Artboard 9B — Next week (Sep 16–22)**
 Navigator: [‹] **Sep 16 – Sep 22** [›]
-- Marcus Thompson · CAS · Sep 18 · [Send Celebration]
-- Jordan Williams · SBK · Sep 20 · [Send Celebration]
+- Marcus Thompson · CAS · Sep 18 · ⋮ 3-dot menu
+- Jordan Williams · SBK · Sep 20 · ⋮ 3-dot menu
 
 **Artboard 9C — Sent state**
-Olivia Bennett row after send: "🎂 Celebration Sent ✓" green badge. Send button hidden.
+Olivia Bennett row after send: "Gift sent ✓" green text. 3-dot menu remains — Send Celebration item hidden; View Profile / Log Note remain.
 
 **Artboard 9D — Empty week**
 Navigator pointing to a week with no birthdays: "No birthdays this week."
 
 **Artboard 9E — Mobile (390px)**
-Navigator full width. Birthday rows stacked. Send button full width.
+Navigator full width. Birthday rows stacked. 3-dot menu right-aligned.
 
 **Annotations:**
 1. Week navigator — ‹/› steps through 4-week window; Prev disabled at current week
 2. "Today" row — amber left border highlight
 3. Segment chip — SBK/CAS/DFS/FDR color-coded
-4. Sent state — green badge replaces button, prevents double-send
+4. Sent state — green "Gift sent ✓" text; Send Celebration removed from menu to prevent double-send
+5. 3-dot menu actions to be confirmed in refinement — placeholder labels: Send Celebration / View Profile / Log Note
 
 **User notes:**
 - "Birthday data from VIP profile DOB — confirm data quality with ops"
