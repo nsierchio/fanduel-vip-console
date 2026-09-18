@@ -2525,16 +2525,16 @@ function markObComplete(rowId, name) {
 
 /* ── Last Contact Tracker ── */
 const LCT_VIPS = [
-  {id:0,  name:'Jordan Williams', seg:'SBK', days:5},
-  {id:1,  name:'Alex Johnson',    seg:'CAS', days:12},
-  {id:2,  name:'Taylor Brown',    seg:'DFS', days:14},
-  {id:3,  name:'Chris Thomas',    seg:'SBK', days:7},
-  {id:4,  name:'Nolan Brooks',    seg:'SBK', days:20},
-  {id:5,  name:'Sophia Novak',    seg:'SBK', days:18},
-  {id:6,  name:'Ava Rivera',      seg:'CAS', days:3},
-  {id:7,  name:'Maya Carter',     seg:'DFS', days:28},
-  {id:8,  name:'Ethan Parker',    seg:'CAS', days:35},
-  {id:9,  name:'Isla Hayes',      seg:'SBK', days:32},
+  {id:0,  name:'Jordan Williams', seg:'SBK', days:5,  priority:false},
+  {id:1,  name:'Alex Johnson',    seg:'CAS', days:12, priority:false},
+  {id:2,  name:'Taylor Brown',    seg:'DFS', days:14, priority:false},
+  {id:3,  name:'Chris Thomas',    seg:'SBK', days:7,  priority:false},
+  {id:4,  name:'Nolan Brooks',    seg:'SBK', days:20, priority:true},
+  {id:5,  name:'Sophia Novak',    seg:'SBK', days:18, priority:true},
+  {id:6,  name:'Ava Rivera',      seg:'CAS', days:3,  priority:false},
+  {id:7,  name:'Maya Carter',     seg:'DFS', days:28, priority:false},
+  {id:8,  name:'Ethan Parker',    seg:'CAS', days:35, priority:true},
+  {id:9,  name:'Isla Hayes',      seg:'SBK', days:32, priority:false},
 ];
 const LCT_PAGE_SIZE = 10;
 let lctSort = 'days', lctSortDir = -1, lctFilter = 'All', lctPage = 1;
@@ -2544,15 +2544,45 @@ function lctStatus(days) {
   if (days <= 29) return {label:'Due Soon',   color:'#dd7a01', bg:'#fef3c7'};
   return                 {label:'Overdue',    color:'#ba0517', bg:'#fee2e2'};
 }
+function renderLctRow(v) {
+  const st = lctStatus(v.days);
+  return `<tr style="border-bottom:1px solid #dddbda;background:#fff;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background='#fff'">
+    <td style="padding:0.4rem 0.75rem;vertical-align:middle;">
+      <a class="vip-link" onclick="openVipModal('${v.name}')" style="color:#0176d3;font-weight:600;font-size:0.75rem;cursor:pointer;">${v.name}</a>
+      <div style="font-size:0.64rem;color:#706e6b;margin-top:0.08rem;">${v.seg}</div>
+    </td>
+    <td style="padding:0.4rem 0.75rem;vertical-align:middle;font-size:0.72rem;font-weight:700;color:${st.color};">${v.days}d ago</td>
+    <td style="padding:0.4rem 0.75rem;vertical-align:middle;"><span style="font-size:0.62rem;font-weight:700;background:${st.bg};color:${st.color};border-radius:0.25rem;padding:0.1rem 0.35rem;white-space:nowrap;">${st.label}</span></td>
+    <td style="padding:0.4rem 0.75rem;vertical-align:middle;text-align:right;position:relative;">
+      <div style="display:inline-flex;align-items:center;gap:0.22rem;">
+        <button class="btn btn-neutral btn-sm" onclick="contactVip('${v.name}')">Email</button>
+        <button class="btn btn-neutral btn-sm" onclick="showToast('SMS sent to ${v.name} ✓')">SMS</button>
+        <button onclick="event.stopPropagation();toggleLctMenu(${v.id})" style="background:none;border:1px solid #d0d5dd;font-size:0.85rem;color:#475569;cursor:pointer;padding:0.1rem 0.28rem;border-radius:0.25rem;line-height:1.2;">⋮</button>
+        <div id="lctMenu-${v.id}" style="display:none;position:absolute;right:0.75rem;top:calc(100% - 4px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,.13);min-width:10rem;font-size:0.72rem;">
+          <div onclick="openLogContactModal('${v.name}');closeAllLctMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Contact</div>
+          <div onclick="showToast('Opening contact record for ${v.name}…');closeAllLctMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Contact Record</div>
+        </div>
+      </div>
+    </td>
+  </tr>`;
+}
+function lctSectionHeader(label, count, accent) {
+  return `<tr><td colspan="4" style="padding:0.3rem 0.75rem;background:${accent};border-bottom:1px solid #dddbda;">
+    <span style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#3e3e3c;">${label}</span>
+    <span style="font-size:0.62rem;color:#706e6b;margin-left:0.4rem;">${count} VIPs</span>
+  </td></tr>`;
+}
 function renderLct() {
   let list = [...LCT_VIPS];
   if (lctFilter !== 'All') list = list.filter(v => lctStatus(v.days).label === lctFilter);
-  list.sort((a,b) => lctSort === 'name' ? lctSortDir*a.name.localeCompare(b.name) : lctSortDir*(a.days-b.days));
+  const sortFn = (a,b) => lctSort === 'name' ? lctSortDir*a.name.localeCompare(b.name) : lctSortDir*(a.days-b.days);
+  const priority = list.filter(v => v.priority).sort(sortFn);
+  const rest = list.filter(v => !v.priority).sort(sortFn);
   const total = list.length;
   const maxPage = Math.ceil(total / LCT_PAGE_SIZE) || 1;
   if (lctPage > maxPage) lctPage = maxPage;
   const start = (lctPage - 1) * LCT_PAGE_SIZE;
-  const page = list.slice(start, start + LCT_PAGE_SIZE);
+  const page = [...priority, ...rest].slice(start, start + LCT_PAGE_SIZE);
   // pagination footer
   const pi = document.getElementById('lctPageInfo');
   const prevBtn = document.getElementById('lctPrevBtn');
@@ -2562,29 +2592,20 @@ function renderLct() {
   if (nextBtn) nextBtn.disabled = lctPage >= maxPage;
   const body = document.getElementById('lctBody');
   if (!body) return;
-  /* eslint-disable no-unsanitized/method */
-  body.innerHTML = page.map(v => {
-    const st = lctStatus(v.days);
-    return `<tr style="border-bottom:1px solid #dddbda;background:#fff;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background='#fff'">
-      <td style="padding:0.4rem 0.75rem;vertical-align:middle;">
-        <a class="vip-link" onclick="openVipModal('${v.name}')" style="color:#0176d3;font-weight:600;font-size:0.75rem;cursor:pointer;">${v.name}</a>
-        <div style="font-size:0.64rem;color:#706e6b;margin-top:0.08rem;">${v.seg}</div>
-      </td>
-      <td style="padding:0.4rem 0.75rem;vertical-align:middle;font-size:0.72rem;font-weight:700;color:${st.color};">${v.days}d ago</td>
-      <td style="padding:0.4rem 0.75rem;vertical-align:middle;"><span style="font-size:0.62rem;font-weight:700;background:${st.bg};color:${st.color};border-radius:0.25rem;padding:0.1rem 0.35rem;white-space:nowrap;">${st.label}</span></td>
-      <td style="padding:0.4rem 0.75rem;vertical-align:middle;text-align:right;position:relative;">
-        <div style="display:inline-flex;align-items:center;gap:0.22rem;">
-          <button class="btn btn-neutral btn-sm" onclick="contactVip('${v.name}')">Email</button>
-          <button class="btn btn-neutral btn-sm" onclick="showToast('SMS sent to ${v.name} ✓')">SMS</button>
-          <button onclick="event.stopPropagation();toggleLctMenu(${v.id})" style="background:none;border:1px solid #d0d5dd;font-size:0.85rem;color:#475569;cursor:pointer;padding:0.1rem 0.28rem;border-radius:0.25rem;line-height:1.2;">⋮</button>
-          <div id="lctMenu-${v.id}" style="display:none;position:absolute;right:0.75rem;top:calc(100% - 4px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,.13);min-width:10rem;font-size:0.72rem;">
-            <div onclick="openLogContactModal('${v.name}');closeAllLctMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Contact</div>
-            <div onclick="showToast('Opening contact record for ${v.name}…');closeAllLctMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Contact Record</div>
-          </div>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
+  // render with section headers
+  const priorityOnPage = page.filter(v => v.priority);
+  const restOnPage = page.filter(v => !v.priority);
+  let html = '';
+  if (priorityOnPage.length) {
+    html += lctSectionHeader('Priority Book — Top 10% · GGR / NGR', priorityOnPage.length, '#eef4ff');
+    html += priorityOnPage.map(renderLctRow).join('');
+  }
+  if (restOnPage.length) {
+    html += lctSectionHeader('Full Book', restOnPage.length, '#f3f2f2');
+    html += restOnPage.map(renderLctRow).join('');
+  }
+  if (!html) html = `<tr><td colspan="4" style="padding:1.2rem;text-align:center;font-size:0.75rem;color:#706e6b;">No VIPs match this filter.</td></tr>`;
+  body.innerHTML = html;
   // cadence bar
   const inC = LCT_VIPS.filter(v => lctStatus(v.days).label === 'In Cadence').length;
   const pct = Math.round(inC / LCT_VIPS.length * 100);

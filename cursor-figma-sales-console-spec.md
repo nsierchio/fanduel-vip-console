@@ -368,48 +368,66 @@ Stacked card rows. Day count and ⚠ flag visible. Action button full width. ⋮
 
 ### Page 04 — Last Contact Tracker
 
+**Two-section layout:** Table renders two distinct sections — "Priority Book — Top 10% · GGR / NGR" (blue-tinted header, `#eef4ff`) anchored at top, followed by "Full Book" (neutral header, `#f3f2f2`). Each section is sorted independently by the active sort (default: most overdue first). Sections collapse when empty (e.g. when a filter produces no matches in that group).
+
+**Data field:** `Book_GGR_Rank_Pct__c` (SBK) / `Book_NGR_Rank_Pct__c` (CAS) on the Contact object. Rank ≤ 10 = Priority Book. Same field drives NBA No Contact alert trigger.
+
 **Artboard 4A — Default (All filter, default sort: most overdue first)**
 
 Filter pills: **All** (active) · In Cadence · Due Soon · Overdue
 
-SLDS table:
+SLDS table — two-section layout:
+
+**Section header:** `PRIORITY BOOK — TOP 10% · GGR / NGR` · 3 VIPs (blue tint `#eef4ff`)
 
 | Name + Segment | Last Contact | Contact Status | Actions |
 |---|---|---|---|
 | Ethan Parker CAS | 35d ago (red) | [Overdue pill] | [Email] [SMS] [⋮] |
-| Isla Hayes SBK | 32d ago (red) | [Overdue pill] | [Email] [SMS] [⋮] |
 | Sophia Novak SBK | 18d ago (amber) | [Due Soon pill] | [Email] [SMS] [⋮] |
 | Nolan Brooks SBK | 20d ago (amber) | [Due Soon pill] | [Email] [SMS] [⋮] |
-| Jordan Williams SBK | 5d ago (green) | [In Cadence pill] | [Email] [SMS] [⋮] |
+
+**Section header:** `FULL BOOK` · 7 VIPs (neutral `#f3f2f2`)
+
+| Name + Segment | Last Contact | Contact Status | Actions |
+|---|---|---|---|
+| Isla Hayes SBK | 32d ago (red) | [Overdue pill] | [Email] [SMS] [⋮] |
+| Maya Carter DFS | 28d ago (red) | [Overdue pill] | [Email] [SMS] [⋮] |
+| Alex Johnson CAS | 12d ago (amber) | [Due Soon pill] | [Email] [SMS] [⋮] |
+| Taylor Brown DFS | 14d ago (amber) | [Due Soon pill] | [Email] [SMS] [⋮] |
+| Chris Thomas SBK | 7d ago (green) | [In Cadence pill] | [Email] [SMS] [⋮] |
 
 Pagination: "Showing 1–10 of 47 VIPs" + Prev/Next
 
 **Artboard 4B — Overdue filter active**
 Filter pills: All · In Cadence · Due Soon · **Overdue** (active, red)
-Showing only overdue rows. Count badge "2 Overdue" in card header.
+Shows only overdue rows in each section; sections with no overdue matches are hidden. Section count badges update (e.g. "2 VIPs" in Priority Book, "2 VIPs" in Full Book).
 
 **Artboard 4C — Row hover + ⋮ dropdown**
-Ethan Parker row hovered, ⋮ open showing: View Contact Record · Log Contact
+Ethan Parker row (Priority Book) hovered, ⋮ open showing: View Contact Record · Log Contact
 
 **Artboard 4D — Empty state (In Cadence)**
-"All VIPs are in cadence. No contacts overdue."
+"All VIPs are in cadence. No contacts overdue." — both sections hidden, empty state message shown.
 
 **Artboard 4E — Loading state**
-Skeleton shimmer rows
+Skeleton shimmer rows (section headers also shimmer)
 
 **Artboard 4F — Mobile (390px)**
-2-column layout: Name + Last Contact · Actions. Status pill on second line under name. Email/SMS as icon buttons.
+Section headers render as full-width chips. 2-column layout per row: Name + Last Contact · Actions. Status pill on second line under name. Email/SMS as icon buttons.
 
 **Annotations:**
 1. Filter pills — color-coded: In Cadence=green text · Due Soon=amber · Overdue=red
 2. Last Contact color threshold — 0–14d=default · 15–29d=amber · 30d+=red
 3. Contact Status pills — In Cadence (green bg) / Due Soon (amber) / Overdue (red)
-4. Email + SMS direct action buttons per row
-5. ⋮ overflow — View Contact Record · Log Contact
-6. Pagination footer — supports 260–500 VIP books
-7. Default sort — most overdue first (highest days)
+4. Priority Book section header — blue tint (`#eef4ff`), uppercase label, VIP count, shared data field with NBA No Contact
+5. Full Book section header — neutral gray (`#f3f2f2`), uppercase label, VIP count
+6. Email + SMS direct action buttons per row
+7. ⋮ overflow — View Contact Record · Log Contact
+8. Pagination footer — spans both sections combined; supports 260–500 VIP books
+9. Default sort — most overdue first within each section independently
 
 **User notes:**
+- "Priority Book threshold (top 10% GGR/NGR) matches NBA No Contact trigger — same `Book_GGR_Rank_Pct__c` field, one Phase 1 data dependency"
+- "NBA No Contact fires only for Priority Book VIPs; KAM manages Full Book cadence via this tracker"
 - "Email/SMS buttons link to Salesforce email/SMS send actions in build"
 - "Log Contact in ⋮ updates Last Contact date and recalculates status real-time"
 - "Cadence thresholds (14d/30d) to be confirmed with ops team — may vary by segment"
