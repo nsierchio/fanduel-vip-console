@@ -1062,7 +1062,7 @@
         <div class="tab-bar">
           <button class="tab-btn active" data-tab="awareness-swings" onclick="switchTab(this,'awareness')">🔥 Big Swings</button>
           <button class="tab-btn" data-tab="awareness-streaks" onclick="switchTab(this,'awareness')">📉 Losing Streaks</button>
-          <button class="tab-btn" data-tab="awareness-payments" onclick="switchTab(this,'awareness')">💳 Payment Alerts <span style="font-size:0.55rem;font-weight:700;background:#e2e8f0;color:#64748b;border-radius:0.2rem;padding:0.05rem 0.3rem;vertical-align:middle;margin-left:0.2rem;letter-spacing:0.02em;">Not MVP</span></button>
+          <button class="tab-btn" data-tab="awareness-payments" onclick="switchTab(this,'awareness')">💳 Payment Alerts <span style="font-size:0.55rem;font-weight:700;background:#e2e8f0;color:#64748b;border-radius:0.2rem;padding:0.05rem 0.3rem;vertical-align:middle;margin-left:0.2rem;letter-spacing:0.02em;">Pending Data Source</span></button>
         </div>
         <!-- Pane: Big Swings -->
         <div id="awareness-swings" data-tab-group="awareness">
@@ -1303,6 +1303,8 @@
             <tr style="background:#f3f2f2;">
               <th onclick="toggleLctSort('name')" style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;cursor:pointer;user-select:none;">Name <span id="lct-sort-name" style="color:#9b9b9b;">⇅</span></th>
               <th onclick="toggleLctSort('days')" style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;cursor:pointer;user-select:none;">Last Contact <span id="lct-sort-days" style="color:#0060a3;">⇅</span></th>
+              <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;">Contact Source</th>
+              <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;max-width:180px;">Contact Note</th>
               <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;">Contact Status</th>
               <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;text-align:right;">Actions</th>
             </tr>
@@ -1453,7 +1455,7 @@
           <div class="card-icon-wrap"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="#706e6b" stroke-width="1.3"/><path d="M5 7l2 2 4-3" stroke="#706e6b" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           <span class="card-heading">Tasks &amp; Weekly Priority Contacts</span>
           <span class="badge badge-blue" id="wpcBadge">9</span>
-          <span style="font-size:0.55rem;font-weight:700;background:#e2e8f0;color:#64748b;border-radius:0.2rem;padding:0.05rem 0.3rem;letter-spacing:0.02em;white-space:nowrap;">Use Existing</span>
+          <span style="font-size:0.55rem;font-weight:700;background:#e2e8f0;color:#64748b;border-radius:0.2rem;padding:0.05rem 0.3rem;letter-spacing:0.02em;white-space:nowrap;">Use Existing Rules</span>
         </div>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;padding:0.4rem 0.75rem;border-bottom:1px solid #f1f5f9;background:#fafafa;">
@@ -1620,7 +1622,7 @@
           </div>
           <span class="card-heading">Campaign Manager</span>
           <span class="badge badge-blue">3 Active</span>
-          <span style="font-size:0.55rem;font-weight:700;background:#e2e8f0;color:#64748b;border-radius:0.2rem;padding:0.05rem 0.3rem;letter-spacing:0.02em;white-space:nowrap;">Use Existing</span>
+          <span style="font-size:0.55rem;font-weight:700;background:#e2e8f0;color:#64748b;border-radius:0.2rem;padding:0.05rem 0.3rem;letter-spacing:0.02em;white-space:nowrap;">Use Existing Rules</span>
         </div>
         <button class="btn btn-brand btn-sm" onclick="showToast('Opening Salesforce Campaign Manager…')">+ New</button>
       </div>
@@ -2525,16 +2527,16 @@ function markObComplete(rowId, name) {
 
 /* ── Last Contact Tracker ── */
 const LCT_VIPS = [
-  {id:0,  name:'Jordan Williams', seg:'SBK', days:5,  priority:false},
-  {id:1,  name:'Alex Johnson',    seg:'CAS', days:12, priority:false},
-  {id:2,  name:'Taylor Brown',    seg:'DFS', days:14, priority:false},
-  {id:3,  name:'Chris Thomas',    seg:'SBK', days:7,  priority:false},
-  {id:4,  name:'Nolan Brooks',    seg:'SBK', days:20, priority:true},
-  {id:5,  name:'Sophia Novak',    seg:'SBK', days:18, priority:true},
-  {id:6,  name:'Ava Rivera',      seg:'CAS', days:3,  priority:false},
-  {id:7,  name:'Maya Carter',     seg:'DFS', days:28, priority:false},
-  {id:8,  name:'Ethan Parker',    seg:'CAS', days:35, priority:true},
-  {id:9,  name:'Isla Hayes',      seg:'SBK', days:32, priority:false},
+  {id:0, name:'Jordan Williams', seg:'SBK', days:5,  priority:false, source:'Email', note:'Followed up on account activity and upcoming event invite.'},
+  {id:1, name:'Alex Johnson',    seg:'CAS', days:12, priority:false, source:'Call',  note:'Discussed bonus preference and checked in on recent sessions.'},
+  {id:2, name:'Taylor Brown',    seg:'DFS', days:14, priority:false, source:'SMS',   note:''},
+  {id:3, name:'Chris Thomas',    seg:'SBK', days:7,  priority:false, source:'Email', note:'Sent personalised outreach ahead of weekend fixture slate.'},
+  {id:4, name:'Nolan Brooks',    seg:'SBK', days:20, priority:true,  source:'Call',  note:''},
+  {id:5, name:'Sophia Novak',    seg:'SBK', days:18, priority:true,  source:'Email', note:'Checked in after CS case resolved — confirmed satisfied.'},
+  {id:6, name:'Ava Rivera',      seg:'CAS', days:3,  priority:false, source:'SMS',   note:'Quick check-in, player confirmed enjoying current promo.'},
+  {id:7, name:'Maya Carter',     seg:'DFS', days:28, priority:false, source:'Call',  note:'Discussed contest strategy and upcoming DFS slate.'},
+  {id:8, name:'Ethan Parker',    seg:'CAS', days:35, priority:true,  source:'Call',  note:''},
+  {id:9, name:'Isla Hayes',      seg:'SBK', days:32, priority:false, source:'Email', note:'Sent follow-up on recent large loss — no response yet.'},
 ];
 const LCT_PAGE_SIZE = 10;
 let lctSort = 'days', lctSortDir = -1, lctFilter = 'All', lctPage = 1;
@@ -2544,14 +2546,32 @@ function lctStatus(days) {
   if (days <= 29) return {label:'Due Soon',   color:'#dd7a01', bg:'#fef3c7'};
   return                 {label:'Overdue',    color:'#ba0517', bg:'#fee2e2'};
 }
+function lctSourceStyle(src) {
+  if (src === 'Email') return 'background:#e8f4fd;color:#0b5cab;';
+  if (src === 'Call')  return 'background:#e8f5ec;color:#1a6632;';
+  if (src === 'SMS')   return 'background:#f3e8fd;color:#6b21a8;';
+  return 'background:#f3f2f2;color:#706e6b;';
+}
+function lctTruncate(str, len) {
+  if (!str) return '';
+  return str.length > len ? str.slice(0, len) + '…' : str;
+}
 function renderLctRow(v) {
   const st = lctStatus(v.days);
+  const srcStyle = lctSourceStyle(v.source);
+  const noteHtml = v.note
+    ? `<span style="font-size:0.7rem;color:#3e3e3c;">${lctTruncate(v.note, 45)}</span> <a href="#" onclick="event.preventDefault();showToast('Opening activity record for ${v.name}…')" style="font-size:0.65rem;color:#0176d3;white-space:nowrap;">View</a>`
+    : '';
   return `<tr style="border-bottom:1px solid #dddbda;background:#fff;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background='#fff'">
     <td style="padding:0.4rem 0.75rem;vertical-align:middle;">
       <a class="vip-link" onclick="openVipModal('${v.name}')" style="color:#0176d3;font-weight:600;font-size:0.75rem;cursor:pointer;">${v.name}</a>
       <div style="font-size:0.64rem;color:#706e6b;margin-top:0.08rem;">${v.seg}</div>
     </td>
     <td style="padding:0.4rem 0.75rem;vertical-align:middle;font-size:0.72rem;font-weight:700;color:${st.color};">${v.days}d ago</td>
+    <td style="padding:0.4rem 0.75rem;vertical-align:middle;white-space:nowrap;">
+      ${v.source ? `<span style="font-size:0.62rem;font-weight:700;border-radius:0.25rem;padding:0.1rem 0.35rem;${srcStyle}">${v.source}</span>` : ''}
+    </td>
+    <td style="padding:0.4rem 0.75rem;vertical-align:middle;max-width:180px;">${noteHtml}</td>
     <td style="padding:0.4rem 0.75rem;vertical-align:middle;"><span style="font-size:0.62rem;font-weight:700;background:${st.bg};color:${st.color};border-radius:0.25rem;padding:0.1rem 0.35rem;white-space:nowrap;">${st.label}</span></td>
     <td style="padding:0.4rem 0.75rem;vertical-align:middle;text-align:right;position:relative;">
       <div style="display:inline-flex;align-items:center;gap:0.22rem;">
@@ -2566,8 +2586,8 @@ function renderLctRow(v) {
     </td>
   </tr>`;
 }
-function lctSectionHeader(label, count, accent) {
-  return `<tr><td colspan="4" style="padding:0.3rem 0.75rem;background:${accent};border-bottom:1px solid #dddbda;">
+function lctSectionHeader(label, count, accent, cols) {
+  return `<tr><td colspan="${cols||6}" style="padding:0.3rem 0.75rem;background:${accent};border-bottom:1px solid #dddbda;">
     <span style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#3e3e3c;">${label}</span>
     <span style="font-size:0.62rem;color:#706e6b;margin-left:0.4rem;">${count} VIPs</span>
   </td></tr>`;
@@ -2597,14 +2617,14 @@ function renderLct() {
   const restOnPage = page.filter(v => !v.priority);
   let html = '';
   if (priorityOnPage.length) {
-    html += lctSectionHeader('Priority Book — Top 10% · GGR / NGR', priorityOnPage.length, '#eef4ff');
+    html += lctSectionHeader('Priority Book — Top 10% · GGR / NGR', priorityOnPage.length, '#eef4ff', 6);
     html += priorityOnPage.map(renderLctRow).join('');
   }
   if (restOnPage.length) {
-    html += lctSectionHeader('Full Book', restOnPage.length, '#f3f2f2');
+    html += lctSectionHeader('Full Book', restOnPage.length, '#f3f2f2', 6);
     html += restOnPage.map(renderLctRow).join('');
   }
-  if (!html) html = `<tr><td colspan="4" style="padding:1.2rem;text-align:center;font-size:0.75rem;color:#706e6b;">No VIPs match this filter.</td></tr>`;
+  if (!html) html = `<tr><td colspan="6" style="padding:1.2rem;text-align:center;font-size:0.75rem;color:#706e6b;">No VIPs match this filter.</td></tr>`;
   body.innerHTML = html;
   // cadence bar
   const inC = LCT_VIPS.filter(v => lctStatus(v.days).label === 'In Cadence').length;
