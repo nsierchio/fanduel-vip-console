@@ -1301,12 +1301,12 @@
         <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout" style="width:100%;">
           <thead>
             <tr style="background:#f3f2f2;">
-              <th onclick="toggleLctSort('name')" style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;cursor:pointer;user-select:none;">Name <span id="lct-sort-name" style="color:#9b9b9b;">⇅</span></th>
-              <th onclick="toggleLctSort('days')" style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;cursor:pointer;user-select:none;">Last Contact <span id="lct-sort-days" style="color:#0060a3;">⇅</span></th>
-              <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;">Contact Source</th>
-              <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;max-width:180px;">Contact Note</th>
-              <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;">Contact Status</th>
-              <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;text-align:right;">Actions</th>
+              <th onclick="toggleLctSort('name')" style="width:17%;background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;cursor:pointer;user-select:none;">Name <span id="lct-sort-name" style="color:#9b9b9b;">⇅</span></th>
+              <th onclick="toggleLctSort('days')" style="width:9%;background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;cursor:pointer;user-select:none;">Last Contact <span id="lct-sort-days" style="color:#0060a3;">⇅</span></th>
+              <th style="width:8%;background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;">Source</th>
+              <th style="width:26%;background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;">Contact Note</th>
+              <th style="width:12%;background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;">Status</th>
+              <th style="width:28%;background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.75rem;border-bottom:1px solid #dddbda;text-align:right;">Actions</th>
             </tr>
           </thead>
           <tbody id="lctBody"></tbody>
@@ -2560,7 +2560,7 @@ function renderLctRow(v) {
   const st = lctStatus(v.days);
   const srcStyle = lctSourceStyle(v.source);
   const noteHtml = v.note
-    ? `<span style="font-size:0.7rem;color:#3e3e3c;">${lctTruncate(v.note, 45)}</span> <a href="#" onclick="event.preventDefault();showToast('Opening activity record for ${v.name}…')" style="font-size:0.65rem;color:#0176d3;white-space:nowrap;">View</a>`
+    ? `<div style="display:flex;align-items:baseline;gap:0.3rem;overflow:hidden;"><span style="font-size:0.7rem;color:#3e3e3c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;">${v.note}</span><a href="#" onclick="event.preventDefault();showToast('Opening activity record for ${v.name}…')" style="font-size:0.65rem;color:#0176d3;white-space:nowrap;flex-shrink:0;">View</a></div>`
     : '';
   return `<tr style="border-bottom:1px solid #dddbda;background:#fff;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background='#fff'">
     <td style="padding:0.4rem 0.75rem;vertical-align:middle;">
@@ -2571,7 +2571,7 @@ function renderLctRow(v) {
     <td style="padding:0.4rem 0.75rem;vertical-align:middle;white-space:nowrap;">
       ${v.source ? `<span style="font-size:0.62rem;font-weight:700;border-radius:0.25rem;padding:0.1rem 0.35rem;${srcStyle}">${v.source}</span>` : ''}
     </td>
-    <td style="padding:0.4rem 0.75rem;vertical-align:middle;max-width:180px;">${noteHtml}</td>
+    <td style="padding:0.4rem 0.75rem;vertical-align:middle;overflow:hidden;">${noteHtml}</td>
     <td style="padding:0.4rem 0.75rem;vertical-align:middle;"><span style="font-size:0.62rem;font-weight:700;background:${st.bg};color:${st.color};border-radius:0.25rem;padding:0.1rem 0.35rem;white-space:nowrap;">${st.label}</span></td>
     <td style="padding:0.4rem 0.75rem;vertical-align:middle;text-align:right;position:relative;">
       <div style="display:inline-flex;align-items:center;gap:0.22rem;">
