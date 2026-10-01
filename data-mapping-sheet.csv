@@ -87,12 +87,12 @@ Upcoming Events,,Tickets Allocated,Tickets assigned to this VIP,TBD,Unknown,Low,
 Upcoming Events,,Invite Status,"Not Invited / Invited / Accepted / Declined pill",TBD,Unknown,Low,TBD,TBD,Picklist,TBD,,,
 Upcoming Events,,Event Type,"Sports / Concert / Hospitality / etc. badge",TBD,Unknown,Low,TBD,TBD,Picklist,TBD,,,
 Campaign Manager,,Campaign Name,Campaign name as a clickable link,Campaign.Name,"Salesforce CRM",High,Campaign,Name,String,Batch,,,Standard Salesforce Campaign object
-Campaign Manager,,Status,"Draft / Active / Completed pill",Campaign.Status,"Salesforce CRM",High,Campaign,Status,Picklist,Batch,,,
-Campaign Manager,,Campaign Type,"Bonus Bet / Reload / Event / Loyalty badge",Campaign.Type,"Salesforce CRM",High,Campaign,Type,Picklist,Batch,,,Custom picklist values needed
-Campaign Manager,,Target (VIP count),Number of VIPs included in the campaign,Campaign.NumberOfContacts,"Salesforce CRM",High,Campaign,NumberOfContacts,Number,Batch,,,
-Campaign Manager,,Send Date,When campaign activates,Campaign.StartDate,"Salesforce CRM",High,Campaign,StartDate,Date,Batch,,,
-Campaign Manager,,Offer Amount,Dollar value of the campaign offer,Campaign.Offer_Amount__c,"Salesforce CRM",High,Campaign,Offer_Amount__c,Currency,Batch,,,Custom field
-Campaign Manager,,Approval Status,"Pre-approved / Awaiting sign-off / In commercial review",Campaign.Approval_Status__c,"Salesforce CRM",High,Campaign,Approval_Status__c,Picklist,Batch,,,Approval workflow via Flow or Process Builder
+Campaign Manager,,Status,"Draft / Active / Completed pill",Campaign.Status,"Salesforce CRM",High,Campaign,Status,Picklist,Batch,,,OOTB field but standard picklist values are Draft/Planned/In Progress/Completed/Aborted — prototype uses Draft/Active/Completed; picklist values need customising (Active ≈ In Progress)
+Campaign Manager,,Campaign Type,"Bonus Bet / Reload / Event / Loyalty badge",Campaign.Type,"Salesforce CRM",High,Campaign,Type,Picklist,Batch,,,OOTB field; picklist values (Bonus Bet/Reload/Event/Loyalty) are custom and need to be configured
+Campaign Manager,,Target (VIP count),Number of VIPs included in the campaign,Campaign.NumberOfContacts,"Salesforce CRM",High,Campaign,NumberOfContacts,Number,Batch,,,OOTB roll-up field — count derives from CampaignMember records; not a directly editable input
+Campaign Manager,,Send Date,When campaign activates,Campaign.StartDate,"Salesforce CRM",High,Campaign,StartDate,Date,Batch,,,OOTB standard field
+Campaign Manager,,Offer Amount,Dollar value of the campaign offer,Campaign.Offer_Amount__c,"Salesforce CRM",High,Campaign,Offer_Amount__c,Currency,Batch,,,Custom field — does not exist OOTB; requires new custom field on Campaign object
+Campaign Manager,,Approval Status,"Pre-approved / Awaiting sign-off / In commercial review",Campaign.Approval_Status__c,"Salesforce CRM",High,Campaign,Approval_Status__c,Picklist,Batch,,,Custom field — no standard Salesforce Campaign approval status field; requires custom picklist + approval process via Flow or Process Builder
 Campaign Manager,,Performance,"Open rate / redemption rate / GGR lift (post-send analytics)",TBD,DataPoints,Medium,Campaign / Custom,TBD,Aggregated,Batch,,,Post-send analytics integration source TBD
 Birthdays This Week,,VIP Name + Birthday Date,VIP name with upcoming birthday date displayed,"Contact.Name, Contact.Birthdate","Salesforce CRM",High,Contact,"Name, Birthdate",String + Date,Batch,,,
 Birthdays This Week,,Days Until Birthday,Countdown to birthday; derived field,Derived from Contact.Birthdate,"Salesforce CRM",High,Contact,Birthdate (derived),Number,Batch,,,
