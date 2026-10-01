@@ -1,0 +1,97 @@
+Component,View / Tab,UI Element (as labeled on screen),Renders As,Data Field(s),Source System,Source Confidence,Salesforce Object,Field API Name(s),Data Type,Real-time or Batch?,Confirmed Source,Accessible Today?,Notes
+VIP Playbook,My VIPs — Table,Name,"VIP full name as a clickable link; amber triangle alert icon if NBA action is pending; click opens VIP Contact Card","Contact.Name + NBA_Pending__c","Salesforce CRM + Salesforce NBA Strategies",High,"Contact / Recommendation","Name, NBA_Pending__c",String + Boolean,Batch,,,Alert icon derived from Recommendation Strategy (Flow-based NBA) — two data sources
+VIP Playbook,My VIPs — Table,State,Single state abbreviation (e.g. NJ),Account.BillingState / State__c,"Salesforce CRM",High,Account,BillingState / State__c,String,Batch,,,
+VIP Playbook,My VIPs — Table,Segment,"Comma-separated segment abbreviations (e.g. SBK, CAS)",Account.Segment__c,"Salesforce CRM",High,Account,Segment__c,Picklist (Multi),Batch,,,Expanding a multi-seg row reveals per-segment sub-rows
+VIP Playbook,My VIPs — Table,Tier,Tier label (e.g. Tier 3) or shield SVG + Shield Select text; blank on multi-seg parent row,Account.Tier__c,"Salesforce CRM",High,Account,Tier__c,Picklist,Batch,,,Tier taxonomy differs by segment; Shield Select renders as SVG icon
+VIP Playbook,My VIPs — Table,GGR L30,"$amount in green if positive (house won) / red if negative (player winning); blank on multi-seg parent row",Account.GGR_L30__c,DataPoints,High,Account,GGR_L30__c,Currency,Batch,,,Positive = house won; Negative = player winning
+VIP Playbook,My VIPs — Table,Last Bonus Issued,"$amount on top line; Type · Date on second line. If overbonused: $0 + Overbonused badge / Type · Date. If no bonus: —","Custom Bonus Object: Bonus_Amount__c, Bonus_Type__c, Bonus_Date__c, Overbonused__c","Salesforce CRM + DataPoints",High,"Custom Bonus Object + Account","Bonus_Amount__c, Bonus_Type__c, Bonus_Date__c, Overbonused__c",Currency + Picklist + Date + Boolean,Batch,,,Overbonused flag may come from DataPoints; bonus record from CRM. Bonus types: Bonus Bet / Postal Gift / Event
+VIP Playbook,My VIPs — Table,KAM,KAM full name as a clickable link; opens KAM user profile,Account.OwnerId / KAM__c,"Salesforce CRM",High,Account / User,OwnerId / KAM__c,Lookup (User),Batch,,,
+VIP Playbook,My VIPs — Table,Last Contact,"Nd ago label with color coding: green ≤14d / amber 15–19d / red 20d+",Task / Event ActivityDate,"Salesforce CRM",High,Task / Event,ActivityDate,Date,Batch,,,Derived from most recent Activity record against this Account/Contact
+VIP Playbook,My VIPs — Table,Status,Small uppercase pill: Active / Deactivated / Suspended,Account.Status__c,"Salesforce CRM",High,Account,Status__c,Picklist,Batch,,,
+VIP Playbook,My VIPs — Table,Actions — Log Contact,⋮ menu item; opens Log Contact modal to record a new activity,"Task: Subject, Description, ActivityDate, Type","Salesforce CRM",High,Task,"Subject, Description, ActivityDate, Type",String + Date,Batch,,,Writes a new Task record on submit
+VIP Playbook,My VIPs — Table,Actions — Bonus,⋮ menu item; opens Bonus modal to issue or view bonus,"Custom Bonus Object: Bonus_Amount__c, Bonus_Type__c","Salesforce CRM",High,Custom Bonus Object,"Bonus_Amount__c, Bonus_Type__c",Currency + Picklist,Batch,,,Creates or updates bonus record
+VIP Playbook,My VIPs — Table,Actions — View Profile,⋮ menu item; opens full VIP Contact Card modal,All VIP master record fields,"Salesforce CRM",High,Contact / Account,Multiple fields,Multiple,Batch,,,See VIP Contact Card modal for full field list
+VIP Playbook,Overview Metrics,Total VIPs,Count of all VIPs assigned to the logged-in KAM,COUNT(Account) filtered by KAM,"Salesforce CRM",High,Account,OwnerId (aggregate),Number,Batch,,,SOQL aggregate
+VIP Playbook,Overview Metrics,Active VIPs,Count of VIPs with Active status,COUNT(Account) WHERE Status__c = Active,"Salesforce CRM",High,Account,"OwnerId, Status__c (aggregate)",Number,Batch,,,
+VIP Playbook,Overview Metrics,Promotions (period),Number of VIPs promoted to a higher tier this period,Account.Tier_Promotion_Count__c,DataPoints,Medium,Account / Custom,Tier_Promotion_Count__c,Number,Batch,,,Period definition (MTD/QTD) TBD
+VIP Playbook,Overview Metrics,Demotions (period),Number of VIPs demoted or churned this period,Account.Tier_Demotion_Count__c,DataPoints,Medium,Account / Custom,Tier_Demotion_Count__c,Number,Batch,,,
+VIP Playbook,Overview Metrics,GGR by Segment (chart),"30 / 60 / 90d GGR bars broken down by SBK / CAS / DFS / FDR",DataPoints aggregated by segment,DataPoints,High,Tableau Integration,N/A,Aggregated,Batch,,,Tableau direct-to-Salesforce vs. middleware — integration pattern TBD
+VIP Playbook,Overview Metrics,Avg Stake,Average wager size across KAM's book,Account.Avg_Stake__c,DataPoints,Medium,Account,Avg_Stake__c,Currency,Batch,,,
+VIP Playbook,Overview Metrics,Sessions Per Week,Avg sessions per week per player,Account.Sessions_Per_Week__c,DataPoints,Medium,Account,Sessions_Per_Week__c,Number,Batch,,,
+Agentforce NBA Queue,Queue Card,VIP Name + Segment chip,VIP name as link + segment abbreviation badge (SBK / CAS / DFS / FDR),"Contact.Name, Account.Segment__c","Salesforce CRM",High,"Contact, Account","Name, Segment__c",String + Picklist,Real-time,,,
+Agentforce NBA Queue,Queue Card,Action Type badge,"Category pill: Retention / Upsell / Reactivation / Loyalty / Check-In / RG Signal",Recommendation.ActionType__c,Salesforce NBA Strategies,High,Recommendation,ActionType__c,Picklist,Batch,,,Built via Recommendation Strategy (Flow/Strategy Builder) — not AI-generated
+Agentforce NBA Queue,Queue Card,Priority indicator,Visual urgency indicator (High / Medium / Low),Recommendation.Priority__c,Salesforce NBA Strategies,High,Recommendation,Priority__c,Number / Picklist,Batch,,,Priority set by strategy logic / Flow rules
+Agentforce NBA Queue,Queue Card,Trigger reason,Text explanation of why action was recommended,Recommendation.Description / TriggerReason__c,Salesforce NBA Strategies,High,Recommendation,Description / TriggerReason__c,String,Batch,,,
+Agentforce NBA Queue,Queue Card,Recommended message,Draft outreach message copy defined in the strategy,Recommendation.Description / RecommendationText__c,Salesforce NBA Strategies,High,Recommendation,Description / RecommendationText__c,Long Text,Batch,,,Message copy authored in Strategy — not AI-generated
+Agentforce NBA Queue,Queue Card,Contact window,Suggested timeframe to act (e.g. Today / This Week),Recommendation.ContactWindow__c,Salesforce NBA Strategies,Medium,Recommendation,ContactWindow__c,String,Batch,,,
+Agentforce NBA Queue,Queue Card,Input signals — GGR 30d,Supporting context shown on card; feeds AI recommendation,Account.GGR_L30__c,DataPoints,High,Account,GGR_L30__c,Currency,Batch,,,
+Agentforce NBA Queue,Queue Card,Input signals — Days Since Last Contact,Supporting context shown on card,Derived from Task/Event ActivityDate,"Salesforce CRM",High,Task / Event,ActivityDate (derived),Number,Batch,,,
+Agentforce NBA Queue,Queue Card,Input signals — RG Signal,Responsible gambling risk flag on card,TBD,Unknown,Low,TBD,TBD,Boolean,TBD,,,Source owner TBD — may sit with compliance team
+Real-Time Awareness,Big Swings,VIP Name,VIP name as clickable link,Contact.Name,"Salesforce CRM",High,Contact,Name,String,Real-time,,,
+Real-Time Awareness,Big Swings,Win/Loss Amount,Dollar value of large single-session win or loss; colored red/green,Session_Amount__c,DataPoints,Medium,Custom Event Object,Session_Amount__c,Currency,Real-time,,,Near-real-time refresh cadence TBD
+Real-Time Awareness,Big Swings,Sessions Count (recent),Number of sessions in the alert window,Session_Count_Recent__c,DataPoints,Medium,Account,Session_Count_Recent__c,Number,Real-time,,,
+Real-Time Awareness,Big Swings,% Change vs Avg Stake,Current stake relative to player's historical average,Derived from Session_Amount__c + Avg_Stake__c,DataPoints,Medium,Derived,Calculated,Percentage,Real-time,,,Requires avg stake baseline from DataPoints
+Real-Time Awareness,Big Swings,Welfare Check flag,Visual flag when loss exceeds policy threshold,TBD,Unknown,Low,TBD,TBD,Boolean,TBD,,,Who owns RG threshold definitions? Compliance / product / configurable?
+Real-Time Awareness,Payment Alerts,VIP Name,VIP name as clickable link,Contact.Name,"Salesforce CRM",High,Contact,Name,String,Real-time,,,
+Real-Time Awareness,Payment Alerts,Withdrawal Amount,Dollar value of pending withdrawal,Withdrawal_Amount__c,DataPoints,Medium,Custom Object,Withdrawal_Amount__c,Currency,Real-time,,,
+Real-Time Awareness,Payment Alerts,Withdrawal Status,"Pending / Declined / Approved",Withdrawal_Status__c,DataPoints,Medium,Custom Object,Withdrawal_Status__c,Picklist,Real-time,,,
+Real-Time Awareness,Payment Alerts,Decline Count,Number of consecutive withdrawal declines,Decline_Count__c,DataPoints,Medium,Custom Object,Decline_Count__c,Number,Real-time,,,
+Real-Time Awareness,Payment Alerts,Escalation SLA,Required response time shown as countdown or label,TBD,Unknown,Low,TBD,TBD,String,TBD,,,Operational policy — may be manual config or hardcoded rule
+Real-Time Awareness,Losing Streaks,VIP Name,VIP name as clickable link,Contact.Name,"Salesforce CRM",High,Contact,Name,String,Real-time,,,
+Real-Time Awareness,Losing Streaks,Consecutive Loss Sessions,Number of back-to-back losing sessions,Consecutive_Losses__c,DataPoints,Medium,Custom Object,Consecutive_Losses__c,Number,Real-time,,,
+Real-Time Awareness,Losing Streaks,Net Loss (period),Total net loss over the alert window,Net_Loss__c,DataPoints,Medium,Account,Net_Loss__c,Currency,Real-time,,,Period window definition TBD
+Real-Time Awareness,Losing Streaks,Wager History (detail),Expandable session-by-session breakdown,TBD,DataPoints,Low,Custom Object,TBD,Related List,Batch,,,Volume/granularity may be too large for CRM — streaming or separate data layer?
+WPC Tracker,,VIP Name,VIP name as clickable link,Contact.Name,"Salesforce CRM",High,Contact,Name,String,Batch,,,
+WPC Tracker,,WPC Status,"Pending / In Progress / Complete pill",Task.Status,"Salesforce CRM",High,Task,Status,Picklist,Batch,,,Standard Task Status field
+WPC Tracker,,WPC Due Date,Deadline for this week's required contact,ActivityDate,Unknown,Low,Task,ActivityDate,Date,Batch,,,How is the weekly due date set? Fixed day-of-week or rolling — needs scoping
+WPC Tracker,,Last Contact,Days since last contact pulled from VIP record,Derived from Task/Event ActivityDate,"Salesforce CRM",High,Task / Event,ActivityDate (derived),Number,Batch,,,Shared with My VIPs table
+WPC Tracker,,Contact Log Notes,Notes from most recent completed contact,Task.Description,"Salesforce CRM",High,Task,Description,Long Text,Batch,,,
+WPC Tracker,,Contact (action button),Opens contact flow (Log Contact or outreach),Task: new record,"Salesforce CRM",High,Task,Status + Description,Picklist + Long Text,Batch,,,
+Onboarding & Offboarding,New VIPs,VIP Name,VIP name as clickable link,Contact.Name,"Salesforce CRM",High,Contact,Name,String,Batch,,,
+Onboarding & Offboarding,New VIPs,Onboarding Start Date,Date the 6-week window began,Account.Onboarding_Start_Date__c,"Salesforce CRM",High,Account,Onboarding_Start_Date__c,Date,Batch,,,
+Onboarding & Offboarding,New VIPs,Onboarding Week,Current week in onboarding progress (Wk 1–6); rendered as progress indicator,Derived from Onboarding_Start_Date__c,"Salesforce CRM",High,Account,Derived,Number,Batch,,,Calculated field
+Onboarding & Offboarding,New VIPs,KYC Status,KYC verification status pill,Account.KYC_Status__c,"Salesforce CRM",High,Account,KYC_Status__c,Picklist,Batch,,,
+Onboarding & Offboarding,New VIPs,Survey Sent,Flag showing whether welcome survey has been sent,TBD,Unknown,Low,TBD,TBD,Boolean,TBD,,,What survey platform? Needs scoping
+Onboarding & Offboarding,New VIPs,Survey Response,Whether player responded and any captured responses,TBD,Unknown,Low,TBD,TBD,Custom,TBD,,,Depends on survey platform and integration approach
+Onboarding & Offboarding,Churn & Demotion,VIP Name,VIP name as clickable link,Contact.Name,"Salesforce CRM",High,Contact,Name,String,Batch,,,
+Onboarding & Offboarding,Churn & Demotion,Churn Risk Score,"High / Medium / Low risk pill",Account.Churn_Risk__c,Agentforce,Medium,Account,Churn_Risk__c,Picklist,Batch,,,Does a predictive churn model already exist in Agentforce?
+Onboarding & Offboarding,Churn & Demotion,Churn Risk Signals,Text reasons driving the risk score,Account.Churn_Signals__c,Agentforce,Medium,Account,Churn_Signals__c,Long Text,Batch,,,
+Onboarding & Offboarding,Churn & Demotion,Last Deposit Date,Date of most recent player deposit,Account.Last_Deposit_Date__c,DataPoints,High,Account,Last_Deposit_Date__c,Date,Batch,,,
+Onboarding & Offboarding,Churn & Demotion,Deposit Frequency Change,Change in deposit cadence shown as trend indicator,Account.Deposit_Frequency__c,DataPoints,Medium,Account,Deposit_Frequency__c,Number,Batch,,,
+Onboarding & Offboarding,Churn & Demotion,Demotion Reason,KAM-selected reason when initiating demotion; picklist,Account.Demotion_Reason__c,"Salesforce CRM",High,Account,Demotion_Reason__c,Picklist,Batch,,,Picklist values to be defined with FanDuel
+Onboarding & Offboarding,Churn & Demotion,Demotion Status,"Whether demotion is in progress; pill",Account.Demotion_Status__c,"Salesforce CRM",High,Account,Demotion_Status__c,Picklist,Batch,,,
+Last Contact Tracker,,VIP Name,VIP name as clickable link; color-coded row by cadence status,Contact.Name,"Salesforce CRM",High,Contact,Name,String,Batch,,,
+Last Contact Tracker,,Days Since Last Contact,Number of days label with color coding (green / amber / red),Derived from Task/Event ActivityDate,"Salesforce CRM",High,Task / Event,ActivityDate (derived),Number,Batch,,,Logic: ≤14d = In Cadence / 15–19d = Due Soon / 20d+ = Overdue
+Last Contact Tracker,,Cadence Status,"In Cadence / Due Soon / Overdue pill",Derived,"Salesforce CRM",High,Derived,Derived from ActivityDate,Picklist,Batch,,,
+Last Contact Tracker,,Contact Type (last),"Call / Email / In-Person / Event",Task.Type / Event.Type,"Salesforce CRM",High,Task / Event,Type,Picklist,Batch,,,Standard Activity Type field
+Last Contact Tracker,,Contact Log Notes,Summary of most recent contact,Task.Description,"Salesforce CRM",High,Task,Description,Long Text,Batch,,,
+Last Contact Tracker,,Contact Outcome,Result of the most recent contact (e.g. Engaged / No Response),Task.Result__c / Outcome__c,"Salesforce CRM",High,Task,Result__c / Outcome__c,Picklist,Batch,,,Custom picklist — values TBD with FanDuel
+Last Contact Tracker,,Log Contact (action button),Opens Log Contact modal to record new activity,Task: new record,"Salesforce CRM",High,Task,"Subject, Description, ActivityDate, Type",Multiple,Batch,,,
+Upcoming Events,,Event Name,Event name as a label or link,TBD,Unknown,Low,TBD,TBD,String,TBD,,,Where is the event catalog maintained? Salesforce Campaign / custom object / external system?
+Upcoming Events,,Event Date,Date of event,TBD,Unknown,Low,TBD,TBD,Date,TBD,,,
+Upcoming Events,,Event Venue,Venue name and city,TBD,Unknown,Low,TBD,TBD,String,TBD,,,
+Upcoming Events,,Ticket Inventory,Remaining tickets available for VIP allocation,TBD,Unknown,Low,TBD,TBD,Number,TBD,,,Inventory management system TBD
+Upcoming Events,,Tickets Allocated,Tickets assigned to this VIP,TBD,Unknown,Low,TBD,TBD,Number,TBD,,,
+Upcoming Events,,Invite Status,"Not Invited / Invited / Accepted / Declined pill",TBD,Unknown,Low,TBD,TBD,Picklist,TBD,,,
+Upcoming Events,,Event Type,"Sports / Concert / Hospitality / etc. badge",TBD,Unknown,Low,TBD,TBD,Picklist,TBD,,,
+Campaign Manager,,Campaign Name,Campaign name as a clickable link,Campaign.Name,"Salesforce CRM",High,Campaign,Name,String,Batch,,,Standard Salesforce Campaign object
+Campaign Manager,,Status,"Draft / Active / Completed pill",Campaign.Status,"Salesforce CRM",High,Campaign,Status,Picklist,Batch,,,
+Campaign Manager,,Campaign Type,"Bonus Bet / Reload / Event / Loyalty badge",Campaign.Type,"Salesforce CRM",High,Campaign,Type,Picklist,Batch,,,Custom picklist values needed
+Campaign Manager,,Target (VIP count),Number of VIPs included in the campaign,Campaign.NumberOfContacts,"Salesforce CRM",High,Campaign,NumberOfContacts,Number,Batch,,,
+Campaign Manager,,Send Date,When campaign activates,Campaign.StartDate,"Salesforce CRM",High,Campaign,StartDate,Date,Batch,,,
+Campaign Manager,,Offer Amount,Dollar value of the campaign offer,Campaign.Offer_Amount__c,"Salesforce CRM",High,Campaign,Offer_Amount__c,Currency,Batch,,,Custom field
+Campaign Manager,,Approval Status,"Pre-approved / Awaiting sign-off / In commercial review",Campaign.Approval_Status__c,"Salesforce CRM",High,Campaign,Approval_Status__c,Picklist,Batch,,,Approval workflow via Flow or Process Builder
+Campaign Manager,,Performance,"Open rate / redemption rate / GGR lift (post-send analytics)",TBD,DataPoints,Medium,Campaign / Custom,TBD,Aggregated,Batch,,,Post-send analytics integration source TBD
+Birthdays This Week,,VIP Name + Birthday Date,VIP name with upcoming birthday date displayed,"Contact.Name, Contact.Birthdate","Salesforce CRM",High,Contact,"Name, Birthdate",String + Date,Batch,,,
+Birthdays This Week,,Days Until Birthday,Countdown to birthday; derived field,Derived from Contact.Birthdate,"Salesforce CRM",High,Contact,Birthdate (derived),Number,Batch,,,
+Birthdays This Week,,Offer Sent,Flag showing whether birthday offer has been sent,Custom Bonus Object Birthday_Offer_Sent__c,"Salesforce CRM",High,Custom Bonus Object,Birthday_Offer_Sent__c,Boolean,Batch,,,
+Birthdays This Week,,Offer Amount,Dollar value of birthday offer,Custom Bonus Object Birthday_Offer_Amount__c,"Salesforce CRM",High,Custom Bonus Object,Birthday_Offer_Amount__c,Currency,Batch,,,
+Birthdays This Week,,Offer Type,"Profit Boost / Bonus Credit / Gift",Custom Bonus Object Birthday_Offer_Type__c,"Salesforce CRM",High,Custom Bonus Object,Birthday_Offer_Type__c,Picklist,Batch,,,
+VIP Feedback Pulse,,VIP Name,VIP name as clickable link,Contact.Name,"Salesforce CRM",High,Contact,Name,String,Real-time,,,
+VIP Feedback Pulse,,Feedback Text,Player's free-text feedback message,Custom Feedback Object Feedback_Text__c,New Build Required,High,Custom Feedback Object,Feedback_Text__c,Long Text,Real-time,,,Requires new survey/feedback capture mechanism — no existing tool confirmed
+VIP Feedback Pulse,,Submitted Date,When feedback was submitted,Custom Feedback Object Feedback_Submitted_Date__c,New Build Required,High,Custom Feedback Object,Feedback_Submitted_Date__c,DateTime,Real-time,,,
+VIP Feedback Pulse,,Sentiment badge,"Positive / Neutral / Negative AI-classified pill",Custom Feedback Object Sentiment__c,Agentforce,Medium,Custom Feedback Object,Sentiment__c,Picklist,Real-time,,,Einstein sentiment classification
+VIP Feedback Pulse,,Review Status,"Unreviewed / Reviewed flag; KAM-set",Custom Feedback Object Review_Status__c,"Salesforce CRM",High,Custom Feedback Object,Review_Status__c,Picklist,Batch,,,
+VIP Feedback Pulse,,KAM Response,KAM's written reply to the feedback,Custom Feedback Object KAM_Response__c,"Salesforce CRM",High,Custom Feedback Object,KAM_Response__c,Long Text,Batch,,,
+VIP Feedback Pulse,,Response Sent Date,When KAM responded,Custom Feedback Object Response_Sent_Date__c,"Salesforce CRM",High,Custom Feedback Object,Response_Sent_Date__c,DateTime,Batch,,,
+VIP Feedback Pulse,,Feedback Channel,"In-app / Survey / Direct / etc.",Custom Feedback Object Channel__c,New Build Required,Low,TBD,Channel__c,Picklist,TBD,,,Channel architecture TBD — depends on feedback capture approach
