@@ -269,6 +269,29 @@
   .wpc-status-complete { font-size: 0.65rem; font-weight: 700; border-radius: 0.3rem; padding: 0.15rem 0.45rem; background: #dcfce7; color: #166534; display: inline-block; }
   .wpc-status-pending  { font-size: 0.65rem; font-weight: 700; border-radius: 0.3rem; padding: 0.15rem 0.45rem; background: #fef3c7; color: #92400e; display: inline-block; }
   .wpc-status-notstarted { font-size: 0.65rem; font-weight: 700; border-radius: 0.3rem; padding: 0.15rem 0.45rem; background: #f1f5f9; color: #64748b; display: inline-block; }
+  .wpc-status-inprogress { font-size: 0.65rem; font-weight: 700; border-radius: 0.3rem; padding: 0.15rem 0.45rem; background: #dbeafe; color: #1e40af; display: inline-block; }
+  /* WPC Tab bar */
+  .wpc-tab-btn { background:none;border:none;padding:0.5rem 0.75rem;font-size:0.78rem;font-weight:600;color:#706e6b;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.12s; }
+  .wpc-tab-btn.wpc-tab-active { color:#0060a3;border-bottom-color:#0060a3; }
+  .wpc-tab-btn:hover:not(.wpc-tab-active) { color:#181818; }
+  /* My Tasks rows */
+  .task-row-item { display:flex;align-items:center;gap:0.55rem;padding:0.5rem 0.75rem;border-bottom:1px solid #f1f5f9; }
+  .task-row-item:last-child { border-bottom:none; }
+  .task-cb { width:15px;height:15px;flex-shrink:0;cursor:pointer;accent-color:#2e844a;border-radius:0.2rem; }
+  .task-row-body { flex:1;min-width:0;display:flex;flex-direction:column;gap:0.1rem; }
+  .task-row-title { font-size:0.76rem;font-weight:700;color:#181818; }
+  .task-row-meta { font-size:0.65rem;color:#706e6b; }
+  .task-view-contact { font-size:0.65rem;color:#0060a3;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap;flex-shrink:0; }
+  .task-view-contact:hover { text-decoration:underline; }
+  .task-title-done { text-decoration:line-through;color:#2e844a; }
+  .task-meta-done { color:#2e844a; }
+  /* WPC rows */
+  .wpc-row-item { display:flex;align-items:center;justify-content:space-between;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid #f1f5f9; }
+  .wpc-row-item:last-child { border-bottom:none; }
+  .wpc-row-body { display:flex;flex-direction:column;gap:0.1rem;min-width:0;flex:1; }
+  .wpc-row-meta { font-size:0.65rem;color:#706e6b; }
+  .wpc-row-actions { display:flex;align-items:center;gap:0.4rem;flex-shrink:0; }
+  .wpc-row-done .vip-link { text-decoration:line-through;color:#706e6b;pointer-events:none; }
 
   /* ── Task Queue ── */
   .task-card { border: 1px solid #e2e8f0; border-radius: 0.45rem; padding: 0.6rem 0.75rem; margin-bottom: 0.5rem; }
@@ -1471,84 +1494,123 @@
           <span style="font-size:0.55rem;font-weight:700;background:#e2e8f0;color:#64748b;border-radius:0.2rem;padding:0.05rem 0.3rem;letter-spacing:0.02em;white-space:nowrap;">Use Existing Rules</span>
         </div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;padding:0.4rem 0.75rem;border-bottom:1px solid #f1f5f9;background:#fafafa;">
-        <div style="display:flex;gap:0.3rem;" id="wpcTypeFilters">
-          <button class="wpc-filter-btn wpc-filter-active" onclick="filterWpc('all','all',this)">All</button>
-          <button class="wpc-filter-btn" onclick="filterWpc('task','all',this)">Tasks</button>
-          <button class="wpc-filter-btn" onclick="filterWpc('wpc','all',this)">WPC</button>
+      <!-- SLDS Tab Bar -->
+      <div style="display:flex;border-bottom:1px solid #dddbda;padding:0 0.75rem;">
+        <button class="wpc-tab-btn wpc-tab-active" id="wpcTabTasks" onclick="switchWpcTab('tasks',this)">My Tasks</button>
+        <button class="wpc-tab-btn" id="wpcTabWpc" onclick="switchWpcTab('wpc',this)">Weekly Priority Contacts</button>
+      </div>
+
+      <!-- My Tasks Panel -->
+      <div id="wpcPanelTasks">
+        <div style="display:flex;gap:0.3rem;padding:0.4rem 0.75rem;border-bottom:1px solid #f1f5f9;background:#fafafa;">
+          <button class="wpc-filter-btn wpc-filter-active" id="taskFAll" onclick="filterTasksNew('all',this)">All</button>
+          <button class="wpc-filter-btn" id="taskFPending" onclick="filterTasksNew('pending',this)">Pending</button>
+          <button class="wpc-filter-btn" id="taskFDone" onclick="filterTasksNew('done',this)">Done</button>
         </div>
-        <div style="display:flex;gap:0.3rem;" id="wpcStatusFilters">
-          <button class="wpc-filter-btn wpc-filter-active" onclick="filterWpc('all','all',this)" id="wpcSAll">All</button>
-          <button class="wpc-filter-btn" onclick="filterWpc('all','pending',this)" id="wpcSPending">Pending</button>
-          <button class="wpc-filter-btn" onclick="filterWpc('all','done',this)" id="wpcSDone">Done</button>
+        <div class="task-row-item" data-task-status="pending">
+          <input type="checkbox" class="task-cb" onclick="completeTaskNew(this)">
+          <div class="task-row-body">
+            <span class="task-row-title">Send birthday offer to Olivia Bennett</span>
+            <span class="task-row-meta">Due Today · SBK</span>
+          </div>
+          <a class="task-view-contact" onclick="showToast('Opening Olivia Bennett profile…')">View Contact</a>
+        </div>
+        <div class="task-row-item" data-task-status="pending">
+          <input type="checkbox" class="task-cb" onclick="completeTaskNew(this)">
+          <div class="task-row-body">
+            <span class="task-row-title">Review Ethan Parker welfare flag <span style="font-size:0.62rem;color:#ba0517;font-weight:600;margin-left:0.2rem;">Urgent</span></span>
+            <span class="task-row-meta">Due Today · CAS</span>
+          </div>
+          <a class="task-view-contact" onclick="openVipModal('Ethan Parker')">View Contact</a>
+        </div>
+        <div class="task-row-item" data-task-status="pending">
+          <input type="checkbox" class="task-cb" onclick="completeTaskNew(this)">
+          <div class="task-row-body">
+            <span class="task-row-title">Log preferences for Victor Ward</span>
+            <span class="task-row-meta">Due Sep 20 · CAS</span>
+          </div>
+          <a class="task-view-contact" onclick="showToast('Opening Victor Ward profile…')">View Contact</a>
+        </div>
+        <div class="task-row-item" data-task-status="done">
+          <input type="checkbox" class="task-cb" checked onclick="return false;" style="cursor:default;">
+          <div class="task-row-body">
+            <span class="task-row-title task-title-done">Confirmed event invite – Noah Coleman</span>
+            <span class="task-row-meta task-meta-done">Completed Sep 15 · SBK</span>
+          </div>
+          <a class="task-view-contact" onclick="openVipModal('Noah Coleman')">View Contact</a>
         </div>
       </div>
-      <div id="wpcBody">
-        <div class="wpc-section-lbl" data-wpc-section="task">My Tasks</div>
-        <div class="nba-item-slim" data-wpc-type="task" data-wpc="pending">
-          <div class="nba-body" style="grid-column:1/3;">
-            <p class="nba-item-title">Submit weekly VIP performance report <span style="font-size:0.6rem;font-weight:700;color:#706e6b;margin-left:0.25rem;">Due today</span></p>
-            <p class="nba-context">Manager review · Salesforce Reports · <span class="wpc-status-pending">Pending</span></p>
+
+      <!-- WPC Panel -->
+      <div id="wpcPanelWpc" style="display:none;">
+        <div style="padding:0.45rem 0.75rem;font-size:0.72rem;color:#706e6b;border-bottom:1px solid #f1f5f9;">3 of 7 complete</div>
+        <div class="wpc-row-item" data-wpc-status="pending">
+          <div class="wpc-row-body">
+            <a class="vip-link" onclick="openVipModal('Isla Hayes')">Isla Hayes</a>
+            <span class="wpc-row-meta">SBK · 32d since contact</span>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="taskAction(this,'Complete','VIP performance report submitted ✓')">Complete</button></div>
-        </div>
-        <div class="nba-item-slim" data-wpc-type="task" data-wpc="pending">
-          <div class="nba-body" style="grid-column:1/3;">
-            <p class="nba-item-title">Review Ethan Parker welfare flag <span style="font-size:0.6rem;font-weight:700;color:#ba0517;margin-left:0.25rem;">Urgent</span></p>
-            <p class="nba-context">Compliance · RGC escalation required · <span class="wpc-status-notstarted">Not Started</span></p>
+          <div class="wpc-row-actions">
+            <span class="wpc-status-notstarted" id="wpc-ns-isla">Not Started</span>
+            <button class="btn btn-brand btn-sm" onclick="openWpcContact(this,'Isla Hayes','wpc-ns-isla')">Log Contact</button>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="taskAction(this,'Review','Welfare review logged for Ethan Parker ✓')">Review</button></div>
         </div>
-        <div class="nba-item-slim" data-wpc-type="task" data-wpc="done">
-          <div class="nba-body" style="grid-column:1/3;">
-            <p class="nba-item-title">Q3 bonus bank allocation approved</p>
-            <p class="nba-context">Finance sign-off · $25,000 approved · <span class="wpc-status-complete">Complete</span></p>
+        <div class="wpc-row-item" data-wpc-status="pending">
+          <div class="wpc-row-body">
+            <a class="vip-link" onclick="openVipModal('Nolan Brooks')">Nolan Brooks</a>
+            <span class="wpc-row-meta">SBK · 20d since contact</span>
           </div>
-          <div class="nba-actions"><button class="btn btn-neutral btn-sm" disabled style="opacity:0.45;cursor:default;">Done</button></div>
-        </div>
-        <div class="wpc-section-lbl" data-wpc-section="wpc">Weekly Priority Contacts</div>
-        <div class="nba-item-slim" data-wpc-type="wpc" data-wpc="pending">
-          <div class="nba-body" style="grid-column:1/3;">
-            <p class="nba-item-title"><a class="vip-link" onclick="openVipModal('Ethan Parker')">Ethan Parker</a> <span class="chip chip-casino">Casino</span></p>
-            <p class="nba-context">Down 40% vs avg · Personal outreach + recovery bonus · <span class="wpc-status-pending" id="wpc-status-ethan">Pending</span></p>
+          <div class="wpc-row-actions">
+            <span class="wpc-status-inprogress" id="wpc-ns-nolan">In Progress</span>
+            <button class="btn btn-brand btn-sm" onclick="openWpcContact(this,'Nolan Brooks','wpc-ns-nolan')">Log Contact</button>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="openWpcContact(this,'Ethan Parker','wpc-status-ethan')">Contact</button></div>
         </div>
-        <div class="nba-item-slim" data-wpc-type="wpc" data-wpc="pending">
-          <div class="nba-body" style="grid-column:1/3;">
-            <p class="nba-item-title"><a class="vip-link" onclick="openVipModal('Sophia Novak')">Sophia Novak</a> <span class="chip chip-sbk">Sportsbook</span></p>
-            <p class="nba-context">No login 12d, withdrew $8k · SMS + event invite · <span class="wpc-status-pending" id="wpc-status-sophia">Pending</span></p>
+        <div class="wpc-row-item" data-wpc-status="pending">
+          <div class="wpc-row-body">
+            <a class="vip-link" onclick="openVipModal('Sophia Novak')">Sophia Novak</a>
+            <span class="wpc-row-meta">SBK · 18d since contact</span>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="openWpcContact(this,'Sophia Novak','wpc-status-sophia')">Contact</button></div>
-        </div>
-        <div class="nba-item-slim" data-wpc-type="wpc" data-wpc="pending">
-          <div class="nba-body" style="grid-column:1/3;">
-            <p class="nba-item-title"><a class="vip-link" onclick="openVipModal('Isla Hayes')">Isla Hayes</a> <span class="chip chip-sbk">Sportsbook</span></p>
-            <p class="nba-context">WPC flagged by commercial — RTC risk · <span class="wpc-status-notstarted" id="wpc-status-isla">Not Started</span></p>
+          <div class="wpc-row-actions">
+            <span class="wpc-status-notstarted" id="wpc-ns-sophia">Not Started</span>
+            <button class="btn btn-brand btn-sm" onclick="openWpcContact(this,'Sophia Novak','wpc-ns-sophia')">Log Contact</button>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="openWpcContact(this,'Isla Hayes','wpc-status-isla')">Contact</button></div>
         </div>
-        <div class="nba-item-slim" data-wpc-type="wpc" data-wpc="pending">
-          <div class="nba-body" style="grid-column:1/3;">
-            <p class="nba-item-title"><a class="vip-link" onclick="openVipModal('Logan Foster')">Logan Foster</a> <span class="chip chip-racing">Racing</span></p>
-            <p class="nba-context">No OTB activity 21d · Voucher + race day invite · <span class="wpc-status-notstarted" id="wpc-status-logan">Not Started</span></p>
+        <div class="wpc-row-item" data-wpc-status="pending">
+          <div class="wpc-row-body">
+            <a class="vip-link" onclick="openVipModal('Logan Foster')">Logan Foster</a>
+            <span class="wpc-row-meta">FDR · 21d since contact</span>
           </div>
-          <div class="nba-actions"><button class="btn btn-brand btn-sm" onclick="openWpcContact(this,'Logan Foster','wpc-status-logan')">Contact</button></div>
-        </div>
-        <div class="nba-item-slim" data-wpc-type="wpc" data-wpc="done">
-          <div class="nba-body" style="grid-column:1/3;">
-            <p class="nba-item-title"><a class="vip-link" onclick="openVipModal('Nolan Brooks')">Nolan Brooks</a> <span class="chip chip-sbk">Sportsbook</span></p>
-            <p class="nba-context">Parlay volume −60% MoM · <span class="wpc-status-complete" id="wpc-status-nolan">Complete</span></p>
+          <div class="wpc-row-actions">
+            <span class="wpc-status-notstarted" id="wpc-ns-logan">Not Started</span>
+            <button class="btn btn-brand btn-sm" onclick="openWpcContact(this,'Logan Foster','wpc-ns-logan')">Log Contact</button>
           </div>
-          <div class="nba-actions"><button class="btn btn-neutral btn-sm" disabled style="opacity:0.45;cursor:default;">Done</button></div>
         </div>
-        <div class="nba-item-slim" data-wpc-type="wpc" data-wpc="done">
-          <div class="nba-body" style="grid-column:1/3;">
-            <p class="nba-item-title"><a class="vip-link" onclick="openVipModal('Carter Ellis')">Carter Ellis</a> <span class="chip chip-sbk">Sportsbook</span></p>
-            <p class="nba-context">Retention call confirmed · <span class="wpc-status-complete" id="wpc-status-carter">Complete</span></p>
+        <div class="wpc-row-item wpc-row-done" data-wpc-status="done">
+          <div class="wpc-row-body">
+            <a class="vip-link" onclick="openVipModal('Ethan Parker')" style="text-decoration:line-through;color:#706e6b;pointer-events:none;">Ethan Parker</a>
+            <span class="wpc-row-meta">CAS · 14d since contact</span>
           </div>
-          <div class="nba-actions"><button class="btn btn-neutral btn-sm" disabled style="opacity:0.45;cursor:default;">Done</button></div>
+          <div class="wpc-row-actions"><span class="wpc-status-complete">Complete</span></div>
         </div>
+        <div class="wpc-row-item wpc-row-done" data-wpc-status="done">
+          <div class="wpc-row-body">
+            <a class="vip-link" onclick="openVipModal('Carter Ellis')" style="text-decoration:line-through;color:#706e6b;pointer-events:none;">Carter Ellis</a>
+            <span class="wpc-row-meta">SBK · 5d since contact</span>
+          </div>
+          <div class="wpc-row-actions"><span class="wpc-status-complete">Complete</span></div>
+        </div>
+        <div class="wpc-row-item wpc-row-done" data-wpc-status="done">
+          <div class="wpc-row-body">
+            <a class="vip-link" onclick="openVipModal('Jordan Williams')" style="text-decoration:line-through;color:#706e6b;pointer-events:none;">Jordan Williams</a>
+            <span class="wpc-row-meta">SBK · 5d since contact</span>
+          </div>
+          <div class="wpc-row-actions"><span class="wpc-status-complete">Complete</span></div>
+        </div>
+      </div>
+
+      <!-- View All Footer -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:0.45rem 0.75rem;border-top:1px solid #e2e8f0;background:#fafafa;">
+        <a style="font-size:0.72rem;color:#0060a3;font-weight:600;cursor:pointer;text-decoration:none;" onclick="window.open('about:blank','_blank');showToast('Opening All Tasks…')">View All Tasks</a>
+        <a style="font-size:0.72rem;color:#0060a3;font-weight:600;cursor:pointer;text-decoration:none;" onclick="window.open('about:blank','_blank');showToast('Opening All WPC…')">View All WPC</a>
       </div>
     </div>
 
@@ -3207,6 +3269,39 @@ function switchTab(btn, group) {
   const paneId = btn.getAttribute('data-tab');
   const pane = document.getElementById(paneId);
   if (pane) pane.style.display = 'block';
+}
+
+/* ── WPC / Tasks tab switching ── */
+function switchWpcTab(tab, btn) {
+  document.getElementById('wpcPanelTasks').style.display = tab === 'tasks' ? '' : 'none';
+  document.getElementById('wpcPanelWpc').style.display   = tab === 'wpc'   ? '' : 'none';
+  document.querySelectorAll('.wpc-tab-btn').forEach(b => b.classList.remove('wpc-tab-active'));
+  if (btn) btn.classList.add('wpc-tab-active');
+}
+function filterTasksNew(filter, btn) {
+  document.querySelectorAll('#wpcPanelTasks .wpc-filter-btn').forEach(b => b.classList.remove('wpc-filter-active'));
+  if (btn) btn.classList.add('wpc-filter-active');
+  document.querySelectorAll('#wpcPanelTasks .task-row-item').forEach(row => {
+    row.style.display = (filter === 'all' || row.dataset.taskStatus === filter) ? '' : 'none';
+  });
+}
+function completeTaskNew(cb) {
+  const row = cb.closest('.task-row-item');
+  if (!row) return;
+  if (cb.checked) {
+    row.dataset.taskStatus = 'done';
+    const title = row.querySelector('.task-row-title');
+    const meta  = row.querySelector('.task-row-meta');
+    if (title) title.classList.add('task-title-done');
+    if (meta)  meta.classList.add('task-meta-done');
+    showToast('Task completed ✓');
+  } else {
+    row.dataset.taskStatus = 'pending';
+    const title = row.querySelector('.task-row-title');
+    const meta  = row.querySelector('.task-row-meta');
+    if (title) title.classList.remove('task-title-done');
+    if (meta)  meta.classList.remove('task-meta-done');
+  }
 }
 
 /* ── WPC filter & Mark Done ── */
