@@ -1168,75 +1168,71 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <!-- Tyler Morgan: 1d — within 3d, no flag, green -->
                   <tr id="ob-vip-0" style="border-bottom:1px solid #dddbda;background:#fff;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background='#fff'">
-                    <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><div style="display:flex;align-items:center;gap:0.25rem;"><a class="vip-link">Tyler Morgan</a></div></td>
+                    <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><a class="vip-link">Tyler Morgan</a></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="chip chip-sbk">SBK</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;font-size:0.7rem;font-weight:700;color:#2e844a;">1d ago</td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="week-label">Wk 1</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="kyc-pending">Pending</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;text-align:right;position:relative;">
-                      <div style="display:inline-flex;justify-content:flex-end;align-items:center;gap:0.25rem;">
-                        <button class="btn btn-brand btn-sm" onclick="contactVip('Tyler Morgan')">Send Survey</button>
-                        <button onclick="event.stopPropagation();toggleObMenu('ob-menu-0')" style="background:none;border:1px solid #d0d5dd;font-size:0.85rem;color:#475569;cursor:pointer;padding:0.1rem 0.28rem;border-radius:0.25rem;line-height:1.2;">⋮</button>
-                        <div id="ob-menu-0" style="display:none;position:absolute;right:0.5rem;top:calc(100% - 4px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.13);min-width:9.5rem;font-size:0.72rem;">
-                          <div onclick="contactVip('Tyler Morgan');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Follow Up / Contact</div>
-                          <div onclick="markObComplete('ob-vip-0','Tyler Morgan');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#2e844a;font-weight:700;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">Mark Complete</div>
-                        </div>
+                      <button onclick="event.stopPropagation();toggleObMenu('ob-menu-0')" style="background:none;border:1px solid #d0d5dd;font-size:0.85rem;color:#475569;cursor:pointer;padding:0.1rem 0.28rem;border-radius:0.25rem;line-height:1.2;">⋮</button>
+                      <div id="ob-menu-0" style="display:none;position:absolute;right:0.5rem;top:calc(100% - 4px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.13);min-width:10rem;font-size:0.72rem;">
+                        <div onclick="showToast('Opening email for Tyler Morgan…');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Send Email</div>
+                        <div onclick="openLogContactModal('Tyler Morgan');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Contact</div>
+                        <div onclick="openBonusModal('Tyler Morgan');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Bonus</div>
+                        <div onclick="openVipModal('Tyler Morgan');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Profile</div>
+                        <div onclick="markObComplete('ob-vip-0','Tyler Morgan');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#2e844a;font-weight:700;border-top:1px solid #f1f5f9;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">Mark Complete</div>
                       </div>
                     </td>
                   </tr>
-                  <!-- Uma Price: 5d — past 3d, flagged, yellow -->
                   <tr id="ob-vip-1" style="border-bottom:1px solid #dddbda;background:#fff;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background='#fff'">
-                    <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><div style="display:flex;align-items:center;gap:0.25rem;"><a class="vip-link">Uma Price</a><span title="No contact within 3 days" style="color:#dd7a01;font-size:0.68rem;cursor:help;">⚠</span></div></td>
+                    <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><a class="vip-link">Uma Price</a></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="chip chip-casino">CAS</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;font-size:0.7rem;font-weight:700;color:#dd7a01;">5d ago</td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="week-label">Wk 1</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="kyc-pending">Pending</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;text-align:right;position:relative;">
-                      <div style="display:inline-flex;justify-content:flex-end;align-items:center;gap:0.25rem;">
-                        <button class="btn btn-brand btn-sm" onclick="contactVip('Uma Price')">Send Survey</button>
-                        <button onclick="event.stopPropagation();toggleObMenu('ob-menu-1')" style="background:none;border:1px solid #d0d5dd;font-size:0.85rem;color:#475569;cursor:pointer;padding:0.1rem 0.28rem;border-radius:0.25rem;line-height:1.2;">⋮</button>
-                        <div id="ob-menu-1" style="display:none;position:absolute;right:0.5rem;top:calc(100% - 4px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.13);min-width:9.5rem;font-size:0.72rem;">
-                          <div onclick="contactVip('Uma Price');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Follow Up / Contact</div>
-                          <div onclick="markObComplete('ob-vip-1','Uma Price');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#2e844a;font-weight:700;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">Mark Complete</div>
-                        </div>
+                      <button onclick="event.stopPropagation();toggleObMenu('ob-menu-1')" style="background:none;border:1px solid #d0d5dd;font-size:0.85rem;color:#475569;cursor:pointer;padding:0.1rem 0.28rem;border-radius:0.25rem;line-height:1.2;">⋮</button>
+                      <div id="ob-menu-1" style="display:none;position:absolute;right:0.5rem;top:calc(100% - 4px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.13);min-width:10rem;font-size:0.72rem;">
+                        <div onclick="showToast('Opening email for Uma Price…');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Send Email</div>
+                        <div onclick="openLogContactModal('Uma Price');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Contact</div>
+                        <div onclick="openBonusModal('Uma Price');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Bonus</div>
+                        <div onclick="openVipModal('Uma Price');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Profile</div>
+                        <div onclick="markObComplete('ob-vip-1','Uma Price');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#2e844a;font-weight:700;border-top:1px solid #f1f5f9;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">Mark Complete</div>
                       </div>
                     </td>
                   </tr>
-                  <!-- Victor Ward: 21d — past 10d, flagged, red -->
                   <tr id="ob-vip-2" style="border-bottom:1px solid #dddbda;background:#fff;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background='#fff'">
-                    <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><div style="display:flex;align-items:center;gap:0.25rem;"><a class="vip-link">Victor Ward</a><span title="No contact within 3 days" style="color:#dd7a01;font-size:0.68rem;cursor:help;">⚠</span></div></td>
+                    <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><a class="vip-link">Victor Ward</a></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="chip chip-dfs">DFS</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;font-size:0.7rem;font-weight:700;color:#ba0517;">21d ago</td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="week-label">Wk 3</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="kyc-done">Complete</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;text-align:right;position:relative;">
-                      <div style="display:inline-flex;justify-content:flex-end;align-items:center;gap:0.25rem;">
-                        <button class="btn btn-brand btn-sm" onclick="showToast('Opening preferences for Victor Ward — contact record ✓')">Log Preferences</button>
-                        <button onclick="event.stopPropagation();toggleObMenu('ob-menu-2')" style="background:none;border:1px solid #d0d5dd;font-size:0.85rem;color:#475569;cursor:pointer;padding:0.1rem 0.28rem;border-radius:0.25rem;line-height:1.2;">⋮</button>
-                        <div id="ob-menu-2" style="display:none;position:absolute;right:0.5rem;top:calc(100% - 4px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.13);min-width:9.5rem;font-size:0.72rem;">
-                          <div onclick="contactVip('Victor Ward');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Follow Up / Contact</div>
-                          <div onclick="markObComplete('ob-vip-2','Victor Ward');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#2e844a;font-weight:700;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">Mark Complete</div>
-                        </div>
+                      <button onclick="event.stopPropagation();toggleObMenu('ob-menu-2')" style="background:none;border:1px solid #d0d5dd;font-size:0.85rem;color:#475569;cursor:pointer;padding:0.1rem 0.28rem;border-radius:0.25rem;line-height:1.2;">⋮</button>
+                      <div id="ob-menu-2" style="display:none;position:absolute;right:0.5rem;top:calc(100% - 4px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.13);min-width:10rem;font-size:0.72rem;">
+                        <div onclick="showToast('Opening email for Victor Ward…');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Send Email</div>
+                        <div onclick="openLogContactModal('Victor Ward');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Contact</div>
+                        <div onclick="openBonusModal('Victor Ward');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Bonus</div>
+                        <div onclick="openVipModal('Victor Ward');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Profile</div>
+                        <div onclick="markObComplete('ob-vip-2','Victor Ward');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#2e844a;font-weight:700;border-top:1px solid #f1f5f9;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">Mark Complete</div>
                       </div>
                     </td>
                   </tr>
-                  <!-- Aaliyah Henderson: 38d — past 10d, flagged, red -->
                   <tr id="ob-vip-3" style="border-bottom:1px solid #dddbda;background:#fff;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background='#fff'">
-                    <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><div style="display:flex;align-items:center;gap:0.25rem;"><a class="vip-link">Aaliyah Henderson</a><span title="No contact within 3 days" style="color:#dd7a01;font-size:0.68rem;cursor:help;">⚠</span></div></td>
+                    <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><a class="vip-link">Aaliyah Henderson</a></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="chip chip-racing">FDR</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;font-size:0.7rem;font-weight:700;color:#ba0517;">38d ago</td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="week-label">Wk 6</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="kyc-pending">Pending</span></td>
                     <td style="padding:0.4rem 0.5rem;vertical-align:middle;text-align:right;position:relative;">
-                      <div style="display:inline-flex;justify-content:flex-end;align-items:center;gap:0.25rem;">
-                        <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:1.5px solid #fca5a5;font-size:0.62rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.5rem;cursor:pointer;" onclick="showToast('Urgent — contact record flagged for Aaliyah Henderson ✓')">Urgent</button>
-                        <button onclick="event.stopPropagation();toggleObMenu('ob-menu-3')" style="background:none;border:1px solid #d0d5dd;font-size:0.85rem;color:#475569;cursor:pointer;padding:0.1rem 0.28rem;border-radius:0.25rem;line-height:1.2;">⋮</button>
-                        <div id="ob-menu-3" style="display:none;position:absolute;right:0.5rem;top:calc(100% - 4px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.13);min-width:9.5rem;font-size:0.72rem;">
-                          <div onclick="contactVip('Aaliyah Henderson');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Follow Up / Contact</div>
-                          <div onclick="markObComplete('ob-vip-3','Aaliyah Henderson');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#2e844a;font-weight:700;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">Mark Complete</div>
-                        </div>
+                      <button onclick="event.stopPropagation();toggleObMenu('ob-menu-3')" style="background:none;border:1px solid #d0d5dd;font-size:0.85rem;color:#475569;cursor:pointer;padding:0.1rem 0.28rem;border-radius:0.25rem;line-height:1.2;">⋮</button>
+                      <div id="ob-menu-3" style="display:none;position:absolute;right:0.5rem;top:calc(100% - 4px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.13);min-width:10rem;font-size:0.72rem;">
+                        <div onclick="showToast('Opening email for Aaliyah Henderson…');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Send Email</div>
+                        <div onclick="openLogContactModal('Aaliyah Henderson');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Contact</div>
+                        <div onclick="openBonusModal('Aaliyah Henderson');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Bonus</div>
+                        <div onclick="openVipModal('Aaliyah Henderson');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Profile</div>
+                        <div onclick="markObComplete('ob-vip-3','Aaliyah Henderson');closeAllObMenus()" style="padding:0.42rem 0.75rem;cursor:pointer;color:#2e844a;font-weight:700;border-top:1px solid #f1f5f9;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">Mark Complete</div>
                       </div>
                     </td>
                   </tr>
