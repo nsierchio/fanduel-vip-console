@@ -188,12 +188,12 @@
 
 ---
 
-## 11. Birthdays This Week
+## 11. Upcoming Birthdays
 
 | Field | Description | Confidence | Confirmed Source | Accessible Today? | Notes |
 |---|---|---|---|---|---|
 | Date of Birth | Player's birthday | ✅ | | | |
-| Birthday This Week Flag | Derived: DOB falls in current week | ✅ | | | |
+| Upcoming Birthday (30-day lookahead) | Derived: next birthday occurrence falls within the next 30 days | ✅ | | | Cannot filter directly on Birthdate (stored year is historical) — requires a formula field calculating next birthday occurrence |
 | Birthday Offer Sent Flag | Whether a birthday bonus/message was sent | ✅ | | | |
 | Birthday Offer Amount | Dollar value of birthday offer | ✅ | | | |
 | Birthday Offer Type | Profit Boost / Bonus Credit / Gift | ✅ | | | |
