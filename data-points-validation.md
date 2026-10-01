@@ -177,13 +177,13 @@
 
 | Field | Description | Confidence | Confirmed Source | Accessible Today? | Notes |
 |---|---|---|---|---|---|
-| Campaign Name | Name of the promotion/campaign | ✅ | | | |
-| Campaign Status | Draft / Active / Completed | ✅ | | | |
-| Campaign Type | Bonus Bet / Reload / Event / Loyalty | ✅ | | | |
-| Campaign Target (VIP count) | How many VIPs are in the campaign | ✅ | | | |
-| Campaign Send Date | When campaign activates | ✅ | | | |
-| Campaign Offer Amount | Dollar value of the offer | ✅ | | | |
-| Approval Status | Pre-approved / Awaiting sign-off / In commercial review | ✅ | | | Approval workflow |
+| Campaign Name | Name of the promotion/campaign | ✅ | | | OOTB standard field |
+| Campaign Status | Draft / Active / Completed | ✅ | | | OOTB field; standard picklist values differ (Draft/Planned/In Progress/Completed/Aborted) — custom values needed for Draft/Active/Completed |
+| Campaign Type | Bonus Bet / Reload / Event / Loyalty | ✅ | | | OOTB field; picklist values are custom — need to be configured |
+| Campaign Target (VIP count) | How many VIPs are in the campaign | ✅ | | | OOTB roll-up from CampaignMember records — not a directly editable field |
+| Campaign Send Date | When campaign activates | ✅ | | | OOTB standard field (Campaign.StartDate) |
+| Campaign Offer Amount | Dollar value of the offer | ⚠️ | | | Custom field — does not exist OOTB; requires new Campaign custom field |
+| Approval Status | Pre-approved / Awaiting sign-off / In commercial review | ⚠️ | | | Custom field — no standard Salesforce approval status on Campaign; requires custom picklist + Flow/Process Builder approval process |
 | Campaign Performance | Open rate / redemption rate / GGR lift | 🟡 | | | Post-send analytics |
 
 ---
