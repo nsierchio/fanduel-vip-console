@@ -1365,7 +1365,6 @@
           <span class="badge badge-red">4 Actions</span>
           <span style="font-size:0.55rem;font-weight:700;background:#e2e8f0;color:#64748b;border-radius:0.2rem;padding:0.05rem 0.3rem;letter-spacing:0.02em;white-space:nowrap;">MVP Static NBA Recco</span>
         </div>
-        <span style="font-size:0.62rem;color:#706e6b;">AI-prioritized</span>
       </div>
 
       <!-- NBA Card 1: No Contact -->
@@ -1381,7 +1380,8 @@
             <p style="font-size:0.67rem;color:#706e6b;margin:0;">Ethan Parker · Tier 1 · CAS · <span style="color:#ba0517;font-weight:600;">−$12,400 GGR L30</span> · <span style="color:#ba0517;font-weight:600;">35 days overdue</span></p>
             <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
               <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Contact logged for Ethan Parker ✓')">Log Contact</button>
-              <button class="btn btn-neutral btn-sm" onclick="showToast('Ethan Parker deferred — reminder in 2 days')">Defer</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Ethan Parker deferred — returning to queue in 24h')">Defer</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Dismissed — removed from queue')">Dismiss</button>
             </div>
             <div style="display:flex;justify-content:flex-end;margin-top:0.35rem;"><span style="font-size:0.62rem;color:#94a3b8;font-style:italic;">1 of 8</span></div>
           </div>
@@ -1400,9 +1400,9 @@
             <p style="font-size:0.7rem;color:#706e6b;margin:0;line-height:1.4;">Case #00812 opened 4 hours ago. Withdrawal delay — funds not received after 48h. Shield Select SBK.</p>
             <p style="font-size:0.67rem;color:#706e6b;margin:0;">Sophia Novak · Shield Select · SBK · <span style="color:#ba0517;font-weight:600;">Case open 4h</span> · <span style="color:#706e6b;">Priority: High</span></p>
             <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
-              <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Sophia Novak contacted re: Case #00812 ✓')">Contact VIP</button>
-              <button class="btn btn-neutral btn-sm" onclick="showToast('Opening Case #00812…')">View Case</button>
-              <button class="btn btn-neutral btn-sm" onclick="showToast('Sophia Novak deferred — reminder in 2 days')">Defer</button>
+              <button class="btn btn-brand btn-sm" onclick="showToast('Opening Case #00812…')">View Case</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Sophia Novak deferred — returning to queue in 24h')">Defer</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Dismissed — removed from queue')">Dismiss</button>
             </div>
             <div style="display:flex;justify-content:flex-end;margin-top:0.35rem;"><span style="font-size:0.62rem;color:#94a3b8;font-style:italic;">1 of 2</span></div>
           </div>
@@ -1421,9 +1421,9 @@
             <p style="font-size:0.7rem;color:#706e6b;margin:0;line-height:1.4;">−$46,200 single-day loss. 5.4× daily average. Empathy outreach recommended — no promotional messaging.</p>
             <p style="font-size:0.67rem;color:#706e6b;margin:0;">Noah Coleman · Tier 2 · CAS · <span style="color:#ba0517;font-weight:600;">−$46,200 today</span> · <span style="color:#ba0517;font-weight:600;">5.4× avg</span></p>
             <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
-              <button class="btn btn-brand btn-sm" onclick="taskAction(this,'Contact','Outreach planned for Noah Coleman ✓')">Plan Outreach</button>
-              <button class="btn btn-neutral btn-sm" onclick="showToast('Opening wager history for Noah Coleman…')">View Wagers</button>
-              <button class="btn btn-neutral btn-sm" onclick="showToast('Noah Coleman deferred 24h')">Defer 24h</button>
+              <button class="btn btn-brand btn-sm" onclick="showToast('Opening wager history for Noah Coleman…')">View Wagers</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Noah Coleman deferred — returning to queue in 24h')">Defer</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Dismissed — removed from queue')">Dismiss</button>
             </div>
             <div style="display:flex;justify-content:flex-end;margin-top:0.35rem;"><span style="font-size:0.62rem;color:#94a3b8;font-style:italic;">1 of 3</span></div>
           </div>
@@ -1443,7 +1443,8 @@
             <p style="font-size:0.67rem;color:#706e6b;margin:0;">Luca Romano · Tier 3 · CAS · <span style="color:#706e6b;">Last bonus: 22d ago</span> · <span style="color:#dd7a01;font-weight:600;">RTC below target</span></p>
             <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
               <button class="btn btn-brand btn-sm" onclick="openBonusModal('Luca Romano')">Issue Bonus</button>
-              <button class="btn btn-neutral btn-sm" onclick="showToast('Luca Romano deferred — reminder in 3 days')">Defer</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Luca Romano deferred — returning to queue in 24h')">Defer</button>
+              <button class="btn btn-neutral btn-sm" onclick="showToast('Dismissed — removed from queue')">Dismiss</button>
             </div>
             <div style="display:flex;justify-content:flex-end;margin-top:0.35rem;"><span style="font-size:0.62rem;color:#94a3b8;font-style:italic;">1 of 5</span></div>
           </div>
