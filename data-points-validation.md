@@ -202,15 +202,17 @@
 
 ## 12. VIP Feedback Pulse
 
+> **Existing component** — feedback is synced from a Tableau survey. Component will be ported to the new build; not a new-build requirement.
+
 | Field | Description | Confidence | Confirmed Source | Accessible Today? | Notes |
 |---|---|---|---|---|---|
-| Feedback Text | Player's free-text feedback | 🔴 | | | Requires survey/feedback capture mechanism |
-| Feedback Submitted Date | When feedback was submitted | 🔴 | | | |
-| Feedback Sentiment | Positive / Neutral / Negative (AI-classified) | 🔵 | | | Agentforce Einstein sentiment |
+| Feedback Text | Player's free-text feedback | 🟡 | Tableau (survey sync) | | Existing Tableau survey integration — field mapping to confirm on port |
+| Feedback Submitted Date | When feedback was submitted | 🟡 | Tableau (survey sync) | | |
+| Feedback Sentiment | Positive / Neutral / Negative (AI-classified) | 🔵 | | | Confirm whether existing component already includes Einstein sentiment or if it needs to be added in new build |
 | Feedback Review Status | Unreviewed / Reviewed | ✅ | | | Simple flag, KAM-set |
 | KAM Response | KAM's written reply to feedback | ✅ | | | |
 | Response Sent Date | When KAM responded | ✅ | | | |
-| Feedback Channel | In-app / Survey / Direct / etc. | 🔴 | | | |
+| Feedback Channel | Survey (Tableau sync) | 🟡 | Tableau (survey sync) | | Channel confirmed — not a new-build requirement |
 
 ---
 
@@ -222,8 +224,7 @@
 4. **WPC list generation**: Is the Weekly Priority Contact list Agentforce-generated, manager-assigned, or rule-based?
 5. **RG thresholds**: Who owns responsible gambling threshold definitions — compliance team, product, or is it configurable by the KAM?
 6. **TVG / FDR Racing data**: Is racing player data accessible via the same data platform as SBK/CAS/DFS, or is it a separate integration?
-7. **VIP Feedback Pulse mechanism**: Is there an existing feedback capture tool, or does this require building a new survey/feedback channel?
-8. **Churn risk model**: Does a predictive churn model already exist, or would this need to be built in Agentforce?
+7. **Churn risk model**: Does a predictive churn model already exist, or would this need to be built in Agentforce?
 
 ---
 
