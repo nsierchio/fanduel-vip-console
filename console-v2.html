@@ -520,12 +520,12 @@
   .fb-filter-pill.active { background:#0070d2;border-color:#0070d2;color:#fff; }
   .slack-ch-btn { transition: background 0.12s; }
   /* ── Feedback list ── */
-  .fb-sev-high { display:inline-flex;align-items:center;font-size:0.62rem;font-weight:700;color:#991b1b;background:#fee2e2;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
-  .fb-sev-med  { display:inline-flex;align-items:center;font-size:0.62rem;font-weight:700;color:#92400e;background:#fef3c7;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
-  .fb-sev-low  { display:inline-flex;align-items:center;font-size:0.62rem;font-weight:700;color:#374151;background:#f1f5f9;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
-  .fb-sev-neg { display:inline-flex;align-items:center;gap:0.22rem;font-size:0.62rem;font-weight:700;color:#991b1b;background:#fee2e2;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
-  .fb-sev-neu { display:inline-flex;align-items:center;gap:0.22rem;font-size:0.62rem;font-weight:700;color:#92400e;background:#fef3c7;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
-  .fb-sev-pos { display:inline-flex;align-items:center;gap:0.22rem;font-size:0.62rem;font-weight:700;color:#065f46;background:#d1fae5;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
+  .fb-sev-high { display:inline-flex;align-items:center;gap:0.18rem;font-size:0.62rem;font-weight:700;color:#991b1b;white-space:nowrap; }
+  .fb-sev-med  { display:inline-flex;align-items:center;gap:0.18rem;font-size:0.62rem;font-weight:700;color:#b45309;white-space:nowrap; }
+  .fb-sev-low  { display:inline-flex;align-items:center;gap:0.18rem;font-size:0.62rem;font-weight:700;color:#6b7280;white-space:nowrap; }
+  .fb-sev-neg { display:inline-flex;align-items:center;font-size:0.62rem;font-weight:700;color:#991b1b;background:#fee2e2;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
+  .fb-sev-neu { display:inline-flex;align-items:center;font-size:0.62rem;font-weight:700;color:#92400e;background:#fef3c7;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
+  .fb-sev-pos { display:inline-flex;align-items:center;font-size:0.62rem;font-weight:700;color:#065f46;background:#d1fae5;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
   .fb-list-head { display:grid;grid-template-columns:4rem 5.8rem 1.2fr 1fr 0.9fr 2fr 5rem 2rem;gap:0.3rem;align-items:center;font-size:0.6375rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.28rem 0.75rem;border-bottom:1px solid #dddbda;background:#f3f2f2; }
   .fb-list-row { display:grid;grid-template-columns:4rem 5.8rem 1.2fr 1fr 0.9fr 2fr 5rem 2rem;gap:0.3rem;align-items:center;padding:0.46rem 0.75rem;border-bottom:1px solid #f1f5f9;font-size:0.72rem;border-left:3px solid transparent; }
   .fb-list-row:hover { background:#f3f9ff; }
@@ -1435,7 +1435,7 @@
       <!-- Rows — sorted by Severity: High > Medium > Low -->
       <div id="fbList">
         <div class="fb-list-row fb-row-neg" data-vip="Marcus Chen" data-severity="high">
-          <span class="fb-sev-high">High</span><span class="fb-sev-neg">&#9873; Negative</span>
+          <span class="fb-sev-high">&#9873; High</span><span class="fb-sev-neg">Negative</span>
           <a class="vip-link" onclick="showToast('Opening Marcus Chen contact record…')">Marcus Chen</a>
           <span style="color:#475569;">Payments</span>
           <span style="color:#475569;">Sportsbook</span>
@@ -1450,7 +1450,7 @@
           </div>
         </div>
         <div class="fb-list-row fb-row-neg" data-vip="Harjot Singh" data-severity="high">
-          <span class="fb-sev-high">High</span><span class="fb-sev-neg">&#9873; Negative</span>
+          <span class="fb-sev-high">&#9873; High</span><span class="fb-sev-neg">Negative</span>
           <a class="vip-link" onclick="showToast('Opening Harjot Singh contact record…')">Harjot Singh</a>
           <span style="color:#475569;">Customer Service</span>
           <span style="color:#475569;">Casino</span>
@@ -1465,7 +1465,7 @@
           </div>
         </div>
         <div class="fb-list-row fb-row-neg" data-vip="Priya Sharma" data-severity="medium">
-          <span class="fb-sev-med">Medium</span><span class="fb-sev-neg">&#9873; Negative</span>
+          <span class="fb-sev-med">&#9873; Medium</span><span class="fb-sev-neg">Negative</span>
           <a class="vip-link" onclick="showToast('Opening Priya Sharma contact record…')">Priya Sharma</a>
           <span style="color:#475569;">Bonus</span>
           <span style="color:#475569;">Casino</span>
@@ -1480,7 +1480,7 @@
           </div>
         </div>
         <div class="fb-list-row fb-row-neu" data-vip="Harjot Singh" data-severity="medium">
-          <span class="fb-sev-med">Medium</span><span class="fb-sev-neu">&#9872; Neutral</span>
+          <span class="fb-sev-med">&#9873; Medium</span><span class="fb-sev-neu">Neutral</span>
           <a class="vip-link" onclick="showToast('Opening Harjot Singh contact record…')">Harjot Singh</a>
           <span style="color:#475569;">Promotions</span>
           <span style="color:#475569;">Sportsbook</span>
@@ -1495,7 +1495,7 @@
           </div>
         </div>
         <div class="fb-list-row fb-row-neu" data-vip="Sarah Blake" data-severity="low">
-          <span class="fb-sev-low">Low</span><span class="fb-sev-neu">&#9872; Neutral</span>
+          <span class="fb-sev-low">&#9873; Low</span><span class="fb-sev-neu">Neutral</span>
           <a class="vip-link" onclick="showToast('Opening Sarah Blake contact record…')">Sarah Blake</a>
           <span style="color:#475569;">Customer Service</span>
           <span style="color:#475569;">Casino</span>
@@ -1510,7 +1510,7 @@
           </div>
         </div>
         <div class="fb-list-row fb-row-pos" data-vip="Elena Voss" data-severity="low" style="border-bottom:none;">
-          <span class="fb-sev-low">Low</span><span class="fb-sev-pos">&#9873; Positive</span>
+          <span class="fb-sev-low">&#9873; Low</span><span class="fb-sev-pos">Positive</span>
           <a class="vip-link" onclick="showToast('Opening Elena Voss contact record…')">Elena Voss</a>
           <span style="color:#475569;">Events</span>
           <span style="color:#475569;">Casino</span>
