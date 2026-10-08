@@ -518,6 +518,41 @@
   .fb-filter-pill { font-size:0.63rem;font-weight:600;border-radius:999px;padding:0.15rem 0.5rem;border:1.5px solid #dddbda;background:#fff;color:#514f4d;cursor:pointer; }
   .fb-filter-pill.active { background:#0070d2;border-color:#0070d2;color:#fff; }
   .slack-ch-btn { transition: background 0.12s; }
+  /* ── Feedback list ── */
+  .fb-sev-neg { display:inline-flex;align-items:center;gap:0.22rem;font-size:0.62rem;font-weight:700;color:#991b1b;background:#fee2e2;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
+  .fb-sev-neu { display:inline-flex;align-items:center;gap:0.22rem;font-size:0.62rem;font-weight:700;color:#92400e;background:#fef3c7;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
+  .fb-sev-pos { display:inline-flex;align-items:center;gap:0.22rem;font-size:0.62rem;font-weight:700;color:#065f46;background:#d1fae5;border-radius:0.25rem;padding:0.09rem 0.35rem;white-space:nowrap; }
+  .fb-list-head { display:grid;grid-template-columns:5.8rem 1.2fr 1fr 0.9fr 2fr 5rem 2rem;gap:0.3rem;align-items:center;font-size:0.6375rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.28rem 0.75rem;border-bottom:1px solid #dddbda;background:#f3f2f2; }
+  .fb-list-row { display:grid;grid-template-columns:5.8rem 1.2fr 1fr 0.9fr 2fr 5rem 2rem;gap:0.3rem;align-items:center;padding:0.46rem 0.75rem;border-bottom:1px solid #f1f5f9;font-size:0.72rem;border-left:3px solid transparent; }
+  .fb-list-row:hover { background:#f3f9ff; }
+  .fb-row-neg { border-left-color:#ef4444; }
+  .fb-row-neu { border-left-color:#f59e0b; }
+  .fb-row-pos { border-left-color:#10b981; }
+  .fb-excerpt { overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#1e293b; }
+  /* ── Log Feedback Modal ── */
+  #logFbModal { display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.45);align-items:center;justify-content:center; }
+  #logFbModal.modal-open { display:flex; }
+  #logFbCard { background:#fff;border-radius:0.4rem;box-shadow:0 8px 40px rgba(0,0,0,0.22);width:min(500px,94vw);max-height:88vh;overflow:hidden;display:flex;flex-direction:column;animation:modal-in 0.18s ease; }
+  .fb-modal-hd { background:linear-gradient(135deg,#0c7a73,#06a59a);padding:0.85rem 1.1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0; }
+  .fb-modal-title { font-size:0.88rem;font-weight:700;color:#fff; }
+  .fb-modal-close { width:1.6rem;height:1.6rem;border:none;background:rgba(255,255,255,0.2);border-radius:50%;color:#fff;cursor:pointer;font-size:0.8rem;display:flex;align-items:center;justify-content:center; }
+  .fb-modal-close:hover { background:rgba(255,255,255,0.35); }
+  .fb-modal-body { padding:1rem 1.2rem;overflow-y:auto;flex:1; }
+  .fb-field { margin-bottom:0.75rem; }
+  .fb-field label { display:block;font-size:0.72rem;font-weight:700;color:#3e3e3c;margin-bottom:0.22rem; }
+  .fb-field label .req { color:#ba0517;margin-left:0.1rem; }
+  .fb-field select, .fb-field textarea { width:100%;border:1px solid #d8dde6;border-radius:0.25rem;font-size:0.74rem;color:#181818;padding:0.38rem 0.5rem;outline:none;font-family:inherit;box-sizing:border-box;background:#fff; }
+  .fb-field select:focus, .fb-field textarea:focus { border-color:#06a59a;box-shadow:0 0 0 2px rgba(6,165,154,0.15); }
+  .fb-field textarea { min-height:4rem;resize:vertical; }
+  .fb-radio-opt { display:flex;align-items:center;gap:0.4rem;font-size:0.73rem;color:#181818;cursor:pointer;padding:0.12rem 0; }
+  .fb-check-opt { display:flex;align-items:center;gap:0.4rem;font-size:0.73rem;color:#181818;cursor:pointer;padding:0.1rem 0; }
+  .fb-multi-list { border:1px solid #d8dde6;border-radius:0.25rem;padding:0.35rem 0.5rem;max-height:6.5rem;overflow-y:auto;background:#fff; }
+  .fb-multi-item { display:flex;align-items:center;gap:0.35rem;padding:0.16rem 0;font-size:0.73rem;color:#0176d3;cursor:pointer; }
+  .fb-modal-ft { padding:0.65rem 1.2rem;border-top:1px solid #e8e8e8;display:flex;justify-content:flex-end;gap:0.5rem;flex-shrink:0; }
+  .fb-confirm-wrap { text-align:center;padding:2rem 1rem; }
+  .fb-confirm-icon { width:2.8rem;height:2.8rem;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.65rem;font-size:1.3rem; }
+  .fb-confirm-title { font-size:0.95rem;font-weight:700;color:#065f46;margin:0 0 0.3rem; }
+  .fb-confirm-sub { font-size:0.74rem;color:#475569;margin:0 0 1.2rem; }
 
   /* ── Quick Toast (dark, bottom-right) ── */
   #toastEl {
@@ -1340,33 +1375,132 @@
       </div>
     </div>
 
-    <!-- ── VIP Feedback Pulse (placeholder) ── -->
-    <div class="card" style="background:#f3f2f2;border:1px solid #d8dde6;">
-      <div class="card-header" style="background:#f3f2f2;border-bottom:none;padding-bottom:0.3rem;">
+    <!-- ── VIP Feedback Pulse ── -->
+    <div class="card">
+      <div class="card-header" style="padding-bottom:0.3rem;">
         <div class="card-title-row">
-          <span class="card-heading" style="font-size:0.82rem;">My VIP Customers Feedback</span>
+          <div class="card-icon-wrap" style="background:#06a59a;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+          </div>
+          <span class="card-heading">My VIP Customers Feedback</span>
+          <span style="font-size:0.62rem;font-weight:700;background:#e0f2fe;color:#0369a1;border-radius:999px;padding:0.05rem 0.42rem;margin-left:0.35rem;">6</span>
         </div>
-        <a href="#" onclick="event.preventDefault();showToast('Opening full list view…')" style="font-size:0.75rem;color:#0176d3;text-decoration:none;font-weight:500;flex-shrink:0;">More</a>
       </div>
 
-      <!-- List view entry -->
-      <div style="padding:0.55rem 0.75rem;">
-        <div style="border:1px solid #d8dde6;border-radius:0.3rem;background:#fff;display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0.65rem;cursor:pointer;" onclick="showToast('Opening My VIP Customers Feedback list view…')">
-          <!-- Hammer icon -->
-          <div style="width:2.4rem;height:2.4rem;background:#8b9c2b;border-radius:0.25rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M15.5 2.1L11 6.6 9.9 5.5 8.5 6.9l1.1 1.1-6.4 6.4c-.8.8-.8 2 0 2.8l1.6 1.6c.8.8 2 .8 2.8 0l6.4-6.4 1.1 1.1 1.4-1.4-1.1-1.1L19.9 6c.8-.8.8-2 0-2.8L18.3 1.6c-.8-.8-2.1-.7-2.8.5z"/></svg>
+      <!-- Toolbar -->
+      <div style="padding:0.4rem 0.75rem 0.35rem;display:flex;align-items:center;gap:0.4rem;border-bottom:1px solid #e8e8e8;">
+        <div style="flex:1;position:relative;">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="position:absolute;left:0.45rem;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="7" cy="7" r="4.5" stroke="#706e6b" stroke-width="1.4"/><path d="M10.5 10.5l2 2" stroke="#706e6b" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <input id="fbSearch" oninput="filterFeedback()" style="width:100%;padding:0.28rem 0.5rem 0.28rem 1.6rem;font-size:0.71rem;border:1px solid #d8dde6;border-radius:0.25rem;outline:none;color:#181818;box-sizing:border-box;" placeholder="Search by VIP name…" />
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openLogFeedback(null)" style="white-space:nowrap;font-size:0.68rem;padding:0.28rem 0.7rem;">+ Log Feedback</button>
+        <button style="border:1px solid #d8dde6;background:#fff;border-radius:0.25rem;padding:0.28rem 0.45rem;cursor:pointer;" title="Refresh" onclick="showToast('Feedback list refreshed')">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5c1.55 0 2.95.64 3.96 1.66L13.5 5.5V2" stroke="#706e6b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <!-- Column headers -->
+      <div class="fb-list-head">
+        <span>Severity</span><span>VIP Name</span><span>Category</span><span>Product</span><span>Feedback</span><span>Date</span><span></span>
+      </div>
+
+      <!-- Rows — Negative > Neutral > Positive, date desc within each group -->
+      <div id="fbList">
+        <div class="fb-list-row fb-row-neg" data-vip="Marcus Chen">
+          <span class="fb-sev-neg">&#9873; Negative</span>
+          <a class="vip-link" onclick="showToast('Opening Marcus Chen contact record…')">Marcus Chen</a>
+          <span style="color:#475569;">Payments</span>
+          <span style="color:#475569;">Sportsbook</span>
+          <span class="fb-excerpt" title="Deposit took 3 days to clear, lost out on a bet I wanted to place">Deposit took 3 days to clear, lost out on a bet…</span>
+          <span style="color:#706e6b;font-size:0.66rem;">Oct 6, 2026</span>
+          <div style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('fbMenu-1')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="fbMenu-1" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">
+              <div onclick="event.stopPropagation();openLogFeedback('Marcus Chen');document.getElementById('fbMenu-1').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Feedback</div>
+              <div onclick="event.stopPropagation();showToast('Opening Marcus Chen contact record…');document.getElementById('fbMenu-1').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Contact Record</div>
+            </div>
           </div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:0.78rem;font-weight:700;color:#181818;">My VIP Customers Feedback</div>
-            <div style="font-size:0.68rem;color:#706e6b;margin-top:0.08rem;">0 items, sorted by Incident Number</div>
-            <div style="font-size:0.68rem;color:#706e6b;">Filtered by Origin</div>
+        </div>
+        <div class="fb-list-row fb-row-neg" data-vip="Harjot Singh">
+          <span class="fb-sev-neg">&#9873; Negative</span>
+          <a class="vip-link" onclick="showToast('Opening Harjot Singh contact record…')">Harjot Singh</a>
+          <span style="color:#475569;">Customer Service</span>
+          <span style="color:#475569;">Casino</span>
+          <span class="fb-excerpt" title="Had issue with the app while I was watching the game, I was so stressed">Had issue with the app while watching the game…</span>
+          <span style="color:#706e6b;font-size:0.66rem;">Oct 7, 2026</span>
+          <div style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('fbMenu-2')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="fbMenu-2" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">
+              <div onclick="event.stopPropagation();openLogFeedback('Harjot Singh');document.getElementById('fbMenu-2').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Feedback</div>
+              <div onclick="event.stopPropagation();showToast('Opening Harjot Singh contact record…');document.getElementById('fbMenu-2').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Contact Record</div>
+            </div>
           </div>
-          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><path d="M5 2l6 6-6 6" stroke="#706e6b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="fb-list-row fb-row-neg" data-vip="Priya Sharma">
+          <span class="fb-sev-neg">&#9873; Negative</span>
+          <a class="vip-link" onclick="showToast('Opening Priya Sharma contact record…')">Priya Sharma</a>
+          <span style="color:#475569;">Bonus</span>
+          <span style="color:#475569;">Casino</span>
+          <span class="fb-excerpt" title="Bonus applied incorrectly, took 3 calls to resolve. Very frustrating experience">Bonus applied incorrectly, took 3 calls to resolve…</span>
+          <span style="color:#706e6b;font-size:0.66rem;">Oct 5, 2026</span>
+          <div style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('fbMenu-3')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="fbMenu-3" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">
+              <div onclick="event.stopPropagation();openLogFeedback('Priya Sharma');document.getElementById('fbMenu-3').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Feedback</div>
+              <div onclick="event.stopPropagation();showToast('Opening Priya Sharma contact record…');document.getElementById('fbMenu-3').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Contact Record</div>
+            </div>
+          </div>
+        </div>
+        <div class="fb-list-row fb-row-neu" data-vip="Harjot Singh">
+          <span class="fb-sev-neu">&#9872; Neutral</span>
+          <a class="vip-link" onclick="showToast('Opening Harjot Singh contact record…')">Harjot Singh</a>
+          <span style="color:#475569;">Promotions</span>
+          <span style="color:#475569;">Sportsbook</span>
+          <span class="fb-excerpt" title="Added money but did not get my bonus spins, had to call and finally resolved">Added money but did not get my bonus spins, resolved…</span>
+          <span style="color:#706e6b;font-size:0.66rem;">Oct 7, 2026</span>
+          <div style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('fbMenu-4')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="fbMenu-4" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">
+              <div onclick="event.stopPropagation();openLogFeedback('Harjot Singh');document.getElementById('fbMenu-4').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Feedback</div>
+              <div onclick="event.stopPropagation();showToast('Opening Harjot Singh contact record…');document.getElementById('fbMenu-4').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Contact Record</div>
+            </div>
+          </div>
+        </div>
+        <div class="fb-list-row fb-row-neu" data-vip="Sarah Blake">
+          <span class="fb-sev-neu">&#9872; Neutral</span>
+          <a class="vip-link" onclick="showToast('Opening Sarah Blake contact record…')">Sarah Blake</a>
+          <span style="color:#475569;">Customer Service</span>
+          <span style="color:#475569;">Casino</span>
+          <span class="fb-excerpt" title="Response time was okay but the resolution took longer than expected">Response time was okay but resolution took longer…</span>
+          <span style="color:#706e6b;font-size:0.66rem;">Oct 3, 2026</span>
+          <div style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('fbMenu-5')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="fbMenu-5" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">
+              <div onclick="event.stopPropagation();openLogFeedback('Sarah Blake');document.getElementById('fbMenu-5').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Feedback</div>
+              <div onclick="event.stopPropagation();showToast('Opening Sarah Blake contact record…');document.getElementById('fbMenu-5').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Contact Record</div>
+            </div>
+          </div>
+        </div>
+        <div class="fb-list-row fb-row-pos" data-vip="Elena Voss" style="border-bottom:none;">
+          <span class="fb-sev-pos">&#9873; Positive</span>
+          <a class="vip-link" onclick="showToast('Opening Elena Voss contact record…')">Elena Voss</a>
+          <span style="color:#475569;">Events</span>
+          <span style="color:#475569;">Casino</span>
+          <span class="fb-excerpt" title="Really enjoyed the dinner, great experience overall. Would love more of these">Really enjoyed the dinner, great experience overall…</span>
+          <span style="color:#706e6b;font-size:0.66rem;">Oct 4, 2026</span>
+          <div style="position:relative;">
+            <button onclick="event.stopPropagation();toggleGenMenu('fbMenu-6')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+            <div id="fbMenu-6" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">
+              <div onclick="event.stopPropagation();openLogFeedback('Elena Voss');document.getElementById('fbMenu-6').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Feedback</div>
+              <div onclick="event.stopPropagation();showToast('Opening Elena Voss contact record…');document.getElementById('fbMenu-6').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Contact Record</div>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- Empty state -->
-      <div style="padding:1.5rem 0.75rem 2rem;text-align:center;">
-        <p style="font-size:0.72rem;color:#706e6b;line-height:1.55;margin:0;">There's nothing in My VIP Customers Feedback yet.<br>When records are added to this list view, you'll see them here.</p>
+
+      <!-- View All footer -->
+      <div style="padding:0.55rem 0.75rem;text-align:center;border-top:1px solid #f1f5f9;">
+        <a href="#" onclick="event.preventDefault();showToast('Opening full feedback list view…')" style="font-size:0.72rem;color:#0176d3;text-decoration:none;font-weight:600;">View All Feedback</a>
       </div>
     </div>
 
@@ -3035,6 +3169,80 @@ document.addEventListener('click', closeAllLctMenus);
       <!-- Submit -->
       <div style="text-align:center;padding:1rem 0 0.5rem;">
         <button id="bbSubmitBtn" onclick="submitBonusBet()" disabled style="background:#c8d4df;color:#fff;border:none;border-radius:0.4rem;padding:0.6rem 3rem;font-size:0.88rem;font-weight:600;cursor:not-allowed;min-width:170px;transition:background 0.15s;">Add Bonus Bet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Log Feedback Modal ── -->
+<div id="logFbModal" onclick="if(event.target===this)closeLogFeedback()">
+  <div id="logFbCard">
+    <div class="fb-modal-hd">
+      <span class="fb-modal-title" id="logFbTitle">Log Feedback</span>
+      <button class="fb-modal-close" onclick="closeLogFeedback()">&#x2715;</button>
+    </div>
+    <!-- Step 1: Form -->
+    <div id="logFbStep1" class="fb-modal-body">
+      <div class="fb-field">
+        <label>Who is submitting the Feedback?<span class="req">*</span></label>
+        <div class="fb-radio-opt"><input type="radio" name="fbSubmitter" value="self" checked style="accent-color:#06a59a;"> I am submitting this on behalf of my VIP Customer</div>
+        <div class="fb-radio-opt" style="margin-top:0.22rem;"><input type="radio" name="fbSubmitter" value="other" style="accent-color:#06a59a;"> I am submitting this on behalf of another KAM's VIP Customer</div>
+      </div>
+      <div class="fb-field">
+        <label>Feedback Category<span class="req">*</span></label>
+        <select>
+          <option value="">--None--</option>
+          <option>Bonus</option><option>Competitors</option><option>Customer Service</option><option>Events</option>
+          <option>Government/Tax</option><option>Market Offering/Trading</option><option>New Product/Game Launch: VIP Early Access</option>
+          <option>Payments</option><option>Product Improvements</option><option>Promotions</option>
+          <option>Rewards Club</option><option>Shield Select</option><option>Technology</option>
+          <option>Transactions</option><option>VIP Communication/Experience</option><option>Withdrawals</option>
+        </select>
+      </div>
+      <div class="fb-field">
+        <label>Product</label>
+        <div class="fb-multi-list">
+          <label class="fb-multi-item"><input type="checkbox" style="accent-color:#06a59a;"> Sportsbook</label>
+          <label class="fb-multi-item"><input type="checkbox" style="accent-color:#06a59a;"> Casino</label>
+          <label class="fb-multi-item"><input type="checkbox" style="accent-color:#06a59a;"> Fantasy</label>
+          <label class="fb-multi-item"><input type="checkbox" style="accent-color:#06a59a;"> FanDuel Racing</label>
+          <label class="fb-multi-item"><input type="checkbox" style="accent-color:#06a59a;"> TVG</label>
+          <label class="fb-multi-item"><input type="checkbox" style="accent-color:#06a59a;"> Casino - Canada</label>
+          <label class="fb-multi-item"><input type="checkbox" style="accent-color:#06a59a;"> Sportsbook - Canada</label>
+          <label class="fb-multi-item"><input type="checkbox" style="accent-color:#06a59a;"> FanDuel Predicts</label>
+          <label class="fb-multi-item"><input type="checkbox" style="accent-color:#06a59a;"> Poker</label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;">
+        <div class="fb-field" style="margin-bottom:0;">
+          <label>Feedback Type<span class="req">*</span></label>
+          <select><option value="">--None--</option><option>Negative</option><option>Positive</option><option>Neutral</option></select>
+        </div>
+        <div class="fb-field" style="margin-bottom:0;">
+          <label>Severity Level<span class="req">*</span></label>
+          <select><option value="">--None--</option><option>High</option><option>Medium</option><option>Low</option></select>
+        </div>
+      </div>
+      <div style="margin:0.7rem 0 0.6rem;">
+        <label class="fb-check-opt"><input type="checkbox" style="accent-color:#06a59a;margin-right:0.1rem;"> Requested Response / Action Required</label>
+        <label class="fb-check-opt" style="margin-top:0.25rem;"><input type="checkbox" style="accent-color:#06a59a;margin-right:0.1rem;"> Is Screenshot Available?</label>
+      </div>
+      <div class="fb-field">
+        <label>Feedback<span class="req">*</span></label>
+        <textarea placeholder="Enter feedback here…"></textarea>
+      </div>
+    </div>
+    <div id="logFbFt1" class="fb-modal-ft">
+      <button class="btn btn-neutral btn-sm" onclick="closeLogFeedback()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="submitLogFeedback()">Next</button>
+    </div>
+    <!-- Step 2: Confirmation -->
+    <div id="logFbStep2" style="display:none;" class="fb-modal-body">
+      <div class="fb-confirm-wrap">
+        <div class="fb-confirm-icon">&#10003;</div>
+        <p class="fb-confirm-title">Feedback submitted!</p>
+        <p class="fb-confirm-sub">Thank you for submitting feedback for this VIP Customer.<br>You can find the record you created on the Insights component.</p>
+        <button class="btn btn-primary btn-sm" onclick="closeLogFeedback()">Done</button>
       </div>
     </div>
   </div>
@@ -5322,34 +5530,28 @@ function launchConfetti() {
 }
 
 // ── VIP Feedback Pulse ──
-function switchFbPulseTab(paneId, tabId) {
-  ['fbPaneUnread','fbPaneHistory'].forEach(id => {
-    document.getElementById(id).style.display = id === paneId ? '' : 'none';
+function filterFeedback() {
+  const q = (document.getElementById('fbSearch').value || '').toLowerCase();
+  document.querySelectorAll('#fbList .fb-list-row').forEach(row => {
+    const name = (row.dataset.vip || '').toLowerCase();
+    row.style.display = (!q || name.includes(q)) ? '' : 'none';
   });
-  document.querySelectorAll('.fb-tab-btn').forEach(b => b.classList.remove('fb-tab-active'));
-  const tab = document.getElementById(tabId);
-  if (tab) tab.classList.add('fb-tab-active');
 }
-
-function toggleFbPulseHistory(vipKey) {
-  const el = document.getElementById('fb-history-' + vipKey);
-  if (!el) return;
-  el.style.display = el.style.display === 'none' ? '' : 'none';
+function openLogFeedback(vipName) {
+  document.querySelectorAll('.gen-menu').forEach(m => m.style.display = 'none');
+  document.getElementById('logFbTitle').textContent = vipName ? 'Log Feedback — ' + vipName : 'Log Feedback';
+  document.getElementById('logFbStep1').style.display = '';
+  document.getElementById('logFbFt1').style.display = '';
+  document.getElementById('logFbStep2').style.display = 'none';
+  document.getElementById('logFbModal').classList.add('modal-open');
 }
-
-function fbMarkReviewed(btn, name) {
-  btn.textContent = 'Reviewed';
-  btn.style.background = '#2e844a';
-  btn.style.borderColor = '#2e844a';
-  btn.disabled = true;
-  const row = btn.closest('[style*="border-left"]');
-  if (row) { row.style.borderLeftColor = '#10b981'; row.style.background = '#f0fdf4'; }
-  showToast('Feedback from ' + name + ' marked as reviewed.');
+function closeLogFeedback() {
+  document.getElementById('logFbModal').classList.remove('modal-open');
 }
-
-function setFbFilter(btn) {
-  document.querySelectorAll('.fb-filter-pill').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+function submitLogFeedback() {
+  document.getElementById('logFbStep1').style.display = 'none';
+  document.getElementById('logFbFt1').style.display = 'none';
+  document.getElementById('logFbStep2').style.display = '';
 }
 
 </script>
