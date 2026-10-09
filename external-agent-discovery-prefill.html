@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FanDuel External Agent — Discovery Pre-Fill</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 0.82rem; color: #1e293b; background: #f8fafc; }
+  .page { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
+  .doc-header { background: #0070d2; color: #fff; border-radius: 0.5rem; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
+  .doc-header h1 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .doc-header p { font-size: 0.74rem; opacity: 0.85; }
+  .legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+  .legend-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.71rem; font-weight: 600; }
+  .dot { width: 0.55rem; height: 0.55rem; border-radius: 50%; }
+  .dot-green { background: #059669; }
+  .dot-amber { background: #d97706; }
+  .dot-gray { background: #94a3b8; }
+  .topic { background: #fff; border: 1px solid #e2e8f0; border-radius: 0.4rem; margin-bottom: 0.9rem; overflow: hidden; }
+  .topic-header { display: grid; grid-template-columns: 2rem 1fr auto; align-items: center; gap: 0.6rem; padding: 0.6rem 0.85rem; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+  .topic-num { font-size: 0.68rem; font-weight: 700; color: #64748b; }
+  .topic-title { font-size: 0.8rem; font-weight: 700; color: #1e293b; }
+  .topic-date { font-size: 0.67rem; color: #475569; white-space: nowrap; }
+  .topic-body { padding: 0.7rem 0.85rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .col-label { font-size: 0.63rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #64748b; margin-bottom: 0.3rem; }
+  ul { list-style: none; padding: 0; }
+  ul li { padding: 0.22rem 0; padding-left: 0.9rem; position: relative; font-size: 0.77rem; line-height: 1.4; }
+  ul li::before { content: ''; position: absolute; left: 0.2rem; top: 0.6rem; width: 0.42rem; height: 0.42rem; border-radius: 50%; }
+  .confirmed li::before { background: #059669; }
+  .open li::before { background: #d97706; }
+  .add-note { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 0.3rem; padding: 0.4rem 0.65rem; font-size: 0.72rem; color: #1d4ed8; margin: 0 0.85rem 0.7rem; }
+  .add-note strong { font-weight: 700; }
+  .topic-new { border-color: #a5b4fc; }
+  .topic-new .topic-header { background: #eef2ff; border-bottom-color: #a5b4fc; }
+  .topic-new .topic-num { color: #4f46e5; }
+  .freeze-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 0.3rem; padding: 0.5rem 0.75rem; margin: 0 0.85rem 0.7rem; }
+  .freeze-box strong { font-size: 0.72rem; font-weight: 700; color: #b91c1c; display: block; margin-bottom: 0.25rem; }
+  .freeze-box ul li::before { background: #b91c1c; }
+  .freeze-box ul li { font-size: 0.72rem; color: #7f1d1d; }
+  @media print {
+    body { background: #fff; }
+    .page { padding: 1rem; }
+    .topic { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <h1>FanDuel External Agent — Discovery Session Pre-Fill</h1>
+    <p>From: FAQ External Agent Spec (Sep 2026) &nbsp;·&nbsp; Prepared by Ren &nbsp;·&nbsp; Oct 2026 &nbsp;·&nbsp; Bring to: Oct 14 in-person sessions</p>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="dot dot-green"></div> Confirmed from existing spec / data</div>
+    <div class="legend-item"><div class="dot dot-amber"></div> Open — needs FanDuel input in session</div>
+    <div class="legend-item"><div class="dot dot-gray"></div> New topic we recommend adding</div>
+  </div>
+
+  <!-- Topic 1 -->
+  <div class="topic">
+    <div class="topic-header">
+      <span class="topic-num">1</span>
+      <span class="topic-title">Scope &amp; Business Goals</span>
+      <span class="topic-date">Oct 14 · 9–10am</span>
+    </div>
+    <div class="topic-body">
+      <div>
+        <div class="col-label">Confirmed</div>
+        <ul class="confirmed">
+          <li>Tier 1 (full self-service): password reset, 2FA, ID verification, deposit status, location check</li>
+          <li>Tier 2 (guided + possible handoff): withdrawal status, failed transactions, bet disputes, promo eligibility, "how to contact support"</li>
+          <li>Tier 3 (Necessary Transfer — not deflection targets): account locked, fraud, RG escalation</li>
+          <li>Primary metric = <strong>containment rate</strong>, not raw deflection count. Tier 3 contacts routed to humans are not agent failures.</li>
+          <li>Article rewrites for top Tier 1 intents are a <strong>prerequisite</strong> for agent quality — not a parallel workstream</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-label">Open in session</div>
+        <ul class="open">
+          <li>Operating hours — after-hours window confirmed? (3–7am?)</li>
+          <li>Peak volume windows — game days, Super Bowl, major events?</li>
+          <li>Containment rate target (baseline needed first)</li>
+          <li>CSAT and handle time baseline from current chatbot?</li>
+          <li>Phase 1 priority ranking within Tier 1</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 2 -->
+  <div class="topic">
+    <div class="topic-header">
+      <span class="topic-num">2</span>
+      <span class="topic-title">Current-State Support Model</span>
+      <span class="topic-date">Oct 14 · 10–11am</span>
+    </div>
+    <div class="topic-body">
+      <div>
+        <div class="col-label">Confirmed</div>
+        <ul class="confirmed">
+          <li>48.5% chat rate confirmed from Help Portal article analysis — primary pain point driving this project</li>
+          <li>Top contact reasons by volume: password/login, ID verification, 2FA, withdrawal status, location check</li>
+          <li>Location Troubleshooting article is a high-performing pattern (step-based + deeplink) — replicate across other Tier 1 intents</li>
+          <li>Necessary Transfer flows (Account Locked, Contact Us) should be expectation-setting only — no resolution attempt</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-label">Open in session</div>
+        <ul class="open">
+          <li>After-hours staffing model and current vendor coverage</li>
+          <li>Existing chatbot platform — can it pass conversation context to a human on handoff?</li>
+          <li>Which flows to keep vs. redesign from the current bot?</li>
+          <li>Current handle time per intent type?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 3 -->
+  <div class="topic">
+    <div class="topic-header">
+      <span class="topic-num">3</span>
+      <span class="topic-title">Channels &amp; Customer Experience</span>
+      <span class="topic-date">Oct 14 · 11:15am–12:15pm</span>
+    </div>
+    <div class="topic-body">
+      <div>
+        <div class="col-label">Confirmed</div>
+        <ul class="confirmed">
+          <li>Primary channel: EC Help Portal — agent embedded on homepage and article pages</li>
+          <li>82% of Help Portal visitors arrive from a FanDuel app (SBK/Casino/DFS/Racing)</li>
+          <li>91% mobile or tablet — mobile-first design required, not adapted from desktop</li>
+          <li>Context at launch defined: from app = personalised greeting + product pre-load; authenticated = name only; unauthenticated = generic</li>
+          <li>Tone: direct, plain English, warm but efficient. Brevity over polish.</li>
+          <li>English (US) — localization/language variants TBC</li>
+          <li>Fallback when agent can't help: acknowledge, do not loop, offer escalation before ending session</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-label">Open in session</div>
+        <ul class="open">
+          <li><strong>Same-agent or subagent?</strong> If the FanDuel app opens a support agent, is it the same agent as the Help Portal or a separate deployment? This is the single biggest architectural decision.</li>
+          <li>Web widget — same agent definition or lighter variant?</li>
+          <li>Agent name — brand name or "FanDuel Help Agent"?</li>
+          <li>Languages beyond English US required?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 4 -->
+  <div class="topic">
+    <div class="topic-header">
+      <span class="topic-num">4</span>
+      <span class="topic-title">Escalation &amp; Human Handoff</span>
+      <span class="topic-date">Oct 14 · 1–2pm</span>
+    </div>
+    <div class="topic-body">
+      <div>
+        <div class="col-label">Confirmed</div>
+        <ul class="confirmed">
+          <li>5 escalation triggers: account locked/suspended · fraud/unauthorised access · active RG flag · 3 failed resolution attempts on same intent · user requests human</li>
+          <li>Escalation experience: acknowledge without blame → set wait expectations (real figures only, no invented SLAs) → pass full context to human</li>
+          <li>Context must pass to human — user should never repeat themselves</li>
+          <li>Tier 3 (Necessary Transfer): agent sets document/info expectations before routing ("Have your ID ready")</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-label">Open in session</div>
+        <ul class="open">
+          <li>Who is available after hours — and for which case types?</li>
+          <li>Case creation and routing — Omni-Channel or callback/follow-up flow?</li>
+          <li>SLA expectations by case type</li>
+          <li>Does the current chatbot platform support context pass on handoff? (If not, this is a technical prerequisite.)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 5 -->
+  <div class="topic">
+    <div class="topic-header">
+      <span class="topic-num">5</span>
+      <span class="topic-title">Data &amp; Knowledge</span>
+      <span class="topic-date">Oct 14 · 2–3pm</span>
+    </div>
+    <div class="topic-body">
+      <div>
+        <div class="col-label">Confirmed</div>
+        <ul class="confirmed">
+          <li>EC Knowledge articles are the single source of truth — no parallel knowledge base assumed</li>
+          <li>Monthly SME review cycle confirmed (July/May/June/August 2026 waves)</li>
+          <li>Article format requirements for agent consumption: numbered steps, decision branches, inline deeplinks, H2/H3 headings — narrative paragraphs produce imprecise answers</li>
+          <li>Narrative rewrites for top Tier 1 articles are a prerequisite — must happen before agent goes live, not in parallel</li>
+          <li>Customer/account data needed: user_id, account_status, product, last_page (from app session)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-label">Open in session</div>
+        <ul class="open">
+          <li>Who owns each article category — and who approves rewrites?</li>
+          <li>How fresh are promo/bonus T&amp;C articles? These change frequently.</li>
+          <li>Is Amplitude integrated? Intent frequency analysis and "trending topics" surface depend on it.</li>
+          <li>Where does account/wallet data live — Salesforce, billing system, or both?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 6 -->
+  <div class="topic">
+    <div class="topic-header">
+      <span class="topic-num">6</span>
+      <span class="topic-title">Actions &amp; Integrations</span>
+      <span class="topic-date">Oct 14 · 3:15–4:15pm</span>
+    </div>
+    <div class="topic-body">
+      <div>
+        <div class="col-label">Confirmed</div>
+        <ul class="confirmed">
+          <li>Context parameters at launch: product · user_id · account_status · last_page</li>
+          <li>RG flag lookup required at session start — gates the entire session if active</li>
+          <li>Deeplinks for procedural Tier 1 intents (reset flow, verification flow, etc.) are required actions, not nice-to-haves</li>
+          <li>Read-only actions for MVP — transactional actions are Phase 2+</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-label">Open in session</div>
+        <ul class="open">
+          <li>Who owns the support entry point in each app (SBK / Casino / DFS / Racing)?</li>
+          <li>Which APIs are available and who owns them?</li>
+          <li>Authentication approach for the agent — session token passthrough or re-auth?</li>
+          <li>Integration team availability and constraints?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 7 -->
+  <div class="topic">
+    <div class="topic-header">
+      <span class="topic-num">7</span>
+      <span class="topic-title">Compliance, Risk &amp; Guardrails</span>
+      <span class="topic-date" style="color:#b91c1c;font-weight:700;">No date set — schedule ASAP</span>
+    </div>
+    <div class="add-note"><strong>Recommend scheduling before or alongside Topic 6.</strong> For a sports betting operator, compliance gates the actions session — you can't finalize what the agent does until guardrails are defined.</div>
+    <div class="topic-body">
+      <div>
+        <div class="col-label">Confirmed</div>
+        <ul class="confirmed">
+          <li>RG gate is a hard rule — non-configurable, no commercial override</li>
+          <li>When RG flag is active: surface only RG resources · no bonuses/promos · do not attempt to retain · route and close</li>
+          <li>Necessary Transfer topics: account locked, fraud/unauthorized access, regulatory complaints</li>
+          <li>Agent must never offer or acknowledge bonuses/promos during a Tier 3 or RG-flagged session</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-label">Open in session</div>
+        <ul class="open">
+          <li><strong>State-specific RG routing:</strong> which states require specific helpline numbers (e.g. NJ 1-800-GAMBLER)? Which states have different self-exclusion or cooling-off rules the agent must respect?</li>
+          <li>Full list of topics agent must never discuss or always escalate</li>
+          <li>Legal / compliance / security review steps and approval chain</li>
+          <li>Audit, logging, and data retention requirements per state</li>
+          <li>PII handling rules for conversation transcripts</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 8 -->
+  <div class="topic">
+    <div class="topic-header">
+      <span class="topic-num">8</span>
+      <span class="topic-title">Agentforce Platform Readiness</span>
+      <span class="topic-date" style="color:#b91c1c;font-weight:700;">No date set</span>
+    </div>
+    <div class="topic-body">
+      <div>
+        <div class="col-label">Confirmed</div>
+        <ul class="confirmed">
+          <li>Context parameter contract (product / user_id / account_status / last_page) is defined — applies regardless of whether hosted on Aura EC or Casey</li>
+          <li>Same-agent / subagent model (app + Help Portal as one agent) is the key open architecture question — unresolved</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-label">Open in session</div>
+        <ul class="open">
+          <li>Current Agentforce setup — existing org, licensing status, sandbox strategy</li>
+          <li>Data Cloud and Einstein Trust Layer considerations</li>
+          <li>Existing topics, actions, or prompts in org that can be reused</li>
+          <li>Same-agent vs. subagent decision — this gates the hosting path</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topics 9–11 condensed -->
+  <div class="topic">
+    <div class="topic-header">
+      <span class="topic-num">9–11</span>
+      <span class="topic-title">Testing · Rollout · Governance · Reporting</span>
+      <span class="topic-date" style="color:#b91c1c;font-weight:700;">No dates set</span>
+    </div>
+    <div class="freeze-box">
+      <strong>Code freeze windows — factor into rollout planning:</strong>
+      <ul>
+        <li>Thanksgiving: Mon Nov 23 – Fri Nov 27, 2026</li>
+        <li>Holiday: Fri Dec 18, 2026 – Mon Jan 4, 2027</li>
+        <li>Super Bowl: Tue Feb 9 – Mon Feb 15, 2027</li>
+      </ul>
+    </div>
+    <div class="topic-body">
+      <div>
+        <div class="col-label">Key open questions</div>
+        <ul class="open">
+          <li>Test approach: real transcripts, red-teaming, UAT owners?</li>
+          <li>Go-live criteria — what defines readiness?</li>
+          <li>Post-launch monitoring and tuning ownership</li>
+          <li>Support team training and change management</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-label">Reporting</div>
+        <ul class="open">
+          <li>Is Amplitude integrated for conversation analytics?</li>
+          <li>Recommended metrics: containment rate · Tier 1 resolution rate · escalation rate by intent · session repeat rate · RG gate firing rate</li>
+          <li>Who owns reporting cadence post-launch?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 12 — new -->
+  <div class="topic topic-new">
+    <div class="topic-header">
+      <span class="topic-num" style="color:#4f46e5;">+</span>
+      <span class="topic-title">Conversation Design &amp; Agent Persona <span style="font-size:0.67rem;font-weight:400;color:#4f46e5;margin-left:0.4rem;">Recommend adding as a session</span></span>
+      <span class="topic-date" style="color:#4f46e5;">Not currently scheduled</span>
+    </div>
+    <div class="add-note"><strong>This is the most common failure point for agent projects</strong> — typically treated as a nice-to-have but it directly determines the customer experience when things go wrong.</div>
+    <div class="topic-body">
+      <div>
+        <div class="col-label">Confirmed from spec</div>
+        <ul class="confirmed">
+          <li>Tone: direct, plain English, warm but efficient — brevity over polish</li>
+          <li>Never: deflect to irrelevant content, use legal jargon, suggest a promo during Tier 3 or RG session</li>
+          <li>Always: confirm what the user needs before answering; offer escalation before ending any unresolved session</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-label">Needs a session</div>
+        <ul class="open">
+          <li>Agent name — brand name or "FanDuel Help Agent"?</li>
+          <li>Fallback message copy for "I can't help with this"</li>
+          <li>How does the agent handle emotionally charged contacts (frustrated bettors, loss-chasing signals, grief)?</li>
+          <li>Error states — what does the agent say when a lookup fails?</li>
+          <li>Escalation phrasing — approved language for handoff to human</li>
+          <li>Attendees: CX / Brand / Support Ops</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:0.66rem;color:#94a3b8;margin-top:1rem;text-align:center;">Derived from: FAQ External Agent Spec (Sep 2026) · faq-external-agent-spec.md · Prepared by Ren</p>
+
+</div>
+</body>
+</html>
