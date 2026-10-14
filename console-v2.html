@@ -2827,8 +2827,8 @@ function renderBook() {
       <td style="padding:0.4rem 0.5rem;vertical-align:middle;"><span class="book-status-pill ${statCls[v.status]||'bsp-active'}">${v.status}</span></td>
       <td style="padding:0.4rem 0.5rem;vertical-align:middle;text-align:right;position:relative;">
         <div style="position:relative;display:inline-block;">
-          <button onclick="event.stopPropagation();toggleGenMenu('rowMenu-${v.id}')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
-          <div id="rowMenu-${v.id}" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:148px;">
+          <button onclick="event.stopPropagation();toggleDynMenu('rowMenu-${v.id}')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+          <div id="rowMenu-${v.id}" class="dyn-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:148px;">
             <div onclick="event.stopPropagation();openLogContactModal('${v.name}');document.getElementById('rowMenu-${v.id}').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Contact</div>
             <div onclick="event.stopPropagation();openLogFeedback('${v.name}');document.getElementById('rowMenu-${v.id}').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Feedback</div>
             <div onclick="event.stopPropagation();openBonusModal('${v.name}');document.getElementById('rowMenu-${v.id}').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Bonus</div>
@@ -3018,8 +3018,8 @@ function renderLctRow(v) {
     <td style="padding:0.4rem 0.75rem;vertical-align:middle;"><span style="font-size:0.62rem;font-weight:700;background:${st.bg};color:${st.color};border-radius:0.25rem;padding:0.1rem 0.35rem;white-space:nowrap;">${st.label}</span></td>
     <td style="padding:0.4rem 0.75rem;vertical-align:middle;text-align:right;position:relative;">
       <div style="position:relative;display:inline-block;">
-        <button onclick="event.stopPropagation();toggleGenMenu('lctMenu-${v.id}')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
-        <div id="lctMenu-${v.id}" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">
+        <button onclick="event.stopPropagation();toggleDynMenu('lctMenu-${v.id}')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>
+        <div id="lctMenu-${v.id}" class="dyn-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">
           <div onclick="event.stopPropagation();openLogContactModal('${v.name}');document.getElementById('lctMenu-${v.id}').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Contact</div>
           <div onclick="event.stopPropagation();openBonusModal('${v.name}');document.getElementById('lctMenu-${v.id}').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Bonus</div>
           <div onclick="event.stopPropagation();openLogFeedback('${v.name}');document.getElementById('lctMenu-${v.id}').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Feedback</div>
@@ -3121,6 +3121,14 @@ function closeAllLctMenus() {
   document.querySelectorAll('[id^="lctMenu-"]').forEach(m => m.style.display = 'none');
 }
 document.addEventListener('click', closeAllLctMenus);
+function toggleDynMenu(menuId) {
+  const menu = document.getElementById(menuId);
+  if (!menu) return;
+  const wasHidden = menu.style.display === 'none' || menu.style.display === '';
+  document.querySelectorAll('.dyn-menu').forEach(m => { m.style.display = 'none'; });
+  if (wasHidden) menu.style.display = 'block';
+}
+document.addEventListener('click', () => document.querySelectorAll('.dyn-menu').forEach(m => m.style.display = 'none'));
 </script>
 <!-- ── Toast ── -->
 <div id="toastEl"></div>
