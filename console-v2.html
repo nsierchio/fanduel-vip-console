@@ -1086,7 +1086,7 @@
               <tr style="background:#f3f2f2;">
                 <th onclick="sortBook('name')" style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;cursor:pointer;user-select:none;width:150px;">Name <span id="sort-name" style="color:#94a3b8;">⇅</span></th>
                 <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;width:34px;">State</th>
-                <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;">Segment</th>
+                <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;">Product</th>
                 <th onclick="sortBook('tier')" style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;cursor:pointer;user-select:none;">Tier <span id="sort-tier" style="color:#94a3b8;">⇅</span></th>
                 <th onclick="sortBook('ggr')" style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;cursor:pointer;user-select:none;">GGR L30 <span id="sort-ggr" style="color:#94a3b8;">⇅</span></th>
                 <th onclick="sortBook('bonus')" style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;cursor:pointer;user-select:none;">Last Bonus Issued <span id="sort-bonus" style="color:#94a3b8;">⇅</span></th>
@@ -1219,7 +1219,7 @@
                 <thead>
                   <tr style="background:#f3f2f2;">
                     <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;">Name</th>
-                    <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;">Segment</th>
+                    <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;">Product</th>
                     <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;">Joined</th>
                     <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;">Week</th>
                     <th style="background:#f3f2f2;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.04em;color:#706e6b;font-weight:700;padding:0.4rem 0.5rem;border-bottom:1px solid #dddbda;">Stage</th>
@@ -2794,7 +2794,7 @@ function openBookVipModal(v) {
     <div class="modal-section">
       <div class="modal-section-title">VIP Profile</div>
       <div class="modal-grid">
-        <div class="modal-field"><div class="mf-label">Segment</div><div class="mf-val"><span style="font-size:0.68rem;font-weight:700;border-radius:999px;padding:0.1rem 0.45rem;${segChipStyle[v.seg]}">${segLabel[v.seg] || v.seg}</span></div></div>
+        <div class="modal-field"><div class="mf-label">Product</div><div class="mf-val"><span style="font-size:0.68rem;font-weight:700;border-radius:999px;padding:0.1rem 0.45rem;${segChipStyle[v.seg]}">${segLabel[v.seg] || v.seg}</span></div></div>
         <div class="modal-field"><div class="mf-label">Tier</div><div class="mf-val">${v.tier}</div></div>
         <div class="modal-field"><div class="mf-label">State</div><div class="mf-val">${v.state}</div></div>
         <div class="modal-field"><div class="mf-label">Birthday</div><div class="mf-val">${v.bday}</div></div>
@@ -3553,7 +3553,7 @@ document.addEventListener('click', () => document.querySelectorAll('.dyn-menu').
     <div style="overflow-y:auto;flex:1;">
       <!-- Col headers -->
       <div style="display:grid;grid-template-columns:1.6fr 0.7fr 0.85fr 1.1fr 0.5fr;gap:0.5rem;padding:0.25rem 1rem;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;font-weight:700;border-bottom:1px solid #e5e5e5;background:#f3f3f3;">
-        <span>VIP</span><span>Segment</span><span>Tier</span><span id="bulkAmtColLabel">Amount ($)</span><span>Clear</span>
+        <span>VIP</span><span>Product</span><span>Tier</span><span id="bulkAmtColLabel">Amount ($)</span><span>Clear</span>
       </div>
       <div id="bulkBonusRows"></div>
     </div>
@@ -3940,7 +3940,7 @@ function openVipModal(name) {
     <div class="modal-section">
       <div class="modal-section-title">VIP Profile</div>
       <div class="modal-grid">
-        <div class="modal-field"><div class="mf-label">Segment</div><div class="mf-val"><span style="font-size:0.68rem;font-weight:700;border-radius:999px;padding:0.1rem 0.45rem;${segChipBg[p.seg]||''}">${p.seg}</span></div></div>
+        <div class="modal-field"><div class="mf-label">Product</div><div class="mf-val"><span style="font-size:0.68rem;font-weight:700;border-radius:999px;padding:0.1rem 0.45rem;${segChipBg[p.seg]||''}">${p.seg}</span></div></div>
         <div class="modal-field"><div class="mf-label">Tier</div><div class="mf-val">${p.tier}</div></div>
         <div class="modal-field"><div class="mf-label">Member Since</div><div class="mf-val">${p.joined}</div></div>
         <div class="modal-field"><div class="mf-label">Birthday</div><div class="mf-val">${p.bday}</div></div>
@@ -4943,7 +4943,7 @@ const REPORT_FULL_CONTENT = {
       { name:'Marcus Thompson', seg:'SBK',    tier:'VIP',           d30:'$14,900', d60:'$16,200', d90:'$15,700', bets:20, fav:'NFL Futures',  status:'Active',       trend:-1 },
       { name:'Nolan Brooks',    seg:'SBK',    tier:'VIP',           d30:'$12,300', d60:'$14,100', d90:'$13,600', bets:17, fav:'NFL Parlays',  status:'Due Contact',  trend:-1 },
     ],
-    cols: ['VIP','Segment','Tier','30d ↕','60d','90d','Bets','Fav Market','Status'],
+    cols: ['VIP','Product','Tier','30d ↕','60d','90d','Bets','Fav Market','Status'],
   },
   'football-filtered': {
     title: '🏈 Declining Football Spend — VIPs Trending Down',
@@ -4953,7 +4953,7 @@ const REPORT_FULL_CONTENT = {
       { name:'Marcus Thompson', seg:'SBK',    tier:'VIP', d30:'$14,900', d60:'$16,200', d90:'$15,700', bets:20, fav:'NFL Futures', status:'Active',      trend:-1 },
       { name:'Nolan Brooks',    seg:'SBK',    tier:'VIP', d30:'$12,300', d60:'$14,100', d90:'$13,600', bets:17, fav:'NFL Parlays', status:'Due Contact', trend:-1 },
     ],
-    cols: ['VIP','Segment','Tier','30d ↓','60d','90d','Bets','Fav Market','Status'],
+    cols: ['VIP','Product','Tier','30d ↓','60d','90d','Bets','Fav Market','Status'],
   },
   bonus: {
     title: '💰 Bonus Balance Report',
@@ -4967,7 +4967,7 @@ const REPORT_FULL_CONTENT = {
       { name:'Maya Carter',    seg:'DFS',    bonusGiven:500,   bonusBench:3000,  delta:-2500, verdict:'Under-bonused' },
       { name:'Parker Ortiz',   seg:'Casino', bonusGiven:900,   bonusBench:3500,  delta:-2600, verdict:'Under-bonused' },
     ],
-    cols: ['VIP','Segment','Bonus Given','Benchmark','Delta','Verdict'],
+    cols: ['VIP','Product','Bonus Given','Benchmark','Delta','Verdict'],
     isBonus: true,
   },
 };
