@@ -4772,7 +4772,7 @@ function renderBdays() {
     else
       whenBadge = '<span style="font-size:0.62rem;color:#706e6b;flex-shrink:0;">' + v.when + '</span>';
     const menuId = 'bdayMenu-' + v.name.replace(/\s+/g, '-');
-    const actionBtn = '<div style="position:relative;flex-shrink:0;">'
+    const actionBtn = '<div style="position:relative;flex-shrink:0;margin-left:auto;">'
       + '<button onclick="event.stopPropagation();toggleDynMenu(\'' + menuId + '\')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>'
       + '<div id="' + menuId + '" class="dyn-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:152px;">'
       + '<div onclick="event.stopPropagation();openLogContactModal(\'' + v.name + '\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Contact</div>'
@@ -4782,7 +4782,7 @@ function renderBdays() {
       + '<div onclick="event.stopPropagation();window.open(\'about:blank\',\'_blank\');showToast(\'Opening Contact record for ' + v.name + '…\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;border-top:1px solid #f1f5f9;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Contact</div>'
       + '</div></div>';
     return '<div style="display:flex;align-items:center;gap:0.45rem;padding:0.45rem 0.85rem;' + (!isLast ? 'border-bottom:1px solid #f3f2f2;' : '') + '">'
-      + '<span style="font-size:0.76rem;font-weight:600;color:#0060a3;cursor:pointer;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" onclick="openVipModal(\'' + v.name + '\')">' + v.name + '</span>'
+      + '<span style="font-size:0.76rem;font-weight:600;color:#0060a3;cursor:pointer;flex-shrink:0;white-space:nowrap;" onclick="openVipModal(\'' + v.name + '\')">' + v.name + '</span>'
       + '<span style="font-size:0.6rem;font-weight:700;border-radius:999px;padding:0.1rem 0.38rem;flex-shrink:0;' + chipStyle + '">' + v.seg + '</span>'
       + '<span style="font-size:0.7rem;color:#475569;flex-shrink:0;white-space:nowrap;">' + v.bdate + '</span>'
       + whenBadge
