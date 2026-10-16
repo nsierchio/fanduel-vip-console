@@ -4679,32 +4679,32 @@ document.addEventListener('DOMContentLoaded', () => {
 const BDAY_WEEKS = [
   { label: 'Sep 15 – Sep 21',
     vips: [
-      { name:'Cameron Reid',    seg:'SBK', bdate:'Sep 16, 2026', when:'Sep 16' },
-      { name:'Maya Patel',      seg:'DFS', bdate:'Sep 19, 2026', when:'Sep 19' },
+      { name:'Cameron Reid',    seg:'SBK', bdate:'Sep 16, 2026', when:'29 days ago' },
+      { name:'Maya Patel',      seg:'DFS', bdate:'Sep 19, 2026', when:'26 days ago' },
     ]
   },
   { label: 'Sep 22 – Sep 28',
     vips: [
-      { name:'Alex Johnson',    seg:'CAS', bdate:'Sep 24, 2026', when:'Sep 24' },
-      { name:'Ryan Torres',     seg:'SBK', bdate:'Sep 27, 2026', when:'Sep 27' },
+      { name:'Alex Johnson',    seg:'CAS', bdate:'Sep 24, 2026', when:'21 days ago' },
+      { name:'Ryan Torres',     seg:'SBK', bdate:'Sep 27, 2026', when:'18 days ago' },
     ]
   },
   { label: 'Sep 29 – Oct 5',
     vips: [
-      { name:'Noah Coleman',    seg:'SBK', bdate:'Oct 2, 2026',  when:'Oct 2' },
-      { name:'Emma Liu',        seg:'CAS', bdate:'Oct 4, 2026',  when:'Oct 4' },
+      { name:'Noah Coleman',    seg:'SBK', bdate:'Oct 2, 2026',  when:'13 days ago' },
+      { name:'Emma Liu',        seg:'CAS', bdate:'Oct 4, 2026',  when:'11 days ago' },
     ]
   },
   { label: 'Oct 6 – Oct 12',
     vips: [
-      { name:'Marcus Thompson', seg:'CAS', bdate:'Oct 8, 2026',  when:'Oct 8' },
-      { name:'Jordan Williams', seg:'SBK', bdate:'Oct 10, 2026', when:'Oct 10' },
-      { name:'Devon Whitfield', seg:'SBK', bdate:'Oct 12, 2026', when:'Oct 12' },
+      { name:'Marcus Thompson', seg:'CAS', bdate:'Oct 8, 2026',  when:'7 days ago' },
+      { name:'Jordan Williams', seg:'SBK', bdate:'Oct 10, 2026', when:'5 days ago' },
+      { name:'Devon Whitfield', seg:'SBK', bdate:'Oct 12, 2026', when:'3 days ago' },
     ]
   },
   { label: 'Oct 13 – Oct 19',
     vips: [
-      { name:'Olivia Bennett',  seg:'SBK', bdate:'Oct 14, 2026', when:'Yesterday' },
+      { name:'Olivia Bennett',  seg:'SBK', bdate:'Oct 14, 2026', when:'1 day ago' },
       { name:'Isla Hayes',      seg:'SBK', bdate:'Oct 15, 2026', when:'Today' },
       { name:'Luca Romano',     seg:'CAS', bdate:'Oct 17, 2026', when:'In 2 days' },
       { name:'Farah Siddiqui',  seg:'DFS', bdate:'Oct 19, 2026', when:'In 4 days' },
@@ -4765,8 +4765,8 @@ function renderBdays() {
       whenBadge = '<span style="font-size:0.62rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.08rem 0.4rem;flex-shrink:0;">Today</span>';
     else if (v.when === 'Tomorrow')
       whenBadge = '<span style="font-size:0.62rem;font-weight:700;background:#fef3c7;color:#92400e;border-radius:999px;padding:0.08rem 0.4rem;flex-shrink:0;">Tomorrow</span>';
-    else if (v.when === 'Yesterday')
-      whenBadge = '<span style="font-size:0.62rem;font-weight:600;background:#f3f4f6;color:#6b7280;border-radius:999px;padding:0.08rem 0.4rem;flex-shrink:0;">Yesterday</span>';
+    else if (v.when.endsWith(' ago'))
+      whenBadge = '<span style="font-size:0.62rem;font-weight:600;background:#f3f4f6;color:#6b7280;border-radius:999px;padding:0.08rem 0.4rem;flex-shrink:0;">' + v.when + '</span>';
     else if (v.when.startsWith('In '))
       whenBadge = '<span style="font-size:0.62rem;font-weight:600;background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:0.08rem 0.4rem;flex-shrink:0;">' + v.when + '</span>';
     else
