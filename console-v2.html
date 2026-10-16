@@ -2095,21 +2095,6 @@
         <div class="card-title-row">
           <span class="card-heading" style="font-size:0.82rem;">Upcoming Birthdays</span>
         </div>
-        <a href="#" onclick="event.preventDefault();showToast('Opening full list view…')" style="font-size:0.75rem;color:#0176d3;text-decoration:none;font-weight:500;flex-shrink:0;">More</a>
-      </div>
-      <!-- SF list view entry -->
-      <div style="padding:0.45rem 0.75rem 0.35rem;">
-        <div style="border:1px solid #d8dde6;border-radius:0.3rem;background:#fff;display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.65rem;cursor:pointer;" onclick="showToast('Opening My Customer Bdays list view…')">
-          <div style="width:2.4rem;height:2.4rem;background:#0a72b1;border-radius:0.25rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="white"><rect x="3" y="5" width="2" height="14"/><rect x="7" y="5" width="1" height="14"/><rect x="10" y="5" width="3" height="14"/><rect x="15" y="5" width="1" height="14"/><rect x="18" y="5" width="2" height="14"/></svg>
-          </div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:0.78rem;font-weight:700;color:#181818;">My Customer Bdays Within 30 Days</div>
-            <div style="font-size:0.67rem;color:#706e6b;margin-top:0.06rem;">0 items, sorted by Asset Name</div>
-            <div style="font-size:0.67rem;color:#706e6b;">Filtered by Current User is Owner, Contact's Upcoming Birthday</div>
-          </div>
-          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><path d="M5 2l6 6-6 6" stroke="#706e6b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
       </div>
       <!-- 30-day week navigator -->
       <div style="display:flex;align-items:center;justify-content:space-between;padding:0.3rem 0.75rem;background:#fff;border-top:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;">
@@ -2119,6 +2104,9 @@
       </div>
       <!-- VIP list -->
       <div id="bdayList" style="background:#fff;"></div>
+      <div style="background:#fff;border-top:1px solid #f3f2f2;padding:0.38rem 0.85rem;text-align:center;">
+        <a href="about:blank" target="_blank" onclick="showToast('Opening full birthday list…')" style="font-size:0.73rem;color:#0176d3;text-decoration:none;font-weight:500;">View all birthdays ↗</a>
+      </div>
     </div>
 
     <!-- ── Bonus Bet Credit (placeholder) ── -->
@@ -4689,32 +4677,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* ── Birthdays 30-day navigator ── */
 const BDAY_WEEKS = [
-  { label: 'Sep 9 – Sep 15',
+  { label: 'Sep 15 – Sep 21',
     vips: [
-      { name:'Olivia Bennett', seg:'SBK',  when:'Today',    chipClass:'chip-sbk',    sent:false, today:true },
-      { name:'Luca Romano',    seg:'CAS',  when:'Tomorrow', chipClass:'chip-casino', sent:false, today:false },
+      { name:'Cameron Reid',    seg:'SBK', bdate:'Sep 16, 2026', when:'Sep 16' },
+      { name:'Maya Patel',      seg:'DFS', bdate:'Sep 19, 2026', when:'Sep 19' },
     ]
   },
-  { label: 'Sep 16 – Sep 22',
+  { label: 'Sep 22 – Sep 28',
     vips: [
-      { name:'Marcus Thompson', seg:'CAS', when:'Sep 18', chipClass:'chip-casino', sent:false, today:false },
-      { name:'Jordan Williams', seg:'SBK', when:'Sep 20', chipClass:'chip-sbk',   sent:false, today:false },
+      { name:'Alex Johnson',    seg:'CAS', bdate:'Sep 24, 2026', when:'Sep 24' },
+      { name:'Ryan Torres',     seg:'SBK', bdate:'Sep 27, 2026', when:'Sep 27' },
     ]
   },
-  { label: 'Sep 23 – Sep 29',
+  { label: 'Sep 29 – Oct 5',
     vips: [
-      { name:'Gavin Turner', seg:'FDR', when:'Sep 25', chipClass:'chip-racing', sent:true, today:false },
+      { name:'Noah Coleman',    seg:'SBK', bdate:'Oct 2, 2026',  when:'Oct 2' },
+      { name:'Emma Liu',        seg:'CAS', bdate:'Oct 4, 2026',  when:'Oct 4' },
     ]
   },
-  { label: 'Sep 30 – Oct 8',
+  { label: 'Oct 6 – Oct 12',
     vips: [
-      { name:'Noah Coleman',  seg:'SBK', when:'Oct 2', chipClass:'chip-sbk',    sent:false, today:false },
-      { name:'Alex Johnson',  seg:'CAS', when:'Oct 5', chipClass:'chip-casino', sent:false, today:false },
+      { name:'Marcus Thompson', seg:'CAS', bdate:'Oct 8, 2026',  when:'Oct 8' },
+      { name:'Jordan Williams', seg:'SBK', bdate:'Oct 10, 2026', when:'Oct 10' },
+      { name:'Devon Whitfield', seg:'SBK', bdate:'Oct 12, 2026', when:'Oct 12' },
+    ]
+  },
+  { label: 'Oct 13 – Oct 19',
+    vips: [
+      { name:'Olivia Bennett',  seg:'SBK', bdate:'Oct 14, 2026', when:'Yesterday' },
+      { name:'Isla Hayes',      seg:'SBK', bdate:'Oct 15, 2026', when:'Today' },
+      { name:'Luca Romano',     seg:'CAS', bdate:'Oct 17, 2026', when:'In 2 days' },
+      { name:'Farah Siddiqui',  seg:'DFS', bdate:'Oct 19, 2026', when:'In 4 days' },
+    ]
+  },
+  { label: 'Oct 20 – Oct 26',
+    vips: [
+      { name:'Sophia Novak',    seg:'SBK', bdate:'Oct 22, 2026', when:'In 7 days' },
+      { name:'Parker Ortiz',    seg:'SBK', bdate:'Oct 25, 2026', when:'In 10 days' },
+    ]
+  },
+  { label: 'Oct 27 – Nov 2',
+    vips: [
+      { name:'Carter Ellis',    seg:'CAS', bdate:'Oct 29, 2026', when:'In 14 days' },
+      { name:'Ethan Parker',    seg:'CAS', bdate:'Nov 1, 2026',  when:'In 17 days' },
+    ]
+  },
+  { label: 'Nov 3 – Nov 9',
+    vips: [
+      { name:'Gavin Turner',    seg:'FDR', bdate:'Nov 5, 2026',  when:'In 21 days' },
+    ]
+  },
+  { label: 'Nov 10 – Nov 16',
+    vips: [
+      { name:'Jordan Miles',    seg:'SBK', bdate:'Nov 12, 2026', when:'In 28 days' },
     ]
   },
 ];
-let bdayWeek = 0;
-const bdaySent = new Set();
+let bdayWeek = 4;
+
+const BDAY_CHIP = {
+  SBK: 'background:#dbeafe;color:#1d4ed8;',
+  CAS: 'background:#fce7f3;color:#9d174d;',
+  DFS: 'background:#dcfce7;color:#15803d;',
+  FDR: 'background:#fef3c7;color:#92400e;',
+};
 
 function renderBdays() {
   const week = BDAY_WEEKS[bdayWeek];
@@ -4726,39 +4752,40 @@ function renderBdays() {
   lbl.textContent = week.label;
   if (prev) prev.disabled = bdayWeek <= 0;
   if (next) next.disabled = bdayWeek >= BDAY_WEEKS.length - 1;
-  if (week.vips.length === 0) {
+  const vips = week.vips.slice(0, 5);
+  if (vips.length === 0) {
     list.innerHTML = '<div style="padding:1.2rem 0.85rem;font-size:0.72rem;color:#706e6b;text-align:center;">No birthdays this period.</div>';
     return;
   }
-  list.innerHTML = week.vips.map((v, i) => {
-    const isSent = v.sent || bdaySent.has(v.name);
-    const isLast = i === week.vips.length - 1;
-    const whenBadge = v.today
-      ? '<span style="font-size:0.62rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.08rem 0.4rem;">Today</span>'
-      : v.when === 'Tomorrow'
-        ? '<span style="font-size:0.62rem;font-weight:700;background:#fef3c7;color:#92400e;border-radius:999px;padding:0.08rem 0.4rem;">Tomorrow</span>'
-        : '<span style="font-size:0.62rem;color:#706e6b;border-radius:999px;padding:0.08rem 0.4rem;">' + v.when + '</span>';
-    const nameColor = isSent ? '#706e6b' : '#0060a3';
+  list.innerHTML = vips.map((v, i) => {
+    const isLast = i === vips.length - 1;
+    const chipStyle = BDAY_CHIP[v.seg] || 'background:#f1f5f9;color:#475569;';
+    let whenBadge;
+    if (v.when === 'Today')
+      whenBadge = '<span style="font-size:0.62rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.08rem 0.4rem;flex-shrink:0;">Today</span>';
+    else if (v.when === 'Tomorrow')
+      whenBadge = '<span style="font-size:0.62rem;font-weight:700;background:#fef3c7;color:#92400e;border-radius:999px;padding:0.08rem 0.4rem;flex-shrink:0;">Tomorrow</span>';
+    else if (v.when === 'Yesterday')
+      whenBadge = '<span style="font-size:0.62rem;font-weight:600;background:#f3f4f6;color:#6b7280;border-radius:999px;padding:0.08rem 0.4rem;flex-shrink:0;">Yesterday</span>';
+    else if (v.when.startsWith('In '))
+      whenBadge = '<span style="font-size:0.62rem;font-weight:600;background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:0.08rem 0.4rem;flex-shrink:0;">' + v.when + '</span>';
+    else
+      whenBadge = '<span style="font-size:0.62rem;color:#706e6b;flex-shrink:0;">' + v.when + '</span>';
     const menuId = 'bdayMenu-' + v.name.replace(/\s+/g, '-');
     const actionBtn = '<div style="position:relative;flex-shrink:0;">'
-      + '<button onclick="event.stopPropagation();toggleGenMenu(\'' + menuId + '\')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>'
-      + '<div id="' + menuId + '" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:152px;">'
-      + (!isSent ? '<div onclick="event.stopPropagation();bdaySend(\'' + v.name + '\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Send Celebration</div>' : '')
-      + '<div onclick="event.stopPropagation();openVipModal(\'' + v.name + '\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Profile</div>'
-      + '<div onclick="event.stopPropagation();showToast(\'Note logged for ' + v.name + ' ✓\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Note</div>'
+      + '<button onclick="event.stopPropagation();toggleDynMenu(\'' + menuId + '\')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>'
+      + '<div id="' + menuId + '" class="dyn-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:152px;">'
+      + '<div onclick="event.stopPropagation();openLogContactModal(\'' + v.name + '\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Contact</div>'
+      + '<div onclick="event.stopPropagation();showToast(\'Opening email for ' + v.name + '…\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Send Email</div>'
+      + '<div onclick="event.stopPropagation();openBonusModal(\'' + v.name + '\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Bonus</div>'
+      + '<div onclick="event.stopPropagation();openLogFeedback(\'' + v.name + '\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Feedback</div>'
+      + '<div onclick="event.stopPropagation();window.open(\'about:blank\',\'_blank\');showToast(\'Opening Contact record for ' + v.name + '…\');document.getElementById(\'' + menuId + '\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;border-top:1px solid #f1f5f9;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Contact</div>'
       + '</div></div>';
-    const statusLine = isSent
-      ? '<div style="font-size:0.67rem;color:#2e844a;font-weight:600;">Gift sent ✓</div>'
-      : '<div style="font-size:0.67rem;color:#706e6b;">No celebration sent yet</div>';
-    return '<div style="display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.85rem;' + (!isLast ? 'border-bottom:1px solid #f3f2f2;' : '') + '">'
-      + '<div style="flex:1;min-width:0;">'
-      + '<div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">'
-      + '<span style="font-size:0.77rem;font-weight:600;color:' + nameColor + ';cursor:pointer;" onclick="openVipModal(\'' + v.name + '\')">' + v.name + '</span>'
-      + '<span class="chip ' + v.chipClass + '" style="font-size:0.58rem;">' + v.seg + '</span>'
+    return '<div style="display:flex;align-items:center;gap:0.45rem;padding:0.45rem 0.85rem;' + (!isLast ? 'border-bottom:1px solid #f3f2f2;' : '') + '">'
+      + '<span style="font-size:0.76rem;font-weight:600;color:#0060a3;cursor:pointer;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" onclick="openVipModal(\'' + v.name + '\')">' + v.name + '</span>'
+      + '<span style="font-size:0.6rem;font-weight:700;border-radius:999px;padding:0.1rem 0.38rem;flex-shrink:0;' + chipStyle + '">' + v.seg + '</span>'
+      + '<span style="font-size:0.7rem;color:#475569;flex-shrink:0;white-space:nowrap;">' + v.bdate + '</span>'
       + whenBadge
-      + '</div>'
-      + statusLine
-      + '</div>'
       + actionBtn
       + '</div>';
   }).join('');
@@ -4768,9 +4795,7 @@ function bdayNav(dir) {
   renderBdays();
 }
 function bdaySend(name) {
-  bdaySent.add(name);
-  showToast('Birthday celebration sent to ' + name + ' ✓');
-  renderBdays();
+  showToast('Birthday action sent for ' + name + ' ✓');
 }
 
 /* ── Scripted Football 10K+ Chat Demo ── */
