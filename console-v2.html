@@ -3258,13 +3258,17 @@ const WIN_INSIGHTS = [
 
 const PAYMENT_ALERTS = [
   {name:'Marcus Thompson', product:'SBK', issueType:'Withdrawal Declined',
-   detail:'$4,200 · Verification hold', date:'Oct 19', dateOrder:0, status:'New', menuId:'paPay-1'},
-  {name:'Isla Hayes',      product:'CAS', issueType:'Withdrawal Declined',
-   detail:'$9,800 · KYC review · x2', date:'Oct 18', dateOrder:1, status:'New', menuId:'paPay-2'},
-  {name:'Jordan Miles',   product:'SBK', issueType:'Deposit Threshold',
-   detail:'$18,000 deposit exceeds 7-day threshold', date:'Oct 19', dateOrder:0, status:'New', menuId:'paPay-3'},
-  {name:'Carter Ellis',   product:'SBK', issueType:'Unusual Pattern',
-   detail:'3rd payment method added in 48h', date:'Oct 18', dateOrder:1, status:'Viewed', menuId:'paPay-4'},
+   detail:'$4,200 · Verification hold', date:'Oct 19', dateOrder:0, status:'New', menuId:'paPay-1',
+   caseLabel:'Review Case', caseToast:'Opening payment case for Marcus Thompson…'},
+  {name:'Isla Hayes', product:'CAS', issueType:'Withdrawal Declined',
+   detail:'$9,800 · KYC review · x2', date:'Oct 18', dateOrder:1, status:'New', menuId:'paPay-2',
+   caseLabel:'Review Case', caseToast:'Opening payment case for Isla Hayes…'},
+  {name:'Jordan Miles', product:'SBK', issueType:'Deposit Threshold',
+   detail:'$18,000 deposit exceeds 7-day threshold', date:'Oct 19', dateOrder:0, status:'New', menuId:'paPay-3',
+   caseLabel:'Flag Transaction', caseToast:'Flagging deposit for Jordan Miles…'},
+  {name:'Carter Ellis', product:'SBK', issueType:'Unusual Pattern',
+   detail:'3rd payment method added in 48h', date:'Oct 18', dateOrder:1, status:'Viewed', menuId:'paPay-4',
+   caseLabel:'Review Account', caseToast:'Opening account review for Carter Ellis…'},
 ];
 // Production: filter by alert.dateTs >= Date.now() - 48*3600*1000
 
@@ -3401,11 +3405,6 @@ const _PAY_PROD_COLOR = {
   SBK:{c:'#0060a3',bg:'#e8f4fd'}, CAS:{c:'#7c3aed',bg:'#f5f3ff'},
   DFS:{c:'#065f46',bg:'#d1fae5'}, FDR:{c:'#b45309',bg:'#fef3c7'},
 };
-const _PAY_MENU_ACTION = {
-  'Withdrawal Declined': {label:'Review Case',    fn:(n,m) => `showToast('Opening payment case for ${n}…');document.getElementById('${m}').style.display='none'`},
-  'Deposit Threshold':   {label:'Flag Transaction',fn:(n,m) => `showToast('Flagging deposit for ${n}…');document.getElementById('${m}').style.display='none'`},
-  'Unusual Pattern':     {label:'Review Account', fn:(n,m) => `showToast('Opening account review for ${n}…');document.getElementById('${m}').style.display='none'`},
-};
 
 function markPayViewed(idx) {
   if (!PAYMENT_ALERTS[idx]) return;
@@ -3414,54 +3413,47 @@ function markPayViewed(idx) {
 }
 
 function _payMenu(r) {
-  const n = r.name, m = r.menuId;
-  const customAction = _PAY_MENU_ACTION[r.issueType] || {label:'Review Case', fn:(n,m)=>`showToast('Reviewing case for ${n}…');document.getElementById('${m}').style.display='none'`};
+  var n = r.name, m = r.menuId, cl = r.caseLabel, ct = r.caseToast;
   return '<div style="position:relative;">'
-    +'<button onclick="event.stopPropagation();toggleGenMenu(''+m+'')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>'
+    +'<button onclick="event.stopPropagation();toggleGenMenu(\''+m+'\')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>'
     +'<div id="'+m+'" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">'
-    +'<div onclick="event.stopPropagation();openLogContactModal(''+n+'');document.getElementById(''+m+'').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Contact</div>'
-    +'<div onclick="event.stopPropagation();showToast('Opening email for '+n+'…');document.getElementById(''+m+'').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Send Email</div>'
-    +'<div onclick="event.stopPropagation();openBonusModal(''+n+'');document.getElementById(''+m+'').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Bonus</div>'
-    +'<div onclick="event.stopPropagation();openLogFeedback(''+n+'');document.getElementById(''+m+'').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">Log Feedback</div>'
-    +'<div onclick="event.stopPropagation();openVipModal(''+n+'');document.getElementById(''+m+'').style.display='none'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">View Profile</div>'
-    +'<div onclick="event.stopPropagation();'+customAction.fn(n,m)+'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;border-top:1px solid #f1f5f9;" onmouseover="this.style.background='#f3f9ff'" onmouseout="this.style.background=''">'+customAction.label+'</div>'
+    +'<div onclick="event.stopPropagation();openLogContactModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Contact</div>'
+    +'<div onclick="event.stopPropagation();showToast(\'Opening email for '+n+'…\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Send Email</div>'
+    +'<div onclick="event.stopPropagation();openBonusModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Bonus</div>'
+    +'<div onclick="event.stopPropagation();openLogFeedback(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Feedback</div>'
+    +'<div onclick="event.stopPropagation();openVipModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Profile</div>'
+    +'<div onclick="event.stopPropagation();showToast(\''+ct+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;border-top:1px solid #f1f5f9;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">'+cl+'</div>'
     +'</div></div>';
 }
 
 function renderPayTable() {
-  const el = document.getElementById('payAlertBody');
+  var el = document.getElementById('payAlertBody');
   if (!el) return;
-  const rows = PAYMENT_ALERTS; // production: filter by 48h window
-  const g = _PAY_G;
-  const th = (label) => '<div style="padding:0.28rem 0.45rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;">'+label+'</div>';
-  const hdr = '<div style="display:grid;grid-template-columns:'+g+';background:#f3f3f3;border-radius:0.25rem 0.25rem 0 0;border-bottom:1px solid #e5e5e5;margin-bottom:2px;">'
-    +th('VIP Name')+th('Product')+th('Issue Type')+th('Detail')+th('Date')+th('Status')+'<div></div>'
+  var rows = PAYMENT_ALERTS; // production: .filter(r => r.dateTs >= Date.now() - 48*3600*1000)
+  var g = _PAY_G;
+  var th = function(label){ return '<span style="padding:0.25rem 0.45rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;">'+label+'</span>'; };
+  var hdr = '<div style="display:grid;grid-template-columns:'+g+';background:#f3f3f3;border-radius:0.25rem 0.25rem 0 0;border-bottom:1px solid #e5e5e5;margin-bottom:2px;">'
+    +th('VIP Name')+th('Product')+th('Issue Type')+th('Detail')+th('Date')+th('Status')+'<span></span>'
     +'</div>';
-
-  const body = rows.map(function(r, idx) {
-    const ic  = _PAY_ISSUE_COLOR[r.issueType] || {c:'#334155', bg:'#f8fafc'};
-    const pc  = _PAY_PROD_COLOR[r.product]    || {c:'#334155', bg:'#f8fafc'};
-    const isNew = r.status === 'New';
-    const rowBg = isNew ? ic.bg : '#fff';
-    const statusStyle = isNew
+  var body = rows.map(function(r, idx) {
+    var ic  = _PAY_ISSUE_COLOR[r.issueType] || {c:'#334155', bg:'#f8fafc'};
+    var pc  = _PAY_PROD_COLOR[r.product]    || {c:'#334155', bg:'#f8fafc'};
+    var isNew = r.status === 'New';
+    var rowBg = isNew ? ic.bg : '#fff';
+    var statusStyle = isNew
       ? 'background:#fef2f2;color:#dc2626;border:1px solid #fecaca;cursor:pointer;font-weight:700;'
       : 'background:#f1f5f9;color:#64748b;border:1px solid #e2e8f0;cursor:pointer;font-weight:600;';
-    const statusLabel = isNew ? 'New' : 'Viewed';
     return '<div style="display:grid;grid-template-columns:'+g+';align-items:center;border-bottom:1px solid #f1f5f9;background:'+rowBg+';padding:0.1rem 0;">'
       +'<div style="padding:0.3rem 0.45rem;"><a class="vip-link" style="font-size:0.73rem;font-weight:600;">'+r.name+'</a></div>'
       +'<div style="padding:0.3rem 0.3rem;"><span style="font-size:0.59rem;font-weight:700;border-radius:999px;padding:0.08rem 0.28rem;background:'+pc.bg+';color:'+pc.c+';">'+r.product+'</span></div>'
       +'<div style="padding:0.3rem 0.35rem;"><span style="font-size:0.62rem;font-weight:700;border-radius:0.25rem;padding:0.1rem 0.35rem;background:'+ic.bg+';color:'+ic.c+';">'+r.issueType+'</span></div>'
       +'<div style="padding:0.3rem 0.35rem;font-size:0.67rem;color:#475569;line-height:1.4;">'+r.detail+'</div>'
       +'<div style="padding:0.3rem 0.35rem;font-size:0.67rem;color:#64748b;white-space:nowrap;">'+r.date+'</div>'
-      +'<div style="padding:0.3rem 0.35rem;"><span onclick="markPayViewed('+idx+')" style="font-size:0.62rem;border-radius:999px;padding:0.1rem 0.4rem;'+statusStyle+'">'+statusLabel+'</span></div>'
+      +'<div style="padding:0.3rem 0.35rem;"><span onclick="markPayViewed('+idx+')" style="font-size:0.62rem;border-radius:999px;padding:0.1rem 0.4rem;'+statusStyle+'">'+(isNew?'New':'Viewed')+'</span></div>'
       +'<div style="padding:0.3rem 0.35rem;display:flex;justify-content:flex-end;">'+_payMenu(r)+'</div>'
       +'</div>';
   }).join('');
-
-  const emptyMsg = rows.length === 0
-    ? '<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:0.73rem;">No payment alerts in the last 48h</div>'
-    : '';
-  el.innerHTML = hdr + body + emptyMsg;
+  el.innerHTML = hdr + (rows.length ? body : '<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:0.73rem;">No payment alerts in the last 48h</div>');
 }
 
 renderLossTable();
