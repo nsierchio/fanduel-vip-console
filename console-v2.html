@@ -2292,10 +2292,13 @@ function viewWagerInAgent(name, menuId) {
   document.getElementById(menuId).style.display = 'none';
   _showChatThread();
   document.getElementById('suggestedWrap').style.display = 'none';
-  // Loss insight rows use Betsplain Agent prompt — swap in final script when ready
+
   const isLossInsight = menuId && menuId.startsWith('paLoss');
-  const userMsg = isLossInsight
-    ? `Using Betsplain, pull the wager details for ${name} — I need to review the specific bets driving this loss insight.`
+  const isWinInsight  = menuId && menuId.startsWith('paSw');
+  const isInsight = isLossInsight || isWinInsight;
+
+  const userMsg = isInsight
+    ? `Run Player Wager Detail for ${name} — pull the bets linked to this ${isLossInsight ? 'loss' : 'win'} insight.`
     : `Show recent wager data for ${name}`;
   addMessage(userMsg, false);
   showTyping();
@@ -2306,17 +2309,33 @@ function viewWagerInAgent(name, menuId) {
       addMessage(`Wager data for ${name} is not yet available in this environment. In production, I'd pull this directly from BetSplain in real time.`, true);
       return;
     }
-    const wins = d.wagers.filter(w => w.result === 'win').length;
-    const losses = d.wagers.filter(w => w.result === 'loss').length;
+
+    // Resolve the Asset Insight record
+    let insight = null;
+    if (isLossInsight && typeof LOSS_INSIGHTS !== 'undefined') {
+      const idx = parseInt(menuId.replace('paLoss-', '')) - 1;
+      insight = LOSS_INSIGHTS[idx] || null;
+    } else if (isWinInsight && typeof WIN_INSIGHTS !== 'undefined') {
+      const idx = parseInt(menuId.replace('paSw-', '')) - 1;
+      insight = WIN_INSIGHTS[idx] || null;
+    }
+
+    const wins    = d.wagers.filter(w => w.result === 'win').length;
+    const losses  = d.wagers.filter(w => w.result === 'loss').length;
     const pending = d.wagers.filter(w => w.result === 'pending').length;
     const isPositive = d.net.startsWith('+');
-    const rows = d.wagers.map((w, i) => {
+    const insightAccent = isLossInsight ? '#dc2626' : '#16a34a';
+    const insightBg     = isLossInsight ? '#fef2f2' : '#f0fdf4';
+
+    const tableRows = d.wagers.map((w, i) => {
       const rc = w.result === 'win' ? '#065f46' : w.result === 'loss' ? '#991b1b' : '#92400e';
       const rb = w.result === 'win' ? '#f0fdf4' : w.result === 'loss' ? '#fef2f2' : '#fffbeb';
       const pc = w.pnl.startsWith('+') ? '#065f46' : w.pnl.startsWith('-') ? '#ef4444' : '#64748b';
       const tc = WAGER_TYPE_COLOR[w.type] || '#334155';
-      return `<tr style="border-bottom:1px solid #f1f5f9;background:${i%2===0?'#fff':'#f8fafc'};">
-        <td style="padding:0.28rem 0.32rem;color:#475569;font-size:0.67rem;white-space:nowrap;">${w.date}</td>
+      const rowBg  = w.key ? (isLossInsight ? '#fff5f5' : '#f0fef4') : (i%2===0 ? '#fff' : '#f8fafc');
+      const keyBorderStyle = w.key ? `border-left:2px solid ${insightAccent};` : 'border-left:2px solid transparent;';
+      return `<tr style="border-bottom:1px solid #f1f5f9;background:${rowBg};">
+        <td style="padding:0.28rem 0.32rem;color:#475569;font-size:0.67rem;white-space:nowrap;${keyBorderStyle}">${w.date}</td>
         <td style="padding:0.28rem 0.32rem;font-weight:600;color:#0b1220;font-size:0.66rem;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${w.event}">${w.event}</td>
         <td style="padding:0.28rem 0.32rem;"><span style="font-size:0.59rem;font-weight:700;border-radius:999px;padding:0.08rem 0.28rem;background:${tc}18;color:${tc};">${w.type}</span></td>
         <td style="padding:0.28rem 0.32rem;text-align:right;font-weight:700;color:#334155;font-size:0.67rem;white-space:nowrap;">${w.stake}</td>
@@ -2326,9 +2345,27 @@ function viewWagerInAgent(name, menuId) {
         </td>
       </tr>`;
     }).join('');
+
+    let insightHeader = '';
+    if (insight) {
+      const amtFmt = isLossInsight
+        ? '−$' + Math.abs(insight.amount).toLocaleString()
+        : '+$' + insight.amount.toLocaleString();
+      insightHeader = `<div style="background:${insightBg};border-left:3px solid ${insightAccent};border-radius:0 0.3rem 0.3rem 0;padding:0.35rem 0.55rem;margin-bottom:0.55rem;">
+        <div style="font-size:0.59rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:${insightAccent};margin-bottom:0.1rem;">Asset Insight · ${insight.type}</div>
+        <div style="font-size:0.67rem;color:#475569;line-height:1.45;">${insight.context}</div>
+        <div style="margin-top:0.2rem;font-weight:700;font-size:0.7rem;color:${isLossInsight ? '#991b1b' : '#15803d'};">${amtFmt} · ${insight.date} · ${insight.severity}</div>
+      </div>`;
+    }
+
+    const title    = isInsight ? `Player Wager Detail — ${name}` : `Wager History — ${name}`;
+    const subtitle = isInsight
+      ? `${d.seg} · Insight-linked bets highlighted`
+      : `${d.seg} · ${d.sessions} sessions · Avg stake ${d.avgStake}`;
+
     addRichMessage(`<div style="font-size:0.75rem;">
-      <div style="font-weight:700;color:#181818;margin-bottom:0.2rem;">Wager History — ${name}</div>
-      <div style="font-size:0.67rem;color:#64748b;margin-bottom:0.5rem;">${d.seg} · ${d.sessions} sessions · Avg stake ${d.avgStake}</div>
+      <div style="font-weight:700;color:#181818;margin-bottom:${insight ? '0.3rem' : '0.2rem'};">${title}</div>
+      ${insightHeader}<div style="font-size:0.67rem;color:#64748b;margin-bottom:0.5rem;">${subtitle}</div>
       <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">
         <thead><tr style="background:#f8fafc;border-bottom:1.5px solid #e2e8f0;">
           <th style="text-align:left;padding:0.28rem 0.32rem;font-weight:700;color:#475569;font-size:0.62rem;">Date</th>
@@ -2337,7 +2374,7 @@ function viewWagerInAgent(name, menuId) {
           <th style="text-align:right;padding:0.28rem 0.32rem;font-weight:700;color:#475569;font-size:0.62rem;">Stake</th>
           <th style="text-align:right;padding:0.28rem 0.32rem;font-weight:700;color:#475569;font-size:0.62rem;">Result / P&amp;L</th>
         </tr></thead>
-        <tbody>${rows}</tbody>
+        <tbody>${tableRows}</tbody>
       </table></div>
       <div style="margin-top:0.5rem;padding-top:0.38rem;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
         <span style="font-size:0.67rem;color:#64748b;">${d.wagers.length} bets · ${wins}W ${losses}L${pending ? ' ' + pending + 'P' : ''}</span>
@@ -4086,12 +4123,42 @@ function contactLogged(btn, name) {
 /* ── VIP Contact Card Modal ── */
 const VIP_PROFILES = {
   'Ethan Parker': { seg:'Casino', tier:'VIP', loc:'New York, NY', bday:'03/14', joined:'Jan 2022', ltv:'$284,000', spend30:'$12,400 (loss)', lastContact:'22d ago', status:'Overdue', fav:'Live dealer blackjack, high-limit slots', notes:'Down $12,400 in 24h. Welfare check recommended. History of recovery after personal outreach. Consider $500 goodwill credit.', stats:[{l:'30d GGR',v:'-$12,400',cls:'negative'},{l:'Avg Stake',v:'$1,850',cls:''},{l:'Sessions/Wk',v:'4.2',cls:''},{l:'Last Login',v:'2d ago',cls:''}] },
-  'Sophia Novak': { seg:'Sportsbook', tier:'VIP', loc:'Chicago, IL', bday:'06/02', joined:'Mar 2021', ltv:'$196,500', spend30:'$8,000 (withdrawal)', lastContact:'18d ago', status:'Due Soon', fav:'NBA same-game parlays, NFL futures', notes:'Withdrew $8k, no re-login in 12 days. Low-friction SMS re-engagement is best first step. Event invite may help.', stats:[{l:'30d GGR',v:'+$3,200',cls:'positive'},{l:'Avg Stake',v:'$620',cls:''},{l:'Sessions/Wk',v:'1.1',cls:''},{l:'Last Login',v:'12d ago',cls:''}] },
-  'Isla Hayes': { seg:'Sportsbook', tier:'MVP', loc:'Boston, MA', bday:'11/28', joined:'Sep 2020', ltv:'$412,000', spend30:'$9,800 (loss)', lastContact:'28d ago', status:'Overdue', fav:'NFL parlays, live betting', notes:'WPC flagged by commercial team. RTC risk elevated. Withdrawal declined x2 — escalate to Payments Ops. Relationship call urgent.', stats:[{l:'30d GGR',v:'-$9,800',cls:'negative'},{l:'Avg Stake',v:'$2,100',cls:''},{l:'Sessions/Wk',v:'2.8',cls:''},{l:'Last Login',v:'3d ago',cls:''}] },
+  'Sophia Novak': {
+    seg: 'Sportsbook', net: '-$14,400', sessions: 9, avgStake: '$1,580',
+    wagers: [
+      { date:'Oct 19', event:'NFL Parlay — 4-Leg Sunday', type:'Sportsbook', stake:'$5,200', odds:'+840', result:'loss', pnl:'-$5,200', key:true },
+      { date:'Oct 19', event:'NFL Live Bet — Cowboys 2H -2', type:'Sportsbook', stake:'$3,800', odds:'-110', result:'loss', pnl:'-$3,800', key:true },
+      { date:'Oct 19', event:'NFL SGP — Jets vs Bills Over 44.5', type:'Sportsbook', stake:'$3,200', odds:'+165', result:'loss', pnl:'-$3,200', key:true },
+      { date:'Oct 19', event:'NFL Week 7 — Bears ML', type:'Sportsbook', stake:'$2,200', odds:'+155', result:'loss', pnl:'-$2,200', key:true },
+      { date:'Oct 17', event:'NBA Opening Night — Celtics -3', type:'Sportsbook', stake:'$1,800', odds:'-115', result:'win', pnl:'+$1,565' },
+      { date:'Oct 15', event:'NFL Futures — NFC South Winner', type:'Sportsbook', stake:'$1,200', odds:'+280', result:'pending', pnl:'—' },
+    ]
+  },
+  'Isla Hayes': {
+    seg: 'Casino', net: '-$18,600', sessions: 8, avgStake: '$2,800',
+    wagers: [
+      { date:'Oct 19', event:'Live Blackjack — High Limit', type:'Casino', stake:'$8,500', odds:'Evens', result:'loss', pnl:'-$8,500', key:true },
+      { date:'Oct 19', event:'Live Roulette — VIP Table 2', type:'Casino', stake:'$6,400', odds:'18/1', result:'loss', pnl:'-$6,400', key:true },
+      { date:'Oct 19', event:'Live Baccarat — Platinum Table', type:'Casino', stake:'$4,800', odds:'Evens', result:'loss', pnl:'-$4,800', key:true },
+      { date:'Oct 18', event:'Live Blackjack — High Limit', type:'Casino', stake:'$2,200', odds:'Evens', result:'win', pnl:'+$1,100' },
+      { date:'Oct 17', event:'Slots — Book of the Dead', type:'Casino', stake:'$1,400', odds:'—', result:'loss', pnl:'-$1,400' },
+      { date:'Oct 15', event:'Live Roulette — VIP Table 1', type:'Casino', stake:'$3,000', odds:'35/1', result:'win', pnl:'+$2,100' },
+    ]
+  },
   'Olivia Bennett': { seg:'Sportsbook', tier:'VIP', loc:'Miami, FL', bday:'07/28', joined:'Feb 2022', ltv:'$158,000', spend30:'$6,800 (win)', lastContact:'3d ago', status:'In Cadence', fav:'NBA parlays, F1 racing markets', notes:'Birthday today — celebration message pending. Profit Boost offer approved ($500). Strong engagement after live events.', stats:[{l:'30d GGR',v:'+$6,800',cls:'positive'},{l:'Avg Stake',v:'$480',cls:''},{l:'Sessions/Wk',v:'5.1',cls:''},{l:'Last Login',v:'Today',cls:''}] },
   'Logan Foster': { seg:'Racing', tier:'Shield Select', loc:'Houston, TX', bday:'09/15', joined:'Jun 2021', ltv:'$92,000', spend30:'$0 (inactive)', lastContact:'21d ago', status:'Due Soon', fav:'OTB Racing, horse racing futures', notes:'No OTB activity in 21 days. Voucher offer + race day invite recommended. Responds well to personal racing tips.', stats:[{l:'30d GGR',v:'$0',cls:''},{l:'Avg Stake',v:'$340',cls:''},{l:'Sessions/Wk',v:'0',cls:'negative'},{l:'Last Login',v:'21d ago',cls:''}] },
   'Ava Rivera': { seg:'Casino', tier:'VIP', loc:'Los Angeles, CA', bday:'04/19', joined:'Nov 2021', ltv:'$221,000', spend30:'$4,200 (win)', lastContact:'3d ago', status:'In Cadence', fav:'Live roulette, slots tournaments', notes:'Attending F1 Miami — seat 3 confirmed by Events Agent. Strong cross-product engagement. Good candidate for Casino loyalty offer.', stats:[{l:'30d GGR',v:'+$4,200',cls:'positive'},{l:'Avg Stake',v:'$780',cls:''},{l:'Sessions/Wk',v:'3.9',cls:''},{l:'Last Login',v:'Today',cls:''}] },
-  'Noah Coleman': { seg:'Sportsbook', tier:'MVP', loc:'Dallas, TX', bday:'02/07', joined:'Jan 2021', ltv:'$534,000', spend30:'$46,200 (win)', lastContact:'5d ago', status:'In Cadence', fav:'NFL, NBA same-game parlays', notes:'Up $46,200 in 24h — largest single-day win in portfolio. Congratulatory outreach appropriate. Monitor for withdrawal intent.', stats:[{l:'30d GGR',v:'+$46,200',cls:'positive'},{l:'Avg Stake',v:'$3,200',cls:''},{l:'Sessions/Wk',v:'6.0',cls:''},{l:'Last Login',v:'Today',cls:''}] },
+  'Noah Coleman': {
+    seg: 'Sportsbook', net: '+$46,200', sessions: 22, avgStake: '$4,440',
+    wagers: [
+      { date:'Oct 19', event:'NFL SGP — 4-Leg Sunday Parlay', type:'Sportsbook', stake:'$12,000', odds:'+385', result:'win', pnl:'+$46,200', key:true },
+      { date:'Oct 19', event:'NFL Week 7 — Chiefs -5.5', type:'Sportsbook', stake:'$4,500', odds:'-110', result:'win', pnl:'+$4,091' },
+      { date:'Oct 18', event:'NBA Opening Night SGP', type:'Sportsbook', stake:'$3,200', odds:'+210', result:'loss', pnl:'-$3,200' },
+      { date:'Oct 17', event:'MLB ALCS — Astros ML', type:'Sportsbook', stake:'$2,800', odds:'-145', result:'win', pnl:'+$1,931' },
+      { date:'Oct 16', event:'UFC 308 — Lightweight Main Event', type:'Sportsbook', stake:'$2,000', odds:'+140', result:'loss', pnl:'-$2,000' },
+      { date:'Oct 14', event:'NHL Futures — Oilers Stanley Cup', type:'Sportsbook', stake:'$3,000', odds:'+450', result:'pending', pnl:'—' },
+    ]
+  },
 };
 const SEG_INITIALS = {'Sportsbook':'SB','Casino':'CA','DFS':'DF','Racing':'RC','SBK':'SB'};
 const SEG_BG = {'Sportsbook':'#0060a3','Casino':'#0060a3','DFS':'#0060a3','Racing':'#0060a3','SBK':'#0060a3'};
@@ -5624,58 +5691,57 @@ const WAGER_DATA = {
     ]
   },
   'Luca Romano': {
-    seg: 'Casino', net: '+$28,750', sessions: 11, avgStake: '$2,400',
+    seg: 'Casino', net: '+$28,750', sessions: 6, avgStake: '$5,500',
     wagers: [
-      { date:'Jul 27', event:'Live Baccarat — Platinum Table', type:'Casino', stake:'$8,000', odds:'Evens', result:'win', pnl:'+$14,000' },
-      { date:'Jul 26', event:'Live Roulette — VIP Table 1', type:'Casino', stake:'$4,500', odds:'17/1', result:'win', pnl:'+$9,500' },
-      { date:'Jul 25', event:'Live Blackjack — High Limit', type:'Casino', stake:'$3,000', odds:'Evens', result:'win', pnl:'+$5,250' },
-      { date:'Jul 24', event:'Slots — Mega Moolah Progressive', type:'Casino', stake:'$2,000', odds:'—', result:'loss', pnl:'-$2,000' },
-      { date:'Jul 23', event:'Live Baccarat — Platinum Table', type:'Casino', stake:'$4,000', odds:'Evens', result:'loss', pnl:'-$4,000' },
+      { date:'Oct 19', event:'Live Baccarat — Platinum Table', type:'Casino', stake:'$12,000', odds:'Evens', result:'win', pnl:'+$14,500', key:true },
+      { date:'Oct 19', event:'Live Roulette — VIP Table 1', type:'Casino', stake:'$7,500', odds:'17/1', result:'win', pnl:'+$9,750', key:true },
+      { date:'Oct 19', event:'Live Blackjack — High Limit', type:'Casino', stake:'$5,000', odds:'Evens', result:'win', pnl:'+$4,500', key:true },
+      { date:'Oct 18', event:'Slots — Mega Moolah Progressive', type:'Casino', stake:'$2,000', odds:'—', result:'loss', pnl:'-$2,000' },
+      { date:'Oct 17', event:'Live Baccarat — Platinum Table', type:'Casino', stake:'$4,000', odds:'Evens', result:'loss', pnl:'-$4,000' },
     ]
   },
   'Farah Siddiqui': {
-    seg: 'DFS', net: '+$17,400', sessions: 7, avgStake: '$1,100',
+    seg: 'DFS', net: '+$17,400', sessions: 5, avgStake: '$1,060',
     wagers: [
-      { date:'Jul 27', event:'NFL DFS GPP — $250K Guaranteed', type:'DFS', stake:'$1,500', odds:'—', result:'win', pnl:'+$12,400' },
-      { date:'Jul 26', event:'NBA DFS — Tuesday Slate', type:'DFS', stake:'$800', odds:'—', result:'win', pnl:'+$3,200' },
-      { date:'Jul 25', event:'PGA DFS — US Open Showdown', type:'DFS', stake:'$600', odds:'—', result:'win', pnl:'+$1,800' },
-      { date:'Jul 24', event:'NFL DFS — Sunday Slate H2H', type:'DFS', stake:'$1,200', odds:'—', result:'loss', pnl:'-$1,200' },
-      { date:'Jul 23', event:'NBA DFS — Thursday Slate', type:'DFS', stake:'$700', odds:'—', result:'win', pnl:'+$1,200' },
+      { date:'Oct 18', event:'NFL DFS GPP — Sunday $250K Guaranteed', type:'DFS', stake:'$1,800', odds:'—', result:'win', pnl:'+$14,200', key:true },
+      { date:'Oct 18', event:'NFL DFS — Sunday Slate H2H', type:'DFS', stake:'$1,200', odds:'—', result:'win', pnl:'+$3,200', key:true },
+      { date:'Oct 17', event:'NBA DFS — Thursday Opening Slate', type:'DFS', stake:'$800', odds:'—', result:'win', pnl:'+$2,400' },
+      { date:'Oct 16', event:'NFL DFS — Thursday Night Single', type:'DFS', stake:'$900', odds:'—', result:'loss', pnl:'-$900' },
+      { date:'Oct 15', event:'MLB DFS — ALCS Game 4', type:'DFS', stake:'$600', odds:'—', result:'win', pnl:'+$1,500' },
     ]
   },
   'Marcus Holloway': {
     seg: 'Sportsbook', net: '-$142,800', sessions: 31, avgStake: '$8,400',
     wagers: [
-      { date:'Oct 12', event:'NFL SGP — 5-leg Sunday Ticket', type:'Sportsbook', stake:'$35,000', odds:'+1840', result:'loss', pnl:'-$35,000' },
-      { date:'Oct 12', event:'NBA Parlay — Knicks / Celtics / Bucks', type:'Sportsbook', stake:'$22,000', odds:'+580', result:'loss', pnl:'-$22,000' },
-      { date:'Oct 11', event:'UFC 308 — Main Event ML', type:'Sportsbook', stake:'$15,000', odds:'+210', result:'loss', pnl:'-$15,000' },
-      { date:'Oct 11', event:'NFL Week 6 — Chiefs -6.5 vs Raiders', type:'Sportsbook', stake:'$28,000', odds:'-110', result:'loss', pnl:'-$28,000' },
-      { date:'Oct 10', event:'NBA Opening Night SGP', type:'Sportsbook', stake:'$12,000', odds:'+320', result:'win', pnl:'+$38,400' },
-      { date:'Oct 09', event:'NHL Futures — Maple Leafs Stanley Cup', type:'Sportsbook', stake:'$5,000', odds:'+1200', result:'pending', pnl:'—' },
-      { date:'Oct 08', event:'NFL SGP — 4-leg Thursday Night', type:'Sportsbook', stake:'$18,000', odds:'+740', result:'loss', pnl:'-$18,000' },
+      { date:'Oct 19', event:'NFL SGP — 5-Leg Sunday Ticket', type:'Sportsbook', stake:'$142,800', odds:'+320', result:'loss', pnl:'-$142,800', key:true },
+      { date:'Oct 19', event:'NFL Week 7 — Chiefs ML vs Raiders', type:'Sportsbook', stake:'$9,200', odds:'-142', result:'win', pnl:'+$6,479' },
+      { date:'Oct 18', event:'NBA Opening Night SGP', type:'Sportsbook', stake:'$12,000', odds:'+420', result:'loss', pnl:'-$12,000' },
+      { date:'Oct 17', event:'MLB ALCS — Yankees vs Guardians', type:'Sportsbook', stake:'$9,500', odds:'-130', result:'win', pnl:'+$7,308' },
+      { date:'Oct 16', event:'UFC 308 — Co-Main Event ML', type:'Sportsbook', stake:'$5,000', odds:'+195', result:'loss', pnl:'-$5,000' },
+      { date:'Oct 14', event:'NHL Futures — Maple Leafs Top 4', type:'Sportsbook', stake:'$4,000', odds:'+310', result:'pending', pnl:'—' },
     ]
   },
   'Devon Whitfield': {
     seg: 'Sportsbook', net: '-$118,500', sessions: 27, avgStake: '$7,200',
     wagers: [
-      { date:'Oct 11', event:'NFL SGP — 6-leg Sunday Survivor', type:'Sportsbook', stake:'$30,000', odds:'+2240', result:'loss', pnl:'-$30,000' },
-      { date:'Oct 11', event:'NBA Live Bet — Knicks 4Q -4', type:'Sportsbook', stake:'$18,000', odds:'-115', result:'loss', pnl:'-$18,000' },
-      { date:'Oct 10', event:'MLB ALCS — Astros ML', type:'Sportsbook', stake:'$25,000', odds:'-145', result:'loss', pnl:'-$25,000' },
-      { date:'Oct 09', event:'NFL Futures — Eagles Super Bowl', type:'Sportsbook', stake:'$10,000', odds:'+480', result:'pending', pnl:'—' },
-      { date:'Oct 08', event:'NBA Parlay — Lakers / Warriors / Nets', type:'Sportsbook', stake:'$20,000', odds:'+420', result:'loss', pnl:'-$20,000' },
-      { date:'Oct 07', event:'UFC 307 — Bantamweight Main', type:'Sportsbook', stake:'$8,000', odds:'+175', result:'win', pnl:'+$14,000' },
-      { date:'Oct 06', event:'NFL Week 5 SGP — Cowboys vs Eagles', type:'Sportsbook', stake:'$15,000', odds:'+320', result:'loss', pnl:'-$15,000' },
+      { date:'Oct 18', event:'NFL SGP — 6-Leg Sunday Survivor', type:'Sportsbook', stake:'$30,000', odds:'+2240', result:'loss', pnl:'-$30,000', key:true },
+      { date:'Oct 18', event:'NFL Live Bet — Chiefs 4Q -4', type:'Sportsbook', stake:'$18,500', odds:'-110', result:'loss', pnl:'-$18,500', key:true },
+      { date:'Oct 18', event:'NFL Week 7 — Bills -3.5 vs Dolphins', type:'Sportsbook', stake:'$22,000', odds:'-110', result:'loss', pnl:'-$22,000', key:true },
+      { date:'Oct 18', event:'NFL Live Bet — Eagles 2H ML', type:'Sportsbook', stake:'$15,000', odds:'+130', result:'loss', pnl:'-$15,000', key:true },
+      { date:'Oct 18', event:'NFL Parlay — 4-Leg Sunday', type:'Sportsbook', stake:'$14,000', odds:'+580', result:'loss', pnl:'-$14,000', key:true },
+      { date:'Oct 17', event:'MLB ALCS — Dodgers ML', type:'Sportsbook', stake:'$10,000', odds:'-165', result:'win', pnl:'+$6,061' },
+      { date:'Oct 15', event:'NFL Futures — Eagles Super Bowl', type:'Sportsbook', stake:'$9,000', odds:'+480', result:'pending', pnl:'—' },
     ]
   },
   'Parker Ortiz': {
-    seg: 'Sportsbook', net: '-$7,800', sessions: 8, avgStake: '$950',
+    seg: 'DFS', net: '-$7,800', sessions: 6, avgStake: '$1,630',
     wagers: [
-      { date:'Oct 12', event:'NFL Parlay — 3-leg Sunday', type:'Sportsbook', stake:'$2,500', odds:'+640', result:'loss', pnl:'-$2,500' },
-      { date:'Oct 10', event:'NBA SGP — Celtics ML / Brown 28+', type:'Sportsbook', stake:'$1,800', odds:'+260', result:'loss', pnl:'-$1,800' },
-      { date:'Oct 09', event:'UFC 308 — Prelim Co-Main ML', type:'Sportsbook', stake:'$1,200', odds:'+185', result:'win', pnl:'+$2,220' },
-      { date:'Oct 08', event:'NFL Week 5 — Rams vs 49ers ML', type:'Sportsbook', stake:'$2,000', odds:'-120', result:'loss', pnl:'-$2,000' },
-      { date:'Oct 07', event:'NHL Futures — Oilers Stanley Cup', type:'Sportsbook', stake:'$800', odds:'+650', result:'pending', pnl:'—' },
-      { date:'Oct 05', event:'NBA Parlay — Opening Weekend', type:'Sportsbook', stake:'$1,500', odds:'+380', result:'loss', pnl:'-$1,500' },
+      { date:'Oct 19', event:'NFL DFS GPP — Sunday $100K Guaranteed', type:'DFS', stake:'$2,800', odds:'—', result:'loss', pnl:'-$2,800', key:true },
+      { date:'Oct 19', event:'NFL DFS — Millionaire Maker', type:'DFS', stake:'$1,800', odds:'—', result:'loss', pnl:'-$1,800', key:true },
+      { date:'Oct 19', event:'NFL DFS — Sunday Slate H2H', type:'DFS', stake:'$1,600', odds:'—', result:'loss', pnl:'-$1,600', key:true },
+      { date:'Oct 18', event:'NFL DFS — Thursday Night H2H', type:'DFS', stake:'$1,600', odds:'—', result:'loss', pnl:'-$1,600', key:true },
+      { date:'Oct 17', event:'NBA DFS — Thursday Slate', type:'DFS', stake:'$1,200', odds:'—', result:'win', pnl:'+$2,800' },
+      { date:'Oct 15', event:'MLB DFS — ALCS Game 3', type:'DFS', stake:'$800', odds:'—', result:'win', pnl:'+$1,400' },
     ]
   },
 };
