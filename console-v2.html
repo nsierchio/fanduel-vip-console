@@ -2288,8 +2288,23 @@ function addRichMessage(html) {
   thread.scrollTop = thread.scrollHeight;
 }
 
+function _openAgentPanel() {
+  const wrap    = document.getElementById('consoleWrap');
+  const floatEl = document.getElementById('agentFloat');
+  const btn     = document.getElementById('navAfBtn');
+  if (agentPinned) {
+    wrap.classList.remove('agent-hidden');
+  } else {
+    floatEl.classList.add('float-open');
+  }
+  if (btn) btn.classList.add('af-active');
+  _agentMinimized = false;
+  document.querySelectorAll('.companion').forEach(c => c.classList.remove('companion-minimized'));
+}
+
 function viewWagerInAgent(name, menuId) {
   document.getElementById(menuId).style.display = 'none';
+  _openAgentPanel();
   _showChatThread();
   document.getElementById('suggestedWrap').style.display = 'none';
 
