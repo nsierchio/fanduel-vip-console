@@ -3304,30 +3304,21 @@ function _statusCell(status) {
   var s = status==='New' ? 'background:#fef3c7;color:#92400e;' : status==='Reviewed' ? 'background:#dbeafe;color:#1d4ed8;' : 'background:#f1f5f9;color:#64748b;';
   return '<span style="font-size:0.62rem;font-weight:700;'+s+'border-radius:0.25rem;padding:0.1rem 0.28rem;white-space:nowrap;display:inline-block;">'+status+'</span>';
 }
-function _lossMenu(r) {
-  var m=r.menuId, n=r.name;
-  return '<div style="position:relative;justify-self:end;">'
-    +'<button onclick="event.stopPropagation();toggleGenMenu(\''+m+'\')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;">&#8942;</button>'
-    +'<div id="'+m+'" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">'
-    +'<div onclick="event.stopPropagation();openLogContactModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Contact</div>'
-    +'<div onclick="event.stopPropagation();openBonusModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Bonus</div>'
-    +'<div onclick="event.stopPropagation();openVipModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Profile</div>'
-    +'<div onclick="event.stopPropagation();viewWagerInAgent(\''+n+'\',\''+m+'\')" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;border-top:1px solid #f1f5f9;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Wager</div>'
-    +'</div></div>';
-}
-function _winMenu(r) {
+function _insightMenu(r) {
   var m=r.menuId, n=r.name;
   return '<div style="position:relative;justify-self:end;">'
     +'<button onclick="event.stopPropagation();toggleGenMenu(\''+m+'\')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">&#8942;</button>'
     +'<div id="'+m+'" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">'
     +'<div onclick="event.stopPropagation();openLogContactModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Contact</div>'
+    +'<div onclick="event.stopPropagation();showToast(\'Opening email for '+n+'…\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Send Email</div>'
     +'<div onclick="event.stopPropagation();openBonusModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Bonus</div>'
     +'<div onclick="event.stopPropagation();openLogFeedback(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Feedback</div>'
-    +'<div onclick="event.stopPropagation();showToast(\'Opening email for '+n+'…\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Send Email</div>'
-    +'<div onclick="event.stopPropagation();openVipModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Profile</div>'
+    +'<div onclick="event.stopPropagation();openVipModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Contact</div>'
     +'<div onclick="event.stopPropagation();viewWagerInAgent(\''+n+'\',\''+m+'\')" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;border-top:1px solid #f1f5f9;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Wager</div>'
     +'</div></div>';
 }
+function _lossMenu(r) { return _insightMenu(r); }
+function _winMenu(r)  { return _insightMenu(r); }
 
 function renderLossTable() {
   var el = document.getElementById('lossInsightBody'); if (!el) return;
