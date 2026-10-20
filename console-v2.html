@@ -3239,6 +3239,9 @@ const LOSS_INSIGHTS = [
    type:'Outlier Loss', typeOrder:2,
    context:'Handle of $9,800 is 4.67× his 30-day avg of $2,100 across 6 DFS entries — total loss $7,800 on Oct 19.',
    amount:-7800, date:'Oct 19', dateOrder:0, status:'New', menuId:'paLoss-5', borderColor:'#ea580c', bg:''},
+  {name:'Marcus Holloway', product:'SBK', severity:'MED', sevOrder:1, type:'Outlier Loss', typeOrder:2,
+   context:'6 additional NFL bets on Oct 18 — net loss $28,400, 3.2× his 30-day avg daily handle of $8,900.',
+   amount:-28400, date:'Oct 18', dateOrder:1, status:'New', menuId:'paLoss-6', borderColor:'#ea580c', bg:''},
 ];
 const WIN_INSIGHTS = [
   {name:'Noah Coleman', product:'SBK', severity:'HIGH', sevOrder:0,
@@ -3401,33 +3404,33 @@ function renderLossTable() {
   var hdr='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;font-weight:700;padding:0.25rem 0.3rem;border-bottom:1px solid #e5e5e5;background:#fef2f2;border-left:3px solid transparent;">'
     +'<span>VIP Name</span><span>Product</span><span>Severity</span><span>Type</span><span>Insight Context</span><span>Amount</span><span>Date</span><span>Status</span><span></span></div>';
   var body='';
-  pn.forEach(function(name,pi){
+  pn.forEach(function(name){
     var grp=gm[name],isMulti=grp.length>1,isExp=lossExpanded[name],first=grp[0];
+    var r0=first.r;
     if(isMulti){
-      var expIcon=isExp?'&#9660;':'&#9654;';
-      var pmid='paLossP-'+pi;
-      body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:center;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;background:#fff8f8;border-left:3px solid #dc2626;cursor:pointer;" onclick="toggleLossGroup(\''+name+'\')">'
-        +'<span style="font-size:0.73rem;font-weight:700;color:#0176d3;display:flex;align-items:center;gap:0.2rem;"><span style="font-size:0.6rem;color:#0060a3;">'+expIcon+'</span>'+name+'<span style="font-size:0.58rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.05rem 0.28rem;margin-left:0.25rem;">'+grp.length+'</span></span>'
-        +'<span style="font-size:0.7rem;color:#475569;">'+first.r.product+'</span>'
-        +_sevPill(first.r.severity)
+      var chevron='<button onclick="event.stopPropagation();toggleLossGroup(\''+name+'\')" style="background:none;border:none;cursor:pointer;padding:0 0.12rem;font-size:0.9rem;color:#64748b;line-height:1;flex-shrink:0;transition:transform 0.15s;'+(isExp?'transform:rotate(90deg);':'')+'" title="'+(isExp?'Collapse':'Expand')+'">&#x203a;</button>';
+      body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:center;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;background:'+(isExp?'#f0f7ff':'#fafbff')+';border-left:3px solid #dc2626;cursor:pointer;" onclick="toggleLossGroup(\''+name+'\')">'
+        +'<span style="display:flex;align-items:center;gap:0.1rem;font-size:0.73rem;font-weight:700;color:#0176d3;">'+chevron+name+'<span style="font-size:0.58rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.05rem 0.28rem;margin-left:0.2rem;">'+grp.length+'</span></span>'
+        +'<span style="font-size:0.7rem;color:#475569;">'+r0.product+'</span>'
+        +_sevCell(r0,false)
+        +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">'+grp.length+' insights</span>'
+        +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">expand to view</span>'
+        +'<span style="font-size:0.72rem;font-weight:700;color:#991b1b;">'+_amtFmt(r0.amount,false)+'</span>'
+        +'<span style="font-size:0.7rem;color:#475569;">'+r0.date+'</span>'
         +'<span></span>'
-        +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">'+grp.length+' insights — expand to view</span>'
-        +'<span style="font-size:0.72rem;font-weight:700;color:#991b1b;">'+_amtFmt(first.r.amount,false)+'</span>'
-        +'<span style="font-size:0.7rem;color:#475569;">'+first.r.date+'</span>'
-        +'<span></span>'
-        +'<div onclick="event.stopPropagation();">'+_vipParentMenu(name,pmid)+'</div></div>';
+        +'<div onclick="event.stopPropagation();">'+_vipParentMenu(name,'paLossP-'+name.replace(/\s/g,''))+'</div></div>';
       if(isExp){
         grp.forEach(function(x){
-          var r=x.r,idx=x.i,ac=Math.abs(r.amount)>20000?'#991b1b':'#b45309';
-          body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:start;padding:0.3rem 0.3rem;border-bottom:1px solid #f1f5f9;background:#fffbfb;border-left:3px solid '+r.borderColor+';">'
-            +'<span style="font-size:0.7rem;color:#94a3b8;padding-left:0.65rem;padding-top:0.06rem;">└</span>'
+          var r=x.r,idx=x.i;
+          body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:start;padding:0.3rem 0.3rem;border-bottom:1px dashed #e2e8f0;background:#f8fafc;border-left:3px solid '+r.borderColor+';">'
+            +'<span style="font-size:0.68rem;color:#94a3b8;padding-left:0.5rem;padding-top:0.08rem;">&#x21b3;</span>'
             +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.product+'</span>'
-            +_sevPill(r.severity)
-            +'<span style="font-size:0.72rem;color:#334155;padding-top:0.06rem;">'+r.type+'</span>'
+            +_sevCell(r,false)
+            +_typeCell(r,false)
             +'<span style="font-size:0.67rem;color:#475569;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+r.context+'</span>'
-            +'<span style="font-size:0.72rem;font-weight:700;color:'+ac+';padding-top:0.06rem;">'+_amtFmt(r.amount,false)+'</span>'
+            +'<span style="font-size:0.72rem;font-weight:700;color:#991b1b;padding-top:0.06rem;">'+_amtFmt(r.amount,false)+'</span>'
             +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.date+'</span>'
-            +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'LOSS\','+idx+')" style="font-size:0.62rem;border-radius:999px;padding:0.1rem 0.42rem;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;cursor:pointer;font-weight:700;">New</span></span>'
+            +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'LOSS\','+idx+')" style="font-size:0.62rem;border-radius:0.2rem;padding:0.1rem 0.38rem;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;cursor:pointer;font-weight:600;white-space:nowrap;">New &#9662;</span></span>'
             +_insightMenu(r)+'</div>';
         });
       }
@@ -3436,12 +3439,12 @@ function renderLossTable() {
       body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:start;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;border-left:3px solid '+r.borderColor+';'+(r.bg?'background:'+r.bg+';':'')+'\">'
         +'<a class="vip-link" style="font-size:0.73rem;padding-top:0.06rem;">'+r.name+'</a>'
         +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.product+'</span>'
-        +_sevPill(r.severity)
-        +'<span style="font-size:0.72rem;color:#334155;padding-top:0.06rem;">'+r.type+'</span>'
+        +_sevCell(r,false)
+        +_typeCell(r,false)
         +'<span style="font-size:0.67rem;color:#475569;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+r.context+'</span>'
         +'<span style="font-size:0.72rem;font-weight:700;color:'+ac+';padding-top:0.06rem;">'+_amtFmt(r.amount,false)+'</span>'
         +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.date+'</span>'
-        +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'LOSS\','+idx+')" style="font-size:0.62rem;border-radius:999px;padding:0.1rem 0.42rem;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;cursor:pointer;font-weight:700;">New</span></span>'
+        +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'LOSS\','+idx+')" style="font-size:0.62rem;border-radius:0.2rem;padding:0.1rem 0.38rem;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;cursor:pointer;font-weight:600;white-space:nowrap;">New &#9662;</span></span>'
         +_insightMenu(r)+'</div>';
     }
   });
@@ -3476,33 +3479,33 @@ function renderWinTable() {
   var hdr='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;font-weight:700;padding:0.25rem 0.3rem;border-bottom:1px solid #e5e5e5;background:#f0fdf4;border-left:3px solid transparent;">'
     +'<span>VIP Name</span><span>Product</span><span>Severity</span><span>Type</span><span>Insight Context</span><span>Amount</span><span>Date</span><span>Status</span><span></span></div>';
   var body='';
-  pn.forEach(function(name,pi){
+  pn.forEach(function(name){
     var grp=gm[name],isMulti=grp.length>1,isExp=winExpanded[name],first=grp[0];
+    var r0=first.r;
     if(isMulti){
-      var expIcon=isExp?'&#9660;':'&#9654;';
-      var pmid='paWinP-'+pi;
-      body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:center;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;background:#f0fdf4;border-left:3px solid #16a34a;cursor:pointer;" onclick="toggleWinGroup(\''+name+'\')">'
-        +'<span style="font-size:0.73rem;font-weight:700;color:#0176d3;display:flex;align-items:center;gap:0.2rem;"><span style="font-size:0.6rem;color:#0060a3;">'+expIcon+'</span>'+name+'<span style="font-size:0.58rem;font-weight:700;background:#dcfce7;color:#15803d;border-radius:999px;padding:0.05rem 0.28rem;margin-left:0.25rem;">'+grp.length+'</span></span>'
-        +'<span style="font-size:0.7rem;color:#475569;">'+first.r.product+'</span>'
-        +_sevPill(first.r.severity)
+      var chevron='<button onclick="event.stopPropagation();toggleWinGroup(\''+name+'\')" style="background:none;border:none;cursor:pointer;padding:0 0.12rem;font-size:0.9rem;color:#64748b;line-height:1;flex-shrink:0;transition:transform 0.15s;'+(isExp?'transform:rotate(90deg);':'')+'" title="'+(isExp?'Collapse':'Expand')+'">&#x203a;</button>';
+      body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:center;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;background:'+(isExp?'#f0f7ff':'#fafbff')+';border-left:3px solid #16a34a;cursor:pointer;" onclick="toggleWinGroup(\''+name+'\')">'
+        +'<span style="display:flex;align-items:center;gap:0.1rem;font-size:0.73rem;font-weight:700;color:#0176d3;">'+chevron+name+'<span style="font-size:0.58rem;font-weight:700;background:#dcfce7;color:#15803d;border-radius:999px;padding:0.05rem 0.28rem;margin-left:0.2rem;">'+grp.length+'</span></span>'
+        +'<span style="font-size:0.7rem;color:#475569;">'+r0.product+'</span>'
+        +_sevCell(r0,true)
+        +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">'+grp.length+' insights</span>'
+        +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">expand to view</span>'
+        +'<span style="font-size:0.72rem;font-weight:700;color:#15803d;">'+_amtFmt(r0.amount,true)+'</span>'
+        +'<span style="font-size:0.7rem;color:#475569;">'+r0.date+'</span>'
         +'<span></span>'
-        +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">'+grp.length+' insights — expand to view</span>'
-        +'<span style="font-size:0.72rem;font-weight:700;color:#15803d;">'+_amtFmt(first.r.amount,true)+'</span>'
-        +'<span style="font-size:0.7rem;color:#475569;">'+first.r.date+'</span>'
-        +'<span></span>'
-        +'<div onclick="event.stopPropagation();">'+_vipParentMenu(name,pmid)+'</div></div>';
+        +'<div onclick="event.stopPropagation();">'+_vipParentMenu(name,'paWinP-'+name.replace(/\s/g,''))+'</div></div>';
       if(isExp){
         grp.forEach(function(x){
           var r=x.r,idx=x.i;
-          body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:start;padding:0.3rem 0.3rem;border-bottom:1px solid #f1f5f9;background:#f8fffe;border-left:3px solid '+r.borderColor+';">'
-            +'<span style="font-size:0.7rem;color:#94a3b8;padding-left:0.65rem;padding-top:0.06rem;">└</span>'
+          body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:start;padding:0.3rem 0.3rem;border-bottom:1px dashed #e2e8f0;background:#f8fafc;border-left:3px solid '+r.borderColor+';">'
+            +'<span style="font-size:0.68rem;color:#94a3b8;padding-left:0.5rem;padding-top:0.08rem;">&#x21b3;</span>'
             +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.product+'</span>'
-            +_sevPill(r.severity)
-            +'<span style="font-size:0.72rem;color:#334155;padding-top:0.06rem;">'+r.type+'</span>'
+            +_sevCell(r,true)
+            +_typeCell(r,true)
             +'<span style="font-size:0.67rem;color:#475569;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+r.context+'</span>'
             +'<span style="font-size:0.72rem;font-weight:700;color:#15803d;padding-top:0.06rem;">'+_amtFmt(r.amount,true)+'</span>'
             +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.date+'</span>'
-            +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'WIN\','+idx+')" style="font-size:0.62rem;border-radius:999px;padding:0.1rem 0.42rem;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;cursor:pointer;font-weight:700;">New</span></span>'
+            +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'WIN\','+idx+')" style="font-size:0.62rem;border-radius:0.2rem;padding:0.1rem 0.38rem;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;cursor:pointer;font-weight:600;white-space:nowrap;">New &#9662;</span></span>'
             +_insightMenu(r)+'</div>';
         });
       }
@@ -3511,12 +3514,12 @@ function renderWinTable() {
       body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:start;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;border-left:3px solid '+r.borderColor+';'+(r.bg?'background:'+r.bg+';':'')+'\">'
         +'<a class="vip-link" style="font-size:0.73rem;padding-top:0.06rem;">'+r.name+'</a>'
         +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.product+'</span>'
-        +_sevPill(r.severity)
-        +'<span style="font-size:0.72rem;color:#334155;padding-top:0.06rem;">'+r.type+'</span>'
+        +_sevCell(r,true)
+        +_typeCell(r,true)
         +'<span style="font-size:0.67rem;color:#475569;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+r.context+'</span>'
         +'<span style="font-size:0.72rem;font-weight:700;color:#15803d;padding-top:0.06rem;">'+_amtFmt(r.amount,true)+'</span>'
         +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.date+'</span>'
-        +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'WIN\','+idx+')" style="font-size:0.62rem;border-radius:999px;padding:0.1rem 0.42rem;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;cursor:pointer;font-weight:700;">New</span></span>'
+        +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'WIN\','+idx+')" style="font-size:0.62rem;border-radius:0.2rem;padding:0.1rem 0.38rem;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;cursor:pointer;font-weight:600;white-space:nowrap;">New &#9662;</span></span>'
         +_insightMenu(r)+'</div>';
     }
   });
