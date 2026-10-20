@@ -2993,10 +2993,22 @@ function toggleGenMenu(id) {
     if (btn) {
       const r = btn.getBoundingClientRect();
       menu.style.position = 'fixed';
-      menu.style.top = (r.bottom + 2) + 'px';
-      menu.style.right = (window.innerWidth - r.right) + 'px';
       menu.style.left = 'auto';
       menu.style.bottom = 'auto';
+      menu.style.right = (window.innerWidth - r.right) + 'px';
+      // measure height before committing position
+      menu.style.visibility = 'hidden';
+      menu.style.top = '0px';
+      menu.style.display = 'block';
+      const mh = menu.offsetHeight;
+      menu.style.display = 'none';
+      menu.style.visibility = '';
+      // flip upward if not enough room below
+      if (r.bottom + 2 + mh > window.innerHeight - 8) {
+        menu.style.top = (r.top - mh - 2) + 'px';
+      } else {
+        menu.style.top = (r.bottom + 2) + 'px';
+      }
     }
     menu.style.display = 'block';
   }
