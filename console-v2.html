@@ -1132,13 +1132,13 @@
       </div>
       <div class="card-body">
         <div class="tab-bar">
-          <button class="tab-btn active" data-tab="awareness-losses" onclick="switchTab(this,'awareness')">⚠️ Big Losses <span style="font-size:0.55rem;font-weight:700;background:#fee2e2;color:#dc2626;border-radius:0.2rem;padding:0.05rem 0.3rem;vertical-align:middle;margin-left:0.2rem;">5</span></button>
+          <button class="tab-btn active" data-tab="awareness-losses" onclick="switchTab(this,'awareness')">⚠️ Big Losses <span style="font-size:0.55rem;font-weight:700;background:#fee2e2;color:#dc2626;border-radius:0.2rem;padding:0.05rem 0.3rem;vertical-align:middle;margin-left:0.2rem;">11</span></button>
           <button class="tab-btn" data-tab="awareness-wins" onclick="switchTab(this,'awareness')">💰 Big Wins <span style="font-size:0.55rem;font-weight:700;background:#dcfce7;color:#15803d;border-radius:0.2rem;padding:0.05rem 0.3rem;vertical-align:middle;margin-left:0.2rem;">3</span></button>
           <button class="tab-btn" data-tab="awareness-payments" onclick="switchTab(this,'awareness')">💳 Payment Alerts</button>
         </div>
         <!-- Pane: Big Wins -->
         <div id="awareness-wins" data-tab-group="awareness" style="display:none;">
-          <p class="section-title-sm" style="color:#15803d;">Big Wins (48h)</p>
+          <p class="section-title-sm" style="color:#15803d;">Big Wins (72h)</p>
           <div id="winInsightBody" style="overflow-x:auto;"></div>
         </div>
         <!-- Pane: Payment Alerts -->
@@ -1148,7 +1148,7 @@
         </div>
         <!-- Pane: Big Losses -->
         <div id="awareness-losses" data-tab-group="awareness" style="overflow:hidden;">
-          <p class="section-title-sm" style="color:#dc2626;">Big Losses (48h)</p>
+          <p class="section-title-sm" style="color:#dc2626;">Big Losses (72h)</p>
           <div id="lossInsightBody" style="overflow-x:auto;"></div>
         </div>
         </div>
@@ -3217,7 +3217,7 @@ function toggleDynMenu(menuId) {
 }
 document.addEventListener('click', () => document.querySelectorAll('.dyn-menu').forEach(m => m.style.display = 'none'));
 
-// ── Player Awareness: Loss & Win Insight tables (48h window) ─────────────────
+// ── Player Awareness: Loss & Win Insight tables (72h window) ─────────────────
 const LOSS_INSIGHTS = [
   {name:'Marcus Holloway', product:'SBK', severity:'HIGH', sevOrder:0,
    type:'Major Loss', typeOrder:0,
@@ -3242,6 +3242,24 @@ const LOSS_INSIGHTS = [
   {name:'Marcus Holloway', product:'SBK', severity:'MED', sevOrder:1, type:'Outlier Loss', typeOrder:2,
    context:'6 additional NFL bets on Oct 18 — net loss $28,400, 3.2× his 30-day avg daily handle of $8,900.',
    amount:-28400, date:'Oct 18', dateOrder:1, status:'New', menuId:'paLoss-6', borderColor:'#ea580c', bg:''},
+  {name:'Ethan Brooks', product:'SBK', severity:'HIGH', sevOrder:0, type:'Major Loss', typeOrder:0,
+   context:'Lost $98,500 on 3 MLB totals on Oct 20 — 5.7× his 30-day avg daily handle of $17,300.',
+   amount:-98500, date:'Oct 20', dateOrder:0, status:'New', menuId:'paLoss-7', borderColor:'#dc2626', bg:'#fff8f8'},
+  {name:'Zara Chen', product:'CAS', severity:'HIGH', sevOrder:0, type:'Daily P&L ↓', typeOrder:1,
+   context:'Casino handle of $84,200 on Oct 18 across 11 sessions — largest single-day loss of $71,600 in 90-day window.',
+   amount:-71600, date:'Oct 18', dateOrder:1, status:'New', menuId:'paLoss-8', borderColor:'#dc2626', bg:'#fff8f8'},
+  {name:'Diego Reyes', product:'SBK', severity:'MED', sevOrder:1, type:'Outlier Loss', typeOrder:2,
+   context:'Handle of $26,400 is 4.1× his 30-day avg of $6,400 across 9 bets — net loss $22,100 on Oct 19.',
+   amount:-22100, date:'Oct 19', dateOrder:0, status:'New', menuId:'paLoss-9', borderColor:'#ea580c', bg:''},
+  {name:'Priya Sharma', product:'CAS', severity:'MED', sevOrder:1, type:'Outlier Loss', typeOrder:2,
+   context:'Casino session of $19,800 net loss on Oct 20 — 3.8× her 30-day avg of $5,200. Second occurrence this week.',
+   amount:-19800, date:'Oct 20', dateOrder:0, status:'New', menuId:'paLoss-10', borderColor:'#ea580c', bg:''},
+  {name:'Finn Kelley', product:'DFS', severity:'MED', sevOrder:1, type:'Outlier Loss', typeOrder:2,
+   context:'DFS handle of $13,200 is 5.5× his 30-day avg of $2,400 — net loss $11,400 on Oct 19.',
+   amount:-11400, date:'Oct 19', dateOrder:0, status:'New', menuId:'paLoss-11', borderColor:'#ea580c', bg:''},
+  {name:'Amara Osei', product:'SBK', severity:'MED', sevOrder:1, type:'Outlier Loss', typeOrder:2,
+   context:'Net loss of $8,900 on Oct 20 across 6 NBA pre-season bets — 3.6× her 30-day avg of $2,500.',
+   amount:-8900, date:'Oct 20', dateOrder:0, status:'New', menuId:'paLoss-12', borderColor:'#ea580c', bg:''},
 ];
 const WIN_INSIGHTS = [
   {name:'Noah Coleman', product:'SBK', severity:'HIGH', sevOrder:0,
@@ -3415,7 +3433,7 @@ function renderLossTable() {
         +_sevCell(r0,false)
         +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">'+grp.length+' insights</span>'
         +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">expand to view</span>'
-        +'<span style="font-size:0.72rem;font-weight:700;color:#991b1b;">'+_amtFmt(r0.amount,false)+'</span>'
+        +'<span></span>'
         +'<span style="font-size:0.7rem;color:#475569;">'+r0.date+'</span>'
         +'<span></span>'
         +'<div onclick="event.stopPropagation();">'+_vipParentMenu(name,'paLossP-'+name.replace(/\s/g,''))+'</div></div>';
@@ -3456,7 +3474,7 @@ function renderLossTable() {
       +'<button onclick="lossPage(1)"'+(lossPg>=pages-1?' disabled':'')+' style="font-size:0.72rem;padding:0.2rem 0.55rem;border:1px solid #dddbda;border-radius:0.25rem;background:#fff;cursor:pointer;color:#0060a3;font-weight:600;'+(lossPg>=pages-1?'opacity:0.4;cursor:default;':'')+'">Next &#8594;</button>'
       +'</div>';
   }
-  el.innerHTML=hdr+(body||'<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:0.73rem;">No new loss insights in the last 48h</div>')+pgHtml;
+  el.innerHTML=hdr+(body||'<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:0.73rem;">No new loss insights in the last 72h</div>')+pgHtml;
 }
 
 function renderWinTable() {
@@ -3490,7 +3508,7 @@ function renderWinTable() {
         +_sevCell(r0,true)
         +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">'+grp.length+' insights</span>'
         +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">expand to view</span>'
-        +'<span style="font-size:0.72rem;font-weight:700;color:#15803d;">'+_amtFmt(r0.amount,true)+'</span>'
+        +'<span></span>'
         +'<span style="font-size:0.7rem;color:#475569;">'+r0.date+'</span>'
         +'<span></span>'
         +'<div onclick="event.stopPropagation();">'+_vipParentMenu(name,'paWinP-'+name.replace(/\s/g,''))+'</div></div>';
@@ -3531,7 +3549,7 @@ function renderWinTable() {
       +'<button onclick="winPage(1)"'+(winPg>=pages-1?' disabled':'')+' style="font-size:0.72rem;padding:0.2rem 0.55rem;border:1px solid #dddbda;border-radius:0.25rem;background:#fff;cursor:pointer;color:#0060a3;font-weight:600;'+(winPg>=pages-1?'opacity:0.4;cursor:default;':'')+'">Next &#8594;</button>'
       +'</div>';
   }
-  el.innerHTML=hdr+(body||'<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:0.73rem;">No new win insights in the last 48h</div>')+pgHtml;
+  el.innerHTML=hdr+(body||'<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:0.73rem;">No new win insights in the last 72h</div>')+pgHtml;
 }
 
 
