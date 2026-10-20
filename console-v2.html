@@ -3426,10 +3426,11 @@ function renderLossTable() {
     var grp=gm[name],isMulti=grp.length>1,isExp=lossExpanded[name],first=grp[0];
     var r0=first.r;
     if(isMulti){
+      var prods=grp.map(function(x){return x.r.product;}).filter(function(v,i,a){return a.indexOf(v)===i;}).join(', ');
       var chevron='<button onclick="event.stopPropagation();toggleLossGroup(\''+name+'\')" style="background:none;border:none;cursor:pointer;padding:0 0.12rem;font-size:0.9rem;color:#64748b;line-height:1;flex-shrink:0;transition:transform 0.15s;'+(isExp?'transform:rotate(90deg);':'')+'" title="'+(isExp?'Collapse':'Expand')+'">&#x203a;</button>';
       body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:center;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;background:'+(isExp?'#f0f7ff':'#fafbff')+';border-left:3px solid #dc2626;cursor:pointer;" onclick="toggleLossGroup(\''+name+'\')">'
         +'<span style="display:flex;align-items:center;gap:0.1rem;font-size:0.73rem;font-weight:700;color:#0176d3;">'+chevron+name+'<span style="font-size:0.58rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.05rem 0.28rem;margin-left:0.2rem;">'+grp.length+'</span></span>'
-        +'<span style="font-size:0.7rem;color:#475569;">'+r0.product+'</span>'
+        +'<span style="font-size:0.7rem;color:#475569;">'+prods+'</span>'
         +_sevCell(r0,false)
         +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">'+grp.length+' insights</span>'
         +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">expand to view</span>'
@@ -3501,10 +3502,11 @@ function renderWinTable() {
     var grp=gm[name],isMulti=grp.length>1,isExp=winExpanded[name],first=grp[0];
     var r0=first.r;
     if(isMulti){
+      var prods=grp.map(function(x){return x.r.product;}).filter(function(v,i,a){return a.indexOf(v)===i;}).join(', ');
       var chevron='<button onclick="event.stopPropagation();toggleWinGroup(\''+name+'\')" style="background:none;border:none;cursor:pointer;padding:0 0.12rem;font-size:0.9rem;color:#64748b;line-height:1;flex-shrink:0;transition:transform 0.15s;'+(isExp?'transform:rotate(90deg);':'')+'" title="'+(isExp?'Collapse':'Expand')+'">&#x203a;</button>';
       body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:center;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;background:'+(isExp?'#f0f7ff':'#fafbff')+';border-left:3px solid #16a34a;cursor:pointer;" onclick="toggleWinGroup(\''+name+'\')">'
         +'<span style="display:flex;align-items:center;gap:0.1rem;font-size:0.73rem;font-weight:700;color:#0176d3;">'+chevron+name+'<span style="font-size:0.58rem;font-weight:700;background:#dcfce7;color:#15803d;border-radius:999px;padding:0.05rem 0.28rem;margin-left:0.2rem;">'+grp.length+'</span></span>'
-        +'<span style="font-size:0.7rem;color:#475569;">'+r0.product+'</span>'
+        +'<span style="font-size:0.7rem;color:#475569;">'+prods+'</span>'
         +_sevCell(r0,true)
         +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">'+grp.length+' insights</span>'
         +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">expand to view</span>'
