@@ -3230,7 +3230,7 @@ const LOSS_INSIGHTS = [
   {name:'Isla Hayes', product:'CAS', severity:'MED', sevOrder:1,
    type:'Outlier Loss', typeOrder:2,
    context:'Handle of $22,400 is 5.3× her 30-day avg of $4,200 across 8 bets — net loss $18,600 on Oct 19. No prior pattern at this volume.',
-   amount:-18600, date:'Oct 19', dateOrder:0, status:'Reviewed', menuId:'paLoss-3', borderColor:'#ea580c', bg:''},
+   amount:-18600, date:'Oct 19', dateOrder:0, status:'New', menuId:'paLoss-3', borderColor:'#ea580c', bg:''},
   {name:'Sophia Novak', product:'SBK', severity:'MED', sevOrder:1,
    type:'Outlier Loss', typeOrder:2,
    context:'Handle of $18,900 is 5.25× her 30-day avg of $3,600 across 12 bets — net loss $14,400 on Oct 19. Second occurrence this month.',
@@ -3248,11 +3248,14 @@ const WIN_INSIGHTS = [
   {name:'Luca Romano', product:'CAS', severity:'MED', sevOrder:1,
    type:'Daily P&amp;L &#8593;', typeOrder:1,
    context:'Daily P&L rose $28,750 on Oct 19 across 6 casino sessions — above his 30-day avg of $12,400.',
-   amount:28750, date:'Oct 19', dateOrder:0, status:'Reviewed', menuId:'paSw-2', borderColor:'#0891b2', bg:''},
+   amount:28750, date:'Oct 19', dateOrder:0, status:'New', menuId:'paSw-2', borderColor:'#0891b2', bg:''},
   {name:'Farah Siddiqui', product:'DFS', severity:'MED', sevOrder:1,
    type:'Outlier Win', typeOrder:2,
    context:'Outlier DFS contest win of $17,400 on Oct 18 — 3.1× her 30-day avg payout of $5,600. Strongest single-day result in 60 days.',
    amount:17400, date:'Oct 18', dateOrder:1, status:'New', menuId:'paSw-3', borderColor:'#0891b2', bg:''},
+  {name:'Noah Coleman', product:'CAS', severity:'MED', sevOrder:1, type:'Outlier Win', typeOrder:2,
+   context:'Casino session on Oct 19 — net win $18,900 across 4 table game sessions, 2.4× his 30-day avg of $7,900.',
+   amount:18900, date:'Oct 19', dateOrder:0, status:'New', menuId:'paSw-4', borderColor:'#0891b2', bg:''},
 ];
 
 const PAYMENT_ALERTS = [
@@ -3273,6 +3276,8 @@ const PAYMENT_ALERTS = [
 
 let lossSortKey = null, lossSortDir = 1;
 let winSortKey  = null, winSortDir  = 1;
+var lossExpanded={}, winExpanded={}, lossPg=0, winPg=0;
+const INSIGHT_PAGE_SIZE=10;
 const _IG = '1.1fr 0.42fr 0.48fr 0.82fr 1.8fr 0.72fr 0.46fr 0.58fr 2rem';
 
 function _sIcon(col, key, dir) {
@@ -3304,7 +3309,7 @@ function _statusCell(status) {
   return '<span style="font-size:0.62rem;font-weight:700;'+s+'border-radius:0.25rem;padding:0.1rem 0.28rem;white-space:nowrap;display:inline-block;">'+status+'</span>';
 }
 function _insightMenu(r) {
-  var m=r.menuId, n=r.name;
+  var m=r.menuId,n=r.name;
   return '<div style="position:relative;justify-self:end;">'
     +'<button onclick="event.stopPropagation();toggleGenMenu(\''+m+'\')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">&#8942;</button>'
     +'<div id="'+m+'" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">'
@@ -3316,65 +3321,216 @@ function _insightMenu(r) {
     +'<div onclick="event.stopPropagation();viewWagerInAgent(\''+n+'\',\''+m+'\')" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;border-top:1px solid #f1f5f9;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Wager</div>'
     +'</div></div>';
 }
-function _lossMenu(r) { return _insightMenu(r); }
-function _winMenu(r)  { return _insightMenu(r); }
+function _lossMenu(r){return _insightMenu(r);}
+function _winMenu(r) {return _insightMenu(r);}
+
+function _vipParentMenu(n,mid) {
+  return '<div style="position:relative;justify-self:end;">'
+    +'<button onclick="event.stopPropagation();toggleGenMenu(\''+mid+'\')" style="font-size:0.78rem;font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">&#8942;</button>'
+    +'<div id="'+mid+'" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">'
+    +'<div onclick="event.stopPropagation();openLogContactModal(\''+n+'\');document.getElementById(\''+mid+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Contact</div>'
+    +'<div onclick="event.stopPropagation();showToast(\'Opening email for '+n+'…\');document.getElementById(\''+mid+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Send Email</div>'
+    +'<div onclick="event.stopPropagation();openBonusModal(\''+n+'\');document.getElementById(\''+mid+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Bonus</div>'
+    +'<div onclick="event.stopPropagation();openLogFeedback(\''+n+'\');document.getElementById(\''+mid+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Feedback</div>'
+    +'<div onclick="event.stopPropagation();openVipModal(\''+n+'\');document.getElementById(\''+mid+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:0.78rem;color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Contact</div>'
+    +'</div></div>';
+}
+
+function _showStatusPicker(event,el,arrName,idx) {
+  event.stopPropagation();
+  var old=document.getElementById('_statusPicker');
+  if(old){old.remove();return;}
+  var rect=el.getBoundingClientRect();
+  var menu=document.createElement('div');
+  menu.id='_statusPicker';
+  menu.style.cssText='position:fixed;z-index:9999;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 6px 20px rgba(0,0,0,0.18);min-width:148px;overflow:hidden;';
+  menu.style.top=(rect.bottom+4)+'px';
+  menu.style.left=rect.left+'px';
+  [{label:'✓ Followed-up',color:'#2e844a',val:'Followed-up'},
+   {label:'— Ignored',color:'#94a3b8',val:'Ignored'}].forEach(function(it){
+    var d=document.createElement('div');
+    d.style.cssText='padding:0.48rem 0.85rem 0.48rem 0.7rem;cursor:pointer;font-size:0.78rem;color:'+it.color+';border-left:3px solid '+it.color+';margin:3px 0;';
+    d.textContent=it.label;
+    d.onmouseover=function(){this.style.background='#f8fafc';};
+    d.onmouseout=function(){this.style.background='';};
+    d.onclick=function(ev){ev.stopPropagation();_setInsightStatus(arrName,idx,it.val);};
+    menu.appendChild(d);
+  });
+  document.body.appendChild(menu);
+}
+function _setInsightStatus(arrName,idx,status) {
+  var arr=arrName==='LOSS'?LOSS_INSIGHTS:WIN_INSIGHTS;
+  if(arr[idx]) arr[idx].status=status;
+  var old=document.getElementById('_statusPicker');
+  if(old) old.remove();
+  if(arrName==='LOSS') renderLossTable(); else renderWinTable();
+}
+document.addEventListener('click',function(e){
+  var p=document.getElementById('_statusPicker');
+  if(p&&!p.contains(e.target)) p.remove();
+},true);
+
+function toggleLossGroup(name){lossExpanded[name]=!lossExpanded[name];renderLossTable();}
+function toggleWinGroup(name){winExpanded[name]=!winExpanded[name];renderWinTable();}
+function lossPage(dir){lossPg=Math.max(0,lossPg+dir);renderLossTable();}
+function winPage(dir){winPg=Math.max(0,winPg+dir);renderWinTable();}
+
+function _sevPill(sev){
+  var c=sev==='HIGH'?'#dc2626':sev==='MED'?'#ea580c':'#2563eb';
+  var bg=sev==='HIGH'?'#fef2f2':sev==='MED'?'#fff7ed':'#eff6ff';
+  return '<span style="font-size:0.62rem;font-weight:700;border-radius:0.2rem;padding:0.06rem 0.28rem;background:'+bg+';color:'+c+';">'+sev+'</span>';
+}
 
 function renderLossTable() {
-  var el = document.getElementById('lossInsightBody'); if (!el) return;
-  var k = lossSortKey, d = lossSortDir;
-  var rows = LOSS_INSIGHTS.slice();
-  if (k) rows.sort(function(a,b){ var av=a[k],bv=b[k]; return typeof av==='string'?d*av.localeCompare(bv):d*(av-bv); });
-  var hdr = '<div style="display:grid;grid-template-columns:'+_IG+';gap:0.3rem;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;font-weight:700;padding:0.25rem 0.3rem;border-bottom:1px solid #e5e5e5;background:#fef2f2;border-left:3px solid transparent;">'
-    +'<span>VIP Name</span><span>Product</span>'
-    +'<span onclick="sortLossBy(\'sevOrder\')" style="cursor:pointer;user-select:none;">Severity '+_sIcon('sevOrder',k,d)+'</span>'
-    +'<span onclick="sortLossBy(\'typeOrder\')" style="cursor:pointer;user-select:none;">Insight Type '+_sIcon('typeOrder',k,d)+'</span>'
-    +'<span>Insight Context</span>'
-    +'<span onclick="sortLossBy(\'amount\')" style="cursor:pointer;user-select:none;">Total Loss '+_sIcon('amount',k,d)+'</span>'
-    +'<span onclick="sortLossBy(\'dateOrder\')" style="cursor:pointer;user-select:none;">Date '+_sIcon('dateOrder',k,d)+'</span>'
-    +'<span onclick="sortLossBy(\'status\')" style="cursor:pointer;user-select:none;">Status '+_sIcon('status',k,d)+'</span>'
-    +'<span></span></div>';
-  var body = rows.map(function(r,i){
-    var isLast=i===rows.length-1;
-    var amtColor=r.amount<-20000?'#991b1b':'#b45309';
-    return '<div style="display:grid;grid-template-columns:'+_IG+';gap:0.3rem;align-items:start;padding:0.38rem 0.3rem;'+(isLast?'':'border-bottom:1px solid #f1f5f9;')+'border-left:3px solid '+r.borderColor+';'+(r.bg?'background:'+r.bg+';':'')+'\">'
-      +'<a class="vip-link" style="font-size:0.73rem;padding-top:0.06rem;">'+r.name+'</a>'
-      +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.product+'</span>'
-      +_sevCell(r,false)+_typeCell(r,false)
-      +'<span style="font-size:0.67rem;color:#475569;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+r.context+'</span>'
-      +'<span style="font-size:0.72rem;font-weight:700;color:'+amtColor+';padding-top:0.06rem;">'+_amtFmt(r.amount,false)+'</span>'
-      +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.date+'</span>'
-      +_statusCell(r.status)+_lossMenu(r)+'</div>';
-  }).join('');
-  el.innerHTML = hdr + body;
+  var el=document.getElementById('lossInsightBody'); if(!el) return;
+  var items=LOSS_INSIGHTS.map(function(r,i){return{r:r,i:i};}).filter(function(x){return x.r.status==='New';});
+  var gm={},gn=[];
+  items.forEach(function(x){if(!gm[x.r.name]){gm[x.r.name]=[];gn.push(x.r.name);}gm[x.r.name].push(x);});
+  gn.sort(function(a,b){
+    var ga=gm[a],gb=gm[b];
+    var sa=Math.min.apply(null,ga.map(function(x){return x.r.sevOrder;}));
+    var sb=Math.min.apply(null,gb.map(function(x){return x.r.sevOrder;}));
+    if(sa!==sb) return sa-sb;
+    return Math.max.apply(null,gb.map(function(x){return Math.abs(x.r.amount);}))-Math.max.apply(null,ga.map(function(x){return Math.abs(x.r.amount);}));
+  });
+  gn.forEach(function(n){gm[n].sort(function(a,b){if(a.r.sevOrder!==b.r.sevOrder)return a.r.sevOrder-b.r.sevOrder;return Math.abs(b.r.amount)-Math.abs(a.r.amount);});});
+  var total=gn.length,pages=Math.max(1,Math.ceil(total/INSIGHT_PAGE_SIZE));
+  if(lossPg>=pages)lossPg=pages-1;
+  var pn=gn.slice(lossPg*INSIGHT_PAGE_SIZE,(lossPg+1)*INSIGHT_PAGE_SIZE);
+  var g=_IG;
+  var hdr='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;font-weight:700;padding:0.25rem 0.3rem;border-bottom:1px solid #e5e5e5;background:#fef2f2;border-left:3px solid transparent;">'
+    +'<span>VIP Name</span><span>Product</span><span>Severity</span><span>Type</span><span>Insight Context</span><span>Amount</span><span>Date</span><span>Status</span><span></span></div>';
+  var body='';
+  pn.forEach(function(name,pi){
+    var grp=gm[name],isMulti=grp.length>1,isExp=lossExpanded[name],first=grp[0];
+    if(isMulti){
+      var expIcon=isExp?'&#9660;':'&#9654;';
+      var pmid='paLossP-'+pi;
+      body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:center;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;background:#fff8f8;border-left:3px solid #dc2626;cursor:pointer;" onclick="toggleLossGroup(\''+name+'\')">'
+        +'<span style="font-size:0.73rem;font-weight:700;color:#0176d3;display:flex;align-items:center;gap:0.2rem;"><span style="font-size:0.6rem;color:#0060a3;">'+expIcon+'</span>'+name+'<span style="font-size:0.58rem;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:999px;padding:0.05rem 0.28rem;margin-left:0.25rem;">'+grp.length+'</span></span>'
+        +'<span style="font-size:0.7rem;color:#475569;">'+first.r.product+'</span>'
+        +_sevPill(first.r.severity)
+        +'<span></span>'
+        +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">'+grp.length+' insights — expand to view</span>'
+        +'<span style="font-size:0.72rem;font-weight:700;color:#991b1b;">'+_amtFmt(first.r.amount,false)+'</span>'
+        +'<span style="font-size:0.7rem;color:#475569;">'+first.r.date+'</span>'
+        +'<span></span>'
+        +'<div onclick="event.stopPropagation();">'+_vipParentMenu(name,pmid)+'</div></div>';
+      if(isExp){
+        grp.forEach(function(x){
+          var r=x.r,idx=x.i,ac=Math.abs(r.amount)>20000?'#991b1b':'#b45309';
+          body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:start;padding:0.3rem 0.3rem;border-bottom:1px solid #f1f5f9;background:#fffbfb;border-left:3px solid '+r.borderColor+';">'
+            +'<span style="font-size:0.7rem;color:#94a3b8;padding-left:0.65rem;padding-top:0.06rem;">└</span>'
+            +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.product+'</span>'
+            +_sevPill(r.severity)
+            +'<span style="font-size:0.72rem;color:#334155;padding-top:0.06rem;">'+r.type+'</span>'
+            +'<span style="font-size:0.67rem;color:#475569;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+r.context+'</span>'
+            +'<span style="font-size:0.72rem;font-weight:700;color:'+ac+';padding-top:0.06rem;">'+_amtFmt(r.amount,false)+'</span>'
+            +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.date+'</span>'
+            +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'LOSS\','+idx+')" style="font-size:0.62rem;border-radius:999px;padding:0.1rem 0.42rem;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;cursor:pointer;font-weight:700;">New</span></span>'
+            +_insightMenu(r)+'</div>';
+        });
+      }
+    } else {
+      var r=grp[0].r,idx=grp[0].i,ac=Math.abs(r.amount)>20000?'#991b1b':'#b45309';
+      body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:start;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;border-left:3px solid '+r.borderColor+';'+(r.bg?'background:'+r.bg+';':'')+'\">'
+        +'<a class="vip-link" style="font-size:0.73rem;padding-top:0.06rem;">'+r.name+'</a>'
+        +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.product+'</span>'
+        +_sevPill(r.severity)
+        +'<span style="font-size:0.72rem;color:#334155;padding-top:0.06rem;">'+r.type+'</span>'
+        +'<span style="font-size:0.67rem;color:#475569;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+r.context+'</span>'
+        +'<span style="font-size:0.72rem;font-weight:700;color:'+ac+';padding-top:0.06rem;">'+_amtFmt(r.amount,false)+'</span>'
+        +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.date+'</span>'
+        +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'LOSS\','+idx+')" style="font-size:0.62rem;border-radius:999px;padding:0.1rem 0.42rem;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;cursor:pointer;font-weight:700;">New</span></span>'
+        +_insightMenu(r)+'</div>';
+    }
+  });
+  var pgHtml='';
+  if(pages>1){
+    pgHtml='<div style="display:flex;align-items:center;justify-content:space-between;padding:0.45rem 0.75rem;border-top:1px solid #e2e8f0;background:#fafafa;font-size:0.72rem;color:#475569;">'
+      +'<button onclick="lossPage(-1)"'+(lossPg===0?' disabled':'')+' style="font-size:0.72rem;padding:0.2rem 0.55rem;border:1px solid #dddbda;border-radius:0.25rem;background:#fff;cursor:pointer;color:#0060a3;font-weight:600;'+(lossPg===0?'opacity:0.4;cursor:default;':'')+'">&#8592; Prev</button>'
+      +'<span>Page '+(lossPg+1)+' of '+pages+' · '+total+' VIPs</span>'
+      +'<button onclick="lossPage(1)"'+(lossPg>=pages-1?' disabled':'')+' style="font-size:0.72rem;padding:0.2rem 0.55rem;border:1px solid #dddbda;border-radius:0.25rem;background:#fff;cursor:pointer;color:#0060a3;font-weight:600;'+(lossPg>=pages-1?'opacity:0.4;cursor:default;':'')+'">Next &#8594;</button>'
+      +'</div>';
+  }
+  el.innerHTML=hdr+(body||'<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:0.73rem;">No new loss insights in the last 48h</div>')+pgHtml;
 }
 
 function renderWinTable() {
-  var el = document.getElementById('winInsightBody'); if (!el) return;
-  var k = winSortKey, d = winSortDir;
-  var rows = WIN_INSIGHTS.slice();
-  if (k) rows.sort(function(a,b){ var av=a[k],bv=b[k]; return typeof av==='string'?d*av.localeCompare(bv):d*(av-bv); });
-  var hdr = '<div style="display:grid;grid-template-columns:'+_IG+';gap:0.3rem;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;font-weight:700;padding:0.25rem 0.3rem;border-bottom:1px solid #e5e5e5;background:#f0fdf4;border-left:3px solid transparent;">'
-    +'<span>VIP Name</span><span>Product</span>'
-    +'<span onclick="sortWinBy(\'sevOrder\')" style="cursor:pointer;user-select:none;">Severity '+_sIcon('sevOrder',k,d)+'</span>'
-    +'<span onclick="sortWinBy(\'typeOrder\')" style="cursor:pointer;user-select:none;">Insight Type '+_sIcon('typeOrder',k,d)+'</span>'
-    +'<span>Insight Context</span>'
-    +'<span onclick="sortWinBy(\'amount\')" style="cursor:pointer;user-select:none;">Total Win '+_sIcon('amount',k,d)+'</span>'
-    +'<span onclick="sortWinBy(\'dateOrder\')" style="cursor:pointer;user-select:none;">Date '+_sIcon('dateOrder',k,d)+'</span>'
-    +'<span onclick="sortWinBy(\'status\')" style="cursor:pointer;user-select:none;">Status '+_sIcon('status',k,d)+'</span>'
-    +'<span></span></div>';
-  var body = rows.map(function(r,i){
-    var isLast=i===rows.length-1;
-    return '<div style="display:grid;grid-template-columns:'+_IG+';gap:0.3rem;align-items:start;padding:0.38rem 0.3rem;'+(isLast?'':'border-bottom:1px solid #f1f5f9;')+'border-left:3px solid '+r.borderColor+';'+(r.bg?'background:'+r.bg+';':'')+'\">'
-      +'<a class="vip-link" style="font-size:0.73rem;padding-top:0.06rem;">'+r.name+'</a>'
-      +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.product+'</span>'
-      +_sevCell(r,true)+_typeCell(r,true)
-      +'<span style="font-size:0.67rem;color:#475569;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+r.context+'</span>'
-      +'<span style="font-size:0.72rem;font-weight:700;color:#15803d;padding-top:0.06rem;">'+_amtFmt(r.amount,true)+'</span>'
-      +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.date+'</span>'
-      +_statusCell(r.status)+_winMenu(r)+'</div>';
-  }).join('');
-  el.innerHTML = hdr + body;
+  var el=document.getElementById('winInsightBody'); if(!el) return;
+  var items=WIN_INSIGHTS.map(function(r,i){return{r:r,i:i};}).filter(function(x){return x.r.status==='New';});
+  var gm={},gn=[];
+  items.forEach(function(x){if(!gm[x.r.name]){gm[x.r.name]=[];gn.push(x.r.name);}gm[x.r.name].push(x);});
+  gn.sort(function(a,b){
+    var ga=gm[a],gb=gm[b];
+    var sa=Math.min.apply(null,ga.map(function(x){return x.r.sevOrder;}));
+    var sb=Math.min.apply(null,gb.map(function(x){return x.r.sevOrder;}));
+    if(sa!==sb) return sa-sb;
+    return Math.max.apply(null,gb.map(function(x){return x.r.amount;}))-Math.max.apply(null,ga.map(function(x){return x.r.amount;}));
+  });
+  gn.forEach(function(n){gm[n].sort(function(a,b){if(a.r.sevOrder!==b.r.sevOrder)return a.r.sevOrder-b.r.sevOrder;return b.r.amount-a.r.amount;});});
+  var total=gn.length,pages=Math.max(1,Math.ceil(total/INSIGHT_PAGE_SIZE));
+  if(winPg>=pages)winPg=pages-1;
+  var pn=gn.slice(winPg*INSIGHT_PAGE_SIZE,(winPg+1)*INSIGHT_PAGE_SIZE);
+  var g=_IG;
+  var hdr='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;font-weight:700;padding:0.25rem 0.3rem;border-bottom:1px solid #e5e5e5;background:#f0fdf4;border-left:3px solid transparent;">'
+    +'<span>VIP Name</span><span>Product</span><span>Severity</span><span>Type</span><span>Insight Context</span><span>Amount</span><span>Date</span><span>Status</span><span></span></div>';
+  var body='';
+  pn.forEach(function(name,pi){
+    var grp=gm[name],isMulti=grp.length>1,isExp=winExpanded[name],first=grp[0];
+    if(isMulti){
+      var expIcon=isExp?'&#9660;':'&#9654;';
+      var pmid='paWinP-'+pi;
+      body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:center;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;background:#f0fdf4;border-left:3px solid #16a34a;cursor:pointer;" onclick="toggleWinGroup(\''+name+'\')">'
+        +'<span style="font-size:0.73rem;font-weight:700;color:#0176d3;display:flex;align-items:center;gap:0.2rem;"><span style="font-size:0.6rem;color:#0060a3;">'+expIcon+'</span>'+name+'<span style="font-size:0.58rem;font-weight:700;background:#dcfce7;color:#15803d;border-radius:999px;padding:0.05rem 0.28rem;margin-left:0.25rem;">'+grp.length+'</span></span>'
+        +'<span style="font-size:0.7rem;color:#475569;">'+first.r.product+'</span>'
+        +_sevPill(first.r.severity)
+        +'<span></span>'
+        +'<span style="font-size:0.66rem;color:#94a3b8;font-style:italic;">'+grp.length+' insights — expand to view</span>'
+        +'<span style="font-size:0.72rem;font-weight:700;color:#15803d;">'+_amtFmt(first.r.amount,true)+'</span>'
+        +'<span style="font-size:0.7rem;color:#475569;">'+first.r.date+'</span>'
+        +'<span></span>'
+        +'<div onclick="event.stopPropagation();">'+_vipParentMenu(name,pmid)+'</div></div>';
+      if(isExp){
+        grp.forEach(function(x){
+          var r=x.r,idx=x.i;
+          body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:start;padding:0.3rem 0.3rem;border-bottom:1px solid #f1f5f9;background:#f8fffe;border-left:3px solid '+r.borderColor+';">'
+            +'<span style="font-size:0.7rem;color:#94a3b8;padding-left:0.65rem;padding-top:0.06rem;">└</span>'
+            +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.product+'</span>'
+            +_sevPill(r.severity)
+            +'<span style="font-size:0.72rem;color:#334155;padding-top:0.06rem;">'+r.type+'</span>'
+            +'<span style="font-size:0.67rem;color:#475569;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+r.context+'</span>'
+            +'<span style="font-size:0.72rem;font-weight:700;color:#15803d;padding-top:0.06rem;">'+_amtFmt(r.amount,true)+'</span>'
+            +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.date+'</span>'
+            +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'WIN\','+idx+')" style="font-size:0.62rem;border-radius:999px;padding:0.1rem 0.42rem;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;cursor:pointer;font-weight:700;">New</span></span>'
+            +_insightMenu(r)+'</div>';
+        });
+      }
+    } else {
+      var r=grp[0].r,idx=grp[0].i;
+      body+='<div style="display:grid;grid-template-columns:'+g+';gap:0.3rem;align-items:start;padding:0.38rem 0.3rem;border-bottom:1px solid #f1f5f9;border-left:3px solid '+r.borderColor+';'+(r.bg?'background:'+r.bg+';':'')+'\">'
+        +'<a class="vip-link" style="font-size:0.73rem;padding-top:0.06rem;">'+r.name+'</a>'
+        +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.product+'</span>'
+        +_sevPill(r.severity)
+        +'<span style="font-size:0.72rem;color:#334155;padding-top:0.06rem;">'+r.type+'</span>'
+        +'<span style="font-size:0.67rem;color:#475569;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+r.context+'</span>'
+        +'<span style="font-size:0.72rem;font-weight:700;color:#15803d;padding-top:0.06rem;">'+_amtFmt(r.amount,true)+'</span>'
+        +'<span style="font-size:0.7rem;color:#475569;padding-top:0.06rem;">'+r.date+'</span>'
+        +'<span style="padding-top:0.04rem;"><span onclick="_showStatusPicker(event,this,\'WIN\','+idx+')" style="font-size:0.62rem;border-radius:999px;padding:0.1rem 0.42rem;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;cursor:pointer;font-weight:700;">New</span></span>'
+        +_insightMenu(r)+'</div>';
+    }
+  });
+  var pgHtml='';
+  if(pages>1){
+    pgHtml='<div style="display:flex;align-items:center;justify-content:space-between;padding:0.45rem 0.75rem;border-top:1px solid #e2e8f0;background:#fafafa;font-size:0.72rem;color:#475569;">'
+      +'<button onclick="winPage(-1)"'+(winPg===0?' disabled':'')+' style="font-size:0.72rem;padding:0.2rem 0.55rem;border:1px solid #dddbda;border-radius:0.25rem;background:#fff;cursor:pointer;color:#0060a3;font-weight:600;'+(winPg===0?'opacity:0.4;cursor:default;':'')+'">&#8592; Prev</button>'
+      +'<span>Page '+(winPg+1)+' of '+pages+' · '+total+' VIPs</span>'
+      +'<button onclick="winPage(1)"'+(winPg>=pages-1?' disabled':'')+' style="font-size:0.72rem;padding:0.2rem 0.55rem;border:1px solid #dddbda;border-radius:0.25rem;background:#fff;cursor:pointer;color:#0060a3;font-weight:600;'+(winPg>=pages-1?'opacity:0.4;cursor:default;':'')+'">Next &#8594;</button>'
+      +'</div>';
+  }
+  el.innerHTML=hdr+(body||'<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:0.73rem;">No new win insights in the last 48h</div>')+pgHtml;
 }
+
 
 function sortLossBy(key) {
   if (lossSortKey===key){lossSortDir*=-1;}else{lossSortKey=key;lossSortDir=1;}
