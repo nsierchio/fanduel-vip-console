@@ -1721,8 +1721,7 @@
             <p style="font-size:0.7rem;color:#706e6b;margin:0;line-height:1.4;">&#8722;$142,800 single-day loss &middot; SBK &middot; Oct 12. Empathy outreach recommended &#8212; no promotional messaging, no bonus offers at this time.</p>
             <p style="font-size:0.67rem;color:#706e6b;margin:0;">Marcus Holloway &middot; Tier 1 &middot; SBK &middot; <span style="color:#ba0517;font-weight:600;">&#8722;$142,800 today</span> &middot; <span style="color:#ba0517;font-weight:600;">Severity: HIGH</span></p>
             <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.4rem;">
-              <button class="btn btn-brand btn-sm" onclick="showToast('Opening outreach for Marcus Holloway&hellip;')">Reach Out</button>
-              <button class="btn btn-neutral btn-sm" onclick="openWagerModal('Marcus Holloway')">View Wagers</button>
+              <button class="btn btn-neutral btn-sm" onclick="viewWagerInAgent('Marcus Holloway', null, 0)">View Wagers</button>
               <button class="btn btn-neutral btn-sm" onclick="showToast('Marcus Holloway deferred &#8212; returning to queue in 24h')">Defer</button>
               <button class="btn btn-neutral btn-sm" onclick="showToast('Dismissed &#8212; removed from queue')">Dismiss</button>
             </div>
@@ -2284,13 +2283,13 @@ function _openAgentPanel() {
   document.querySelectorAll('.companion').forEach(c => c.classList.remove('companion-minimized'));
 }
 
-function viewWagerInAgent(name, menuId) {
-  document.getElementById(menuId).style.display = 'none';
+function viewWagerInAgent(name, menuId, lossIdx) {
+  if (menuId) { const el = document.getElementById(menuId); if (el) el.style.display = 'none'; }
   _openAgentPanel();
   _showChatThread();
   document.getElementById('suggestedWrap').style.display = 'none';
 
-  const isLossInsight = menuId && menuId.startsWith('paLoss');
+  const isLossInsight = (typeof lossIdx === 'number') || (menuId && menuId.startsWith('paLoss'));
   const isWinInsight  = menuId && menuId.startsWith('paSw');
   const isInsight = isLossInsight || isWinInsight;
 
@@ -2310,7 +2309,7 @@ function viewWagerInAgent(name, menuId) {
     // Resolve the Asset Insight record
     let insight = null;
     if (isLossInsight && typeof LOSS_INSIGHTS !== 'undefined') {
-      const idx = parseInt(menuId.replace('paLoss-', '')) - 1;
+      const idx = typeof lossIdx === 'number' ? lossIdx : parseInt(menuId.replace('paLoss-', '')) - 1;
       insight = LOSS_INSIGHTS[idx] || null;
     } else if (isWinInsight && typeof WIN_INSIGHTS !== 'undefined') {
       const idx = parseInt(menuId.replace('paSw-', '')) - 1;
