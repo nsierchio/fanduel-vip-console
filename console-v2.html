@@ -263,6 +263,15 @@
   .tab-btn { background: none; border: none; padding: 0.4rem 0.75rem; font-size: var(--text-sm); font-weight: 600; color: #64748b; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
   .tab-btn.active { color: #0060a3; border-bottom-color: #0060a3; }
 
+  /* ── Payment Alerts table ── */
+  .pay-row-new { display:grid; align-items:center; border-bottom:1px solid #f1f5f9; transition:background 0.1s; }
+  .pay-row-new:hover { background:#f9fbff !important; }
+  .pay-exp-row { display:none; border-bottom:1px dashed #e2e8f0; background:#f8fafc; }
+  .pay-exp-row.open { display:block; }
+  .pay-chevron { background:none; border:none; cursor:pointer; padding:0 0.1rem; font-size:var(--text-body); color:#94a3b8; line-height:1; flex-shrink:0; transition:transform 0.15s, color 0.1s; display:block; width:1.3rem; text-align:center; }
+  .pay-chevron:hover { color:#0060a3; }
+  .pay-chevron.open { transform:rotate(90deg); color:#0060a3; }
+
   .swing-grid { display: grid; grid-template-columns: 1.4fr 1fr 0.7fr 0.9fr; gap: 0.5rem; }
   .swing-head { font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.04em; color: #3e3e3c; font-weight: 700; padding: 0.25rem 0.3rem; border-bottom: 1px solid #e5e5e5; background: #f3f3f3; }
   .swing-row { display: grid; grid-template-columns: 1.4fr 1fr 0.7fr 0.9fr; gap: 0.5rem; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid #f1f5f9; font-size: var(--text-body); }
@@ -1174,7 +1183,7 @@
         <div class="tab-bar">
           <button class="tab-btn active" data-tab="awareness-losses" onclick="switchTab(this,'awareness')">⚠️ Big Losses <span style="font-size:var(--text-xs);font-weight:700;background:#fee2e2;color:#dc2626;border-radius:0.2rem;padding:0.05rem 0.3rem;vertical-align:middle;margin-left:0.2rem;">11</span></button>
           <button class="tab-btn" data-tab="awareness-wins" onclick="switchTab(this,'awareness')">💰 Big Wins <span style="font-size:var(--text-xs);font-weight:700;background:#dcfce7;color:#15803d;border-radius:0.2rem;padding:0.05rem 0.3rem;vertical-align:middle;margin-left:0.2rem;">3</span></button>
-          <button class="tab-btn" data-tab="awareness-payments" onclick="switchTab(this,'awareness')">💳 Payment Alerts</button>
+          <button class="tab-btn" data-tab="awareness-payments" onclick="switchTab(this,'awareness')">💳 Payment Alerts <span style="font-size:var(--text-xs);font-weight:700;background:#fef2f2;color:#dc2626;border-radius:0.2rem;padding:0.05rem 0.3rem;vertical-align:middle;margin-left:0.2rem;">5</span></button>
         </div>
         <!-- Pane: Big Wins -->
         <div id="awareness-wins" data-tab-group="awareness" style="display:none;">
@@ -1183,7 +1192,8 @@
         </div>
         <!-- Pane: Payment Alerts -->
         <div id="awareness-payments" data-tab-group="awareness" style="display:none;">
-          <p class="section-title-sm" style="color:#0060a3;">Payment Alerts (48h)</p>
+          <p class="section-title-sm" style="color:#0060a3;">Payment Alerts <span style="font-weight:400;color:#706e6b;font-size:var(--text-xs);">72h window</span></p>
+          <p style="font-size:var(--text-xs);color:#64748b;padding:0 0 0.4rem;">Failed, declined, or refunded payments where you are Asset Owner. Click a row to expand details.</p>
           <div id="payAlertBody" style="overflow-x:auto;"></div>
         </div>
         <!-- Pane: Big Losses -->
@@ -3484,20 +3494,81 @@ const WIN_INSIGHTS = [
 ];
 
 const PAYMENT_ALERTS = [
-  {name:'Marcus Thompson', product:'SBK', issueType:'Withdrawal Declined',
-   detail:'$4,200 · Verification hold', date:'10.19.2026', dateOrder:0, status:'New', menuId:'paPay-1',
-   caseLabel:'Review Case', caseToast:'Opening payment case for Marcus Thompson…'},
-  {name:'Isla Hayes', product:'CAS', issueType:'Withdrawal Declined',
-   detail:'$9,800 · KYC review · x2', date:'10.18.2026', dateOrder:1, status:'New', menuId:'paPay-2',
-   caseLabel:'Review Case', caseToast:'Opening payment case for Isla Hayes…'},
-  {name:'Jordan Miles', product:'SBK', issueType:'Deposit Threshold',
-   detail:'$18,000 deposit exceeds 7-day threshold', date:'10.19.2026', dateOrder:0, status:'New', menuId:'paPay-3',
-   caseLabel:'Flag Transaction', caseToast:'Flagging deposit for Jordan Miles…'},
-  {name:'Carter Ellis', product:'SBK', issueType:'Unusual Pattern',
-   detail:'3rd payment method added in 48h', date:'10.18.2026', dateOrder:1, status:'Viewed', menuId:'paPay-4',
-   caseLabel:'Review Account', caseToast:'Opening account review for Carter Ellis…'},
+  {
+    name:'Marcus Thompson', product:'SBK', amount:'$4,200',
+    type:'Withdrawal', typeStatus:'Failed', typePill:'failed',
+    failureReason:'KYC Hold',
+    recommendation:'Prompt VIP to complete ID verification', recColor:'#0060a3',
+    method:'Visa ···4821', processor:'PaySafe', fails:2, failsLevel:2,
+    date:'11.16.2026', viewed:false, menuId:'paPay-1',
+    expand:[
+      {label:'Account Status', val:'Flagged — KYC Pending', warn:true},
+      {label:'Queue Reason', val:'FTD velocity limit'},
+      {label:'Approval Method', val:'Manual Review'},
+      {label:'Lifetime Attempts', val:'7'},
+      {label:'Lifetime Completed', val:'5'}
+    ]
+  },
+  {
+    name:'Isla Hayes', product:'SBK, CAS', amount:'$9,800',
+    type:'Withdrawal', typeStatus:'Failed', typePill:'failed',
+    failureReason:'Velocity Limit',
+    recommendation:'Advise on weekly withdrawal limits and timing', recColor:'#0060a3',
+    method:'Mastercard ···2290', processor:'Worldpay', fails:3, failsLevel:3,
+    date:'11.15.2026', viewed:false, menuId:'paPay-2',
+    expand:[
+      {label:'Account Status', val:'Active', ok:true},
+      {label:'Queue Reason', val:'Weekly amount exceeded'},
+      {label:'Approval Method', val:'Auto-declined'},
+      {label:'Lifetime Attempts', val:'22'},
+      {label:'Lifetime Completed', val:'19'}
+    ]
+  },
+  {
+    name:'Devon Whitfield', product:'SBK', amount:'$1,500',
+    type:'Withdrawal', typeStatus:'Failed', typePill:'failed',
+    failureReason:'Processor Decline',
+    recommendation:'Suggest alternate payment method', recColor:'#706e6b',
+    method:'ACH ···8873', processor:'Vantiv', fails:1, failsLevel:1,
+    date:'11.14.2026', viewed:true, menuId:'paPay-3',
+    expand:[
+      {label:'Account Status', val:'Active', ok:true},
+      {label:'Queue Reason', val:'Bank-side decline'},
+      {label:'Approval Method', val:'Auto-approved, processor declined'},
+      {label:'Lifetime Attempts', val:'11'},
+      {label:'Lifetime Completed', val:'10'}
+    ]
+  },
+  {
+    name:'Jordan Miles', product:'SBK', amount:'$18,000',
+    type:'Deposit', typeStatus:'Declined', typePill:'decline',
+    failureReason:'Threshold Exceeded',
+    recommendation:'Contact VIP re: 7-day deposit limit', recColor:'#0060a3',
+    method:'Visa ···7742', processor:'PaySafe', fails:1, failsLevel:1,
+    date:'11.16.2026', viewed:false, menuId:'paPay-4',
+    expand:[
+      {label:'Account Status', val:'Active', ok:true},
+      {label:'Same-Method Fails (72h)', val:'1'}
+    ]
+  },
+  {
+    name:'Carter Ellis', product:'CAS', amount:'$3,000',
+    type:'Deposit', typeStatus:'Refunded', typePill:'refund',
+    failureReason:'Bonus Violation',
+    recommendation:'Confirm VIP received partial refund of $1,500', recColor:'#c2410c',
+    method:'Mastercard ···5519', processor:'Worldpay', fails:1, failsLevel:1,
+    date:'11.14.2026', viewed:false, menuId:'paPay-5',
+    expand:[
+      {label:'Refund Type', val:'Partial — $1,500 of $3,000'},
+      {label:'Initiated By', val:'Payments Ops Team'},
+      {label:'Original Deposit', val:'11.12.2026'},
+      {label:'Refund Date', val:'11.14.2026'},
+      {label:'Account Status', val:'Active', ok:true}
+    ]
+  }
 ];
-// Production: filter by alert.dateTs >= Date.now() - 48*3600*1000
+// Production: filter by alert.dateTs >= Date.now() - 72*3600*1000
+var _payExpanded = {};
 
 let lossSortKey = null, lossSortDir = 1;
 let winSortKey  = null, winSortDir  = 1;
@@ -3770,34 +3841,36 @@ function sortWinBy(key) {
   renderWinTable();
 }
 
-const _PAY_G = '1.1fr 0.38fr 0.9fr 2fr 0.5fr 0.56fr 2rem';
-const _PAY_ISSUE_COLOR = {
-  'Withdrawal Declined': {c:'#dc2626', bg:'#fef2f2'},
-  'Deposit Threshold':   {c:'#d97706', bg:'#fffbeb'},
-  'Unusual Pattern':     {c:'#7c3aed', bg:'#f5f3ff'},
+const _PAY_G = '1.3rem 1.25fr 0.42fr 0.5fr 0.72fr 0.9fr 1.5fr 1.15fr 0.52fr 2rem';
+const _PAY_PILL = {
+  'failed':  'background:#fef2f2;color:#b91c1c;',
+  'decline': 'background:#fef2f2;color:#b91c1c;',
+  'refund':  'background:#fff7ed;color:#c2410c;'
 };
-const _PAY_PROD_COLOR = {
-  SBK:{c:'#0060a3',bg:'#e8f4fd'}, CAS:{c:'#7c3aed',bg:'#f5f3ff'},
-  DFS:{c:'#065f46',bg:'#d1fae5'}, FDR:{c:'#b45309',bg:'#fef3c7'},
-};
+const _PAY_FAILS_C = ['','color:#94a3b8;font-weight:400;','color:#d97706;','color:#dc2626;'];
 
-function markPayViewed(idx) {
-  if (!PAYMENT_ALERTS[idx]) return;
-  PAYMENT_ALERTS[idx].status = PAYMENT_ALERTS[idx].status === 'New' ? 'Viewed' : 'New';
-  renderPayTable();
+function togglePayExp(idx) {
+  var exp = document.getElementById('payExp-'+idx);
+  var btn = document.getElementById('payCh-'+idx);
+  if (!exp) return;
+  var wasOpen = exp.classList.contains('open');
+  document.querySelectorAll('.pay-exp-row').forEach(function(e){e.classList.remove('open');});
+  document.querySelectorAll('.pay-chevron').forEach(function(b){b.classList.remove('open');});
+  if (!wasOpen) { exp.classList.add('open'); if(btn) btn.classList.add('open'); }
 }
 
 function _payMenu(r) {
-  var n = r.name, m = r.menuId, cl = r.caseLabel, ct = r.caseToast;
+  var n = r.name, m = r.menuId;
+  var mi = function(lbl, onclick, sep) {
+    return '<div onclick="event.stopPropagation();'+onclick+';document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:var(--text-ui);color:#181818;'+(sep?'border-top:1px solid #f1f5f9;':'')+'" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">'+lbl+'</div>';
+  };
   return '<div style="position:relative;">'
-    +'<button onclick="event.stopPropagation();toggleGenMenu(\''+m+'\')" style="font-size:var(--text-ui);font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">⋮</button>'
+    +'<button onclick="event.stopPropagation();toggleGenMenu(\''+m+'\')" style="font-size:var(--text-ui);font-weight:700;border-radius:0.3rem;padding:0.2rem 0.45rem;border:1.5px solid #dddbda;background:#fff;color:#475569;cursor:pointer;line-height:1;" title="Actions">&#8942;</button>'
     +'<div id="'+m+'" class="gen-menu" style="display:none;position:absolute;right:0;top:calc(100% + 2px);z-index:600;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 4px 16px rgba(0,0,0,0.14);min-width:158px;">'
-    +'<div onclick="event.stopPropagation();openLogContactModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:var(--text-ui);color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Contact</div>'
-    +'<div onclick="event.stopPropagation();showToast(\'Opening email for '+n+'…\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:var(--text-ui);color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Send Email</div>'
-    +'<div onclick="event.stopPropagation();openBonusModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:var(--text-ui);color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Bonus</div>'
-    +'<div onclick="event.stopPropagation();openLogFeedback(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:var(--text-ui);color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">Log Feedback</div>'
-    +'<div onclick="event.stopPropagation();openVipModal(\''+n+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:var(--text-ui);color:#181818;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">View Contact</div>'
-    +'<div onclick="event.stopPropagation();showToast(\''+ct+'\');document.getElementById(\''+m+'\').style.display=\'none\'" style="padding:0.48rem 0.85rem;cursor:pointer;font-size:var(--text-ui);color:#181818;border-top:1px solid #f1f5f9;" onmouseover="this.style.background=\'#f3f9ff\'" onmouseout="this.style.background=\'\'">'+cl+'</div>'
+    +mi('Log Contact', 'openLogContactModal(\''+n+'\')')
+    +mi('Send Email', 'showToast(\'Opening email for '+n+'…\')')
+    +mi('Open Case', 'showToast(\'Opening case for '+n+'…\')', true)
+    +mi('View Contact', 'openVipModal(\''+n+'\')')
     +'</div></div>';
 }
 
@@ -3805,31 +3878,63 @@ function renderPayTable() {
   var el = document.getElementById('payAlertBody');
   if (!el) return;
   var _aq=(document.getElementById('awarenessSearch')||{}).value||''; _aq=_aq.toLowerCase().trim();
-  var rows = _aq ? PAYMENT_ALERTS.filter(function(r){return r.name.toLowerCase().indexOf(_aq)!==-1;}) : PAYMENT_ALERTS; // production: filter by dateTs
+  var rows = _aq ? PAYMENT_ALERTS.filter(function(r){return r.name.toLowerCase().indexOf(_aq)!==-1;}) : PAYMENT_ALERTS;
   var g = _PAY_G;
-  var th = function(label){ return '<span style="padding:0.25rem 0.45rem;font-size:var(--text-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;">'+label+'</span>'; };
-  var hdr = '<div style="display:grid;grid-template-columns:'+g+';background:#f3f3f3;border-radius:0.25rem 0.25rem 0 0;border-bottom:1px solid #e5e5e5;margin-bottom:2px;">'
-    +th('VIP Name')+th('Product')+th('Issue Type')+th('Detail')+th('Date')+th('Status')+'<span></span>'
+  var th = function(lbl,extra){ return '<span style="padding:0.26rem 0.42rem;font-size:var(--text-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:#3e3e3c;'+(extra||'')+'">'+lbl+'</span>'; };
+  var hdr = '<div style="display:grid;grid-template-columns:'+g+';background:#f3f3f3;border-top:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;margin-bottom:2px;">'
+    +'<span></span>'+th('VIP Name')+th('Product')+th('Amount')+th('Type')+th('Failure Reason')+th('Recommendation')+th('Method / Processor')+th('Date')+'<span></span>'
     +'</div>';
   var body = rows.map(function(r, idx) {
-    var ic  = _PAY_ISSUE_COLOR[r.issueType] || {c:'#334155', bg:'#f8fafc'};
-    var pc  = _PAY_PROD_COLOR[r.product]    || {c:'#334155', bg:'#f8fafc'};
-    var isNew = r.status === 'New';
-    var rowBg = isNew ? ic.bg : '#fff';
-    var statusStyle = isNew
-      ? 'background:#fef2f2;color:#dc2626;border:1px solid #fecaca;cursor:pointer;font-weight:700;'
-      : 'background:#f1f5f9;color:#64748b;border:1px solid #e2e8f0;cursor:pointer;font-weight:600;';
-    return '<div style="display:grid;grid-template-columns:'+g+';align-items:center;border-bottom:1px solid #f1f5f9;background:'+rowBg+';padding:0.1rem 0;">'
-      +'<div style="padding:0.3rem 0.45rem;"><a class="vip-link" style="font-size:var(--text-ui);font-weight:600;">'+r.name+'</a></div>'
-      +'<div style="padding:0.3rem 0.3rem;"><span style="font-size:var(--text-xs);font-weight:700;border-radius:999px;padding:0.08rem 0.28rem;background:'+pc.bg+';color:'+pc.c+';">'+r.product+'</span></div>'
-      +'<div style="padding:0.3rem 0.35rem;"><span style="font-size:var(--text-xs);font-weight:700;border-radius:0.25rem;padding:0.1rem 0.35rem;background:'+ic.bg+';color:'+ic.c+';">'+r.issueType+'</span></div>'
-      +'<div style="padding:0.3rem 0.35rem;font-size:var(--text-sm);color:#475569;line-height:1.4;">'+r.detail+'</div>'
-      +'<div style="padding:0.3rem 0.35rem;font-size:var(--text-sm);color:#64748b;white-space:nowrap;">'+r.date+'</div>'
-      +'<div style="padding:0.3rem 0.35rem;"><span onclick="markPayViewed('+idx+')" style="font-size:var(--text-xs);border-radius:999px;padding:0.1rem 0.4rem;'+statusStyle+'">'+(isNew?'New':'Viewed')+'</span></div>'
-      +'<div style="padding:0.3rem 0.35rem;display:flex;justify-content:flex-end;">'+_payMenu(r)+'</div>'
+    var viewed = r.viewed;
+    var rowBg  = viewed ? '#fff' : (r.typePill==='refund' ? '#fffbf5' : '#fef9f9');
+    var muted  = viewed ? 'opacity:0.55;' : '';
+    var pillS  = (_PAY_PILL[r.typePill]||'background:#f1f5f9;color:#64748b;');
+    var failsC = _PAY_FAILS_C[Math.min(r.failsLevel,3)] || '';
+    var failsPill = r.typePill==='failed' && viewed ? 'opacity:0.45;' : '';
+    var expFields = (r.expand||[]).map(function(f){
+      var vc = f.ok ? 'color:#2e844a;' : f.warn ? 'color:#dc2626;' : 'color:#334155;';
+      return '<div style="display:flex;flex-direction:column;gap:0.08rem;min-width:110px;">'
+        +'<span style="font-size:var(--text-xs);font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;">'+f.label+'</span>'
+        +'<span style="font-size:var(--text-sm);font-weight:600;'+vc+'">'+f.val+'</span>'
+        +'</div>';
+    }).join('');
+    var row = '<div class="pay-row-new" style="grid-template-columns:'+g+';background:'+rowBg+';">'
+      // chevron
+      +'<div style="padding:0.38rem 0 0.38rem 0.42rem;"><button class="pay-chevron" id="payCh-'+idx+'" onclick="event.stopPropagation();togglePayExp('+idx+')">&#x203a;</button></div>'
+      // VIP name
+      +'<div style="padding:0.38rem 0.42rem;'+muted+'"><a class="vip-link" onclick="event.stopPropagation();selectVip && selectVip(0)" style="font-size:var(--text-ui);font-weight:600;color:'+(viewed?'#706e6b':'#0176d3')+';">'+r.name+'</a></div>'
+      // product — plain text, no chip
+      +'<div style="padding:0.38rem 0.42rem;font-size:var(--text-ui);color:#475569;font-weight:500;'+muted+'">'+r.product+'</div>'
+      // amount
+      +'<div style="padding:0.38rem 0.42rem;font-size:var(--text-sm);font-weight:700;color:'+(viewed?'#94a3b8':'#181818')+';">'+r.amount+'</div>'
+      // type
+      +'<div style="padding:0.38rem 0.42rem;display:flex;flex-direction:column;gap:0.14rem;">'
+        +'<span style="font-size:var(--text-xs);font-weight:700;color:'+(viewed?'#94a3b8':(r.type==='Withdrawal'?'#0060a3':'#334155'))+';">'+r.type+'</span>'
+        +'<span style="font-size:var(--text-xs);font-weight:700;border-radius:0.22rem;padding:0.08rem 0.28rem;white-space:nowrap;display:inline-block;'+pillS+failsPill+'">'+r.typeStatus+'</span>'
+      +'</div>'
+      // failure reason
+      +'<div style="padding:0.38rem 0.42rem;font-size:var(--text-sm);font-weight:600;color:'+(viewed?'#94a3b8':'#334155')+';">'+r.failureReason+'</div>'
+      // recommendation
+      +'<div style="padding:0.38rem 0.42rem;font-size:var(--text-xs);font-weight:'+(viewed?'400':'600')+';color:'+r.recColor+';line-height:1.35;">'+r.recommendation+'</div>'
+      // method / processor
+      +'<div style="padding:0.38rem 0.42rem;display:flex;flex-direction:column;gap:0.06rem;">'
+        +'<span style="font-size:var(--text-sm);color:'+(viewed?'#94a3b8':'#334155')+';font-weight:500;">'+r.method+'</span>'
+        +'<span style="font-size:var(--text-xs);display:flex;align-items:center;gap:0.3rem;">'
+          +'<span style="color:#64748b;">'+r.processor+'</span>'
+          +'<span style="font-weight:700;'+failsC+'">· '+r.fails+' fail'+(r.fails!==1?'s':'')+'</span>'
+        +'</span>'
+      +'</div>'
+      // date
+      +'<div style="padding:0.38rem 0.42rem;font-size:var(--text-sm);color:#64748b;white-space:nowrap;">'+r.date+'</div>'
+      // actions
+      +'<div style="padding:0.38rem 0.3rem;display:flex;justify-content:flex-end;">'+_payMenu(r)+'</div>'
       +'</div>';
+    var exp = '<div class="pay-exp-row" id="payExp-'+idx+'">'
+      +'<div style="padding:0.52rem 0.85rem 0.56rem 2.1rem;display:flex;gap:1.8rem;flex-wrap:wrap;">'+expFields+'</div>'
+      +'</div>';
+    return row + exp;
   }).join('');
-  el.innerHTML = hdr + (rows.length ? body : '<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:var(--text-ui);">No payment alerts in the last 48h</div>');
+  el.innerHTML = hdr + (rows.length ? body : '<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:var(--text-ui);">No payment alerts in the last 72h</div>');
 }
 
 renderLossTable();
