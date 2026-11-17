@@ -3932,7 +3932,7 @@ function _payDataRow(r, idx, isSub) {
     +'<div style="padding:0.38rem 0.42rem;font-size:var(--text-ui);color:#475569;font-weight:500;'+muted+'">'+r.product+'</div>'
     +'<div style="padding:0.38rem 0.42rem;font-size:var(--text-sm);font-weight:700;color:'+(viewed?'#94a3b8':'#181818')+';">'+r.amount+'</div>'
     +'<div style="padding:0.38rem 0.42rem;display:flex;flex-direction:column;gap:0.14rem;">'
-      +'<span style="font-size:var(--text-xs);font-weight:700;color:'+(viewed?'#94a3b8':(r.type==='Withdrawal'?'#0060a3':'#334155'))+';">'+r.type+'</span>'
+      +'<span style="font-size:var(--text-xs);font-weight:700;color:'+(viewed?'#94a3b8':(r.type==='Withdrawal'?'#0060a3':'#334155'))+';display:flex;align-items:center;gap:0.18rem;">'+(r.type==='Withdrawal'?'<span style="font-size:0.68rem;">↑</span>':'<span style="font-size:0.68rem;">↓</span>')+r.type+'</span>'
       +'<span style="font-size:var(--text-xs);font-weight:700;border-radius:0.22rem;padding:0.08rem 0.28rem;white-space:nowrap;display:inline-block;'+pillS+failsPill+'">'+r.typeStatus+'</span>'
     +'</div>'
     +'<div style="padding:0.38rem 0.42rem;font-size:var(--text-sm);font-weight:600;color:'+(viewed?'#94a3b8':'#334155')+';">'+r.failureReason+'</div>'
