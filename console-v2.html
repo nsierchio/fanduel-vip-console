@@ -3924,11 +3924,11 @@ function _payDataRow(r, idx, isSub) {
   }).join('');
   var subStyle=isSub?'border-bottom:1px dashed #e2e8f0;background:#f8fafc;':'border-bottom:1px solid #f1f5f9;background:#fff;';
   var row='<div class="pay-row-new" style="grid-template-columns:'+tpl+';'+subStyle+'">'
-    +(isSub
-      ?'<div style="padding:0.38rem 0 0.38rem 0.42rem;"><span style="font-size:var(--text-sm);color:#94a3b8;padding-left:0.1rem;">&#x21b3;</span></div>'
-      :'<div style="padding:0.38rem 0 0.38rem 0.42rem;"><button class="pay-chevron" id="payCh-'+idx+'" onclick="event.stopPropagation();togglePayExp('+idx+')">&#x203a;</button></div>'
-    )
-    +'<div style="padding:0.38rem 0.42rem;'+muted+'"><a class="vip-link" onclick="event.stopPropagation();openVipModal(\''+r.name+'\')" style="font-size:var(--text-ui);font-weight:600;color:'+(viewed?'#706e6b':'#0176d3')+';">'+r.name+'</a></div>'
+    +'<div style="padding:0.38rem 0 0.38rem 0.42rem;"><button class="pay-chevron" id="payCh-'+idx+'" onclick="event.stopPropagation();togglePayExp('+idx+')">&#x203a;</button></div>'
+    +'<div style="padding:0.38rem 0.42rem;'+muted+';display:flex;align-items:center;gap:0.22rem;">'
+      +(isSub?'<span style="font-size:var(--text-xs);color:#94a3b8;flex-shrink:0;">&#x21b3;</span>':'')
+      +'<a class="vip-link" onclick="event.stopPropagation();openVipModal(\''+r.name+'\')" style="font-size:var(--text-ui);font-weight:600;color:'+(viewed?'#706e6b':'#0176d3')+';">'+r.name+'</a>'
+    +'</div>'
     +'<div style="padding:0.38rem 0.42rem;font-size:var(--text-ui);color:#475569;font-weight:500;'+muted+'">'+r.product+'</div>'
     +'<div style="padding:0.38rem 0.42rem;font-size:var(--text-sm);font-weight:700;color:'+(viewed?'#94a3b8':'#181818')+';">'+r.amount+'</div>'
     +'<div style="padding:0.38rem 0.42rem;display:flex;flex-direction:column;gap:0.14rem;">'
@@ -3947,9 +3947,8 @@ function _payDataRow(r, idx, isSub) {
     +'<div style="padding:0.38rem 0.42rem;font-size:var(--text-sm);color:#64748b;white-space:nowrap;">'+r.date+'</div>'
     +'<div style="padding:0.38rem 0.3rem;display:flex;justify-content:flex-end;">'+_payMenu(r)+'</div>'
     +'</div>';
-  var exp=isSub?'':
-    '<div class="pay-exp-row" id="payExp-'+idx+'">'
-    +'<div style="padding:0.52rem 0.85rem 0.56rem 2.1rem;display:flex;gap:1.8rem;flex-wrap:wrap;">'+expFields+'</div>'
+  var exp='<div class="pay-exp-row" id="payExp-'+idx+'">'
+    +'<div style="padding:0.52rem 0.85rem 0.56rem '+(isSub?'2.6rem':'2.1rem')+';display:flex;gap:1.8rem;flex-wrap:wrap;">'+expFields+'</div>'
     +'</div>';
   return row+exp;
 }
