@@ -3548,7 +3548,9 @@ const PAYMENT_ALERTS = [
     date:'11.16.2026', viewed:false, menuId:'paPay-4',
     expand:[
       {label:'Account Status', val:'Active', ok:true},
-      {label:'Same-Method Fails (72h)', val:'1'}
+      {label:'Processor Response', val:'Deposit Limit Exceeded', warn:true},
+      {label:'Daily Deposit Total', val:'$18,000 of $20,000 limit', warn:true},
+      {label:'Method Attempts (72h)', val:'1'}
     ]
   },
   {
@@ -3560,7 +3562,9 @@ const PAYMENT_ALERTS = [
     date:'11.16.2026', viewed:false, menuId:'paPay-6',
     expand:[
       {label:'Account Status', val:'Active', ok:true},
-      {label:'Same-Method Fails (72h)', val:'2'}
+      {label:'Processor Response', val:'Do Not Honor', warn:true},
+      {label:'Daily Deposit Total', val:'$2,500 of $20,000 limit', ok:true},
+      {label:'Method Attempts (72h)', val:'3'}
     ]
   },
   {
