@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demotion Expanded Row — Preview</title>
+<style>
+  :root {
+    --text-xs: 0.68rem;
+    --text-sm: 0.72rem;
+    --text-ui: 0.775rem;
+    --text-body: 0.8rem;
+    --fd-blue: #0060a3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Salesforce Sans', Arial, sans-serif; background: #f3f3f3; padding: 2rem; }
+
+  .preview-label {
+    font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    color: #706e6b; margin-bottom: 0.5rem;
+  }
+
+  /* ── DNA/DAN shared table styles ── */
+  .dna-table { width: 100%; border-collapse: collapse; background: #fff; font-size: var(--text-ui); }
+  .dna-th {
+    font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.04em; color: #3e3e3c;
+    font-weight: 700; padding: 0.3rem 0.6rem; border-bottom: 2px solid #dddbda;
+    background: #f3f3f3; white-space: nowrap; position: relative; user-select: none;
+    text-align: left;
+  }
+  .dna-td { padding: 0.4rem 0.6rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; color: #181818; }
+  .dna-tr:hover > td { background: #f8fafc; }
+  .dna-tr.expanded > td { background: #f0f7ff; border-bottom: none; }
+
+  .chip { font-size: var(--text-ui); font-weight: 400; color: #181818; white-space: nowrap; }
+
+  .dan-action-trigger {
+    font-size: var(--text-xs); border-radius: 0.2rem; padding: 0.12rem 0.5rem;
+    background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;
+    cursor: pointer; font-weight: 600; white-space: nowrap; display: inline-block;
+  }
+  .dan-action-trigger:hover { background: #e0f2fe; border-color: #7dd3fc; color: #0369a1; }
+  .btn-appeal {
+    font-size: var(--text-xs); border-radius: 0.2rem; padding: 0.12rem 0.55rem;
+    background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;
+    cursor: pointer; font-weight: 600; white-space: nowrap; display: inline-block;
+  }
+  .btn-appeal:hover { background: #e8edf2; border-color: #cbd5e1; }
+  .btn-demote {
+    font-size: var(--text-xs); border-radius: 0.2rem; padding: 0.12rem 0.55rem;
+    background: #fff5f5; color: #c23934; border: 1px solid #fecaca;
+    cursor: pointer; font-weight: 600; white-space: nowrap; display: inline-block;
+  }
+  .btn-demote:hover { background: #fee2e2; border-color: #fca5a5; }
+
+  .expand-toggle {
+    cursor: pointer; font-size: 0.65rem; color: #706e6b; display: inline-flex;
+    align-items: center; justify-content: center; width: 16px; height: 16px;
+    border: 1px solid #dddbda; border-radius: 0.2rem; background: #fff;
+    margin-right: 0.4rem; flex-shrink: 0; transition: background 0.1s;
+  }
+  .expand-toggle:hover { background: #e0f2fe; border-color: #7dd3fc; color: #0369a1; }
+  .vip-name-cell { display: flex; align-items: center; }
+
+  /* ── Expanded detail panel ── */
+  .detail-row td { padding: 0; border-bottom: 1px solid #e2e8f0; }
+  .detail-panel {
+    background: #f8fbff; border-top: 2px solid #d0e3f4; padding: 0.75rem 1rem;
+  }
+  .detail-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.1rem 2rem;
+  }
+  .detail-field { display: flex; flex-direction: column; padding: 0.3rem 0; border-bottom: 1px solid #eef2f7; }
+  .detail-field:last-child { border-bottom: none; }
+  .detail-label {
+    font-size: var(--text-xs); color: #706e6b; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.15rem;
+  }
+  .detail-value { font-size: var(--text-ui); color: #181818; font-weight: 400; line-height: 1.4; }
+
+  .detail-recs {
+    display: flex; gap: 0; margin-top: 0.6rem; border-top: 1px solid #e2e8f0; padding-top: 0.55rem;
+    align-items: center;
+  }
+  .rec-cell {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    border-right: 1px solid #e2e8f0; padding: 0 1rem;
+  }
+  .rec-cell:first-child { padding-left: 0; }
+  .rec-cell:last-child { border-right: none; }
+  .rec-label { font-size: var(--text-xs); color: #706e6b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+  .rec-value { font-size: 1.05rem; font-weight: 800; color: #181818; margin-top: 0.1rem; }
+
+  .detail-footer { display: flex; align-items: center; justify-content: flex-end; margin-top: 0.6rem; padding-top: 0.5rem; border-top: 1px solid #e2e8f0; }
+  .view-record-link {
+    font-size: var(--text-ui); font-weight: 700; color: var(--fd-blue); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.25rem;
+  }
+  .view-record-link:hover { text-decoration: underline; }
+  .view-record-link svg { flex-shrink: 0; }
+
+  .dna-date { font-size: var(--text-xs); color: #706e6b; }
+  .vip-link { color: #0176d3; font-weight: 600; font-size: var(--text-body); cursor: pointer; text-decoration: none; }
+  .vip-link:hover { text-decoration: underline; }
+
+  /* gen-menu stub */
+  .gen-menu-btn {
+    font-size: var(--text-ui); font-weight: 700; border-radius: 0.3rem; padding: 0.2rem 0.45rem;
+    border: 1.5px solid #dddbda; background: #fff; color: #475569; cursor: pointer; line-height: 1;
+  }
+
+  .card {
+    background: #fff; border-radius: 0.4rem; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 0.6rem 0.75rem; border-bottom: 1px solid #e2e8f0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-heading { font-size: 0.85rem; font-weight: 800; color: #181818; }
+  .tab-bar { display: flex; gap: 0; padding: 0 0.75rem; background: #fff; border-bottom: 1px solid #e2e8f0; }
+  .tab-btn { font-size: var(--text-sm); font-weight: 600; padding: 0.5rem 0.75rem; border: none; background: none; color: #706e6b; cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab-btn.active { color: var(--fd-blue); border-bottom-color: var(--fd-blue); font-weight: 700; }
+  .tab-content { padding: 0.6rem 0.75rem 0.5rem; }
+  .tab-blurb { font-size: var(--text-ui); color: #475569; margin: 0 0 0.5rem; }
+  .concern-high { font-size: var(--text-xs); font-weight: 700; background: #fee2e2; color: #991b1b; border-radius: 0.25rem; padding: 0.1rem 0.3rem; white-space: nowrap; display: inline-block; }
+  .concern-low  { font-size: var(--text-xs); font-weight: 700; background: #fef3c7; color: #92400e; border-radius: 0.25rem; padding: 0.1rem 0.3rem; white-space: nowrap; display: inline-block; }
+  .concern-susp { font-size: var(--text-xs); font-weight: 700; background: #f3f4f6; color: #374151; border-radius: 0.25rem; padding: 0.1rem 0.3rem; white-space: nowrap; display: inline-block; }
+  .dna-seg-row > td { background: #f8fafc; border-bottom: 1px dashed #e2e8f0; }
+  .dna-seg-row:hover > td { background: #f0f7ff; }
+  .parent-chevron { background: none; border: none; cursor: pointer; padding: 0 0.1rem; font-size: var(--text-body); color: #64748b; line-height: 1; flex-shrink: 0; transition: transform 0.15s; }
+</style>
+</head>
+<body>
+
+<div style="max-width:1100px;margin:0 auto;">
+  <div class="preview-label">Preview — Demotion: Action Needed · Expanded Row (Sophia Novak)</div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-heading">Onboarding &amp; Offboarding</span>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn" onclick="switchTab('new')">New VIPs</button>
+      <button class="tab-btn" id="tab-btn-dna" onclick="switchTab('dna')">Demotion: Review</button>
+      <button class="tab-btn active" id="tab-btn-dan" onclick="switchTab('dan')">Demotion: Action Needed</button>
+    </div>
+
+    <div class="tab-content">
+      <div id="tab-dan">
+      <p class="tab-blurb">VIPs flagged for demotion — review and act to keep or remove from your book.</p>
+
+      <table class="dna-table">
+        <colgroup>
+          <col style="width:160px">
+          <col style="width:76px">
+          <col style="width:70px">
+          <col style="width:260px">
+          <col style="width:88px">
+          <col style="width:200px">
+          <col style="width:34px">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="dna-th">VIP Name</th>
+            <th class="dna-th">Product</th>
+            <th class="dna-th">Priority</th>
+            <th class="dna-th">Demotion Reason</th>
+            <th class="dna-th">Dem. Date</th>
+            <th class="dna-th">Action</th>
+            <th class="dna-th"></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- ── Row 1: Sophia Novak — EXPANDABLE ── -->
+          <tr class="dna-tr expanded" id="dan-row-sophia">
+            <td class="dna-td">
+              <div class="vip-name-cell">
+                <span class="expand-toggle" id="toggle-sophia" onclick="toggleDetail('sophia')" title="Show details">▾</span>
+                <a class="vip-link">Sophia Novak</a>
+              </div>
+            </td>
+            <td class="dna-td"><span class="chip chip-sbk">SBK</span></td>
+            <td class="dna-td"><span style="font-size:var(--text-body);font-weight:700;color:#334155;">1</span></td>
+            <td class="dna-td" style="font-size:var(--text-ui);color:#334155;" title="Risk 1 – Player Stats – Low/Negative Forecast Profit">Risk 1 – Player Stats – Low/Negative Forecast Profit</td>
+            <td class="dna-td"><span class="dna-date">11.01.2026</span></td>
+            <td class="dna-td"><div style="display:flex;gap:0.3rem;align-items:center;"><span class="btn-appeal" onclick="alert('Appeal flow triggered')">Appeal</span><span class="btn-demote" onclick="alert('Demote flow triggered')">Demote</span></div></td>
+            <td class="dna-td" style="text-align:right;"><button class="gen-menu-btn">⋮</button></td>
+          </tr>
+
+          <!-- ── Expanded detail panel ── -->
+          <tr class="detail-row" id="detail-sophia">
+            <td colspan="8">
+              <div class="detail-panel">
+                <div class="detail-grid">
+                  <!-- Left column -->
+                  <div>
+                    <div class="detail-field">
+                      <span class="detail-label">Highest Risk Demotion Reason</span>
+                      <span class="detail-value">Risk 1 – Player Stats – Low/Negative Forecast Profit</span>
+                    </div>
+                    <div class="detail-field">
+                      <span class="detail-label">All Demotion Reasons</span>
+                      <span class="detail-value">Risk 1 – Player Stats – Low/Negative Forecast Profit; Risk 3 – Low/No Recent Activity</span>
+                    </div>
+                    <div class="detail-field">
+                      <span class="detail-label">Most Common Demotion Reason</span>
+                      <span class="detail-value">Risk 1 – Player Stats – Low/Negative Forecast Profit</span>
+                    </div>
+                  </div>
+                  <!-- Right column -->
+                  <div>
+                    <div class="detail-field">
+                      <span class="detail-label">Explanation</span>
+                      <span class="detail-value">No login for 12 days; SBK handle below $200 in L28 days with minimal cross-product activity in the same window.</span>
+                    </div>
+                    <div class="detail-field">
+                      <span class="detail-label">Demotion Next Steps</span>
+                      <span class="detail-value">High number of demotion recs recently. Review account and consider immediate action.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- L14 / L30 / L90 row + View Record -->
+                <div class="detail-recs">
+                  <div class="rec-cell">
+                    <span class="rec-label">Total Recs L14</span>
+                    <span class="rec-value">8</span>
+                  </div>
+                  <div class="rec-cell">
+                    <span class="rec-label">Total Recs L30</span>
+                    <span class="rec-value">22</span>
+                  </div>
+                  <div class="rec-cell">
+                    <span class="rec-label">Total Recs L90</span>
+                    <span class="rec-value">47</span>
+                  </div>
+                  <div style="flex:2;display:flex;justify-content:flex-end;align-items:center;padding-left:1.5rem;">
+                    <a href="#" class="view-record-link">
+                      View Record
+                      <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round"/><path d="M10 2h4v4M14 2 8 8" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            </td>
+          </tr>
+
+          <!-- ── Row 2: Parker Ortiz (collapsed) ── -->
+          <tr class="dna-tr" id="dan-row-parker">
+            <td class="dna-td">
+              <div class="vip-name-cell">
+                <span class="expand-toggle" id="toggle-parker" onclick="toggleDetail('parker')" title="Show details">▸</span>
+                <a class="vip-link">Parker Ortiz</a>
+              </div>
+            </td>
+            <td class="dna-td"><span class="chip chip-casino">CAS</span></td>
+            <td class="dna-td"><span style="font-size:var(--text-xs);color:#9ea5ae;">—</span></td>
+            <td class="dna-td" style="font-size:var(--text-ui);color:#334155;">Risk 2 – Low/No Recent Activity</td>
+            <td class="dna-td"><span class="dna-date">11.01.2026</span></td>
+            <td class="dna-td">
+              <div style="display:flex;gap:0.3rem;align-items:center;"><span class="btn-appeal" onclick="alert('Appeal flow triggered')">Appeal</span><span class="btn-demote" onclick="alert('Demote flow triggered')">Demote</span></div>
+            </td>
+            <td class="dna-td" style="text-align:right;"><button class="gen-menu-btn">⋮</button></td>
+          </tr>
+          <tr class="detail-row" id="detail-parker" style="display:none;">
+            <td colspan="8">
+              <div class="detail-panel">
+                <div class="detail-grid">
+                  <div>
+                    <div class="detail-field">
+                      <span class="detail-label">Highest Risk Demotion Reason</span>
+                      <span class="detail-value">Risk 2 – Low/No Recent Activity</span>
+                    </div>
+                    <div class="detail-field">
+                      <span class="detail-label">All Demotion Reasons</span>
+                      <span class="detail-value">Risk 2 – Low/No Recent Activity; Risk 4 – Casino Session Frequency Drop</span>
+                    </div>
+                    <div class="detail-field">
+                      <span class="detail-label">Most Common Demotion Reason</span>
+                      <span class="detail-value">Risk 2 – Low/No Recent Activity</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="detail-field">
+                      <span class="detail-label">Explanation</span>
+                      <span class="detail-value">No Casino sessions logged in 18 days; average daily handle dropped below threshold in L28 window.</span>
+                    </div>
+                    <div class="detail-field">
+                      <span class="detail-label">Demotion Next Steps</span>
+                      <span class="detail-value">Review session history and consider re-engagement offer before removal decision.</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="detail-recs">
+                  <div class="rec-cell">
+                    <span class="rec-label">Total Recs L14</span>
+                    <span class="rec-value">5</span>
+                  </div>
+                  <div class="rec-cell">
+                    <span class="rec-label">Total Recs L30</span>
+                    <span class="rec-value">14</span>
+                  </div>
+                  <div class="rec-cell">
+                    <span class="rec-label">Total Recs L90</span>
+                    <span class="rec-value">31</span>
+                  </div>
+                  <div style="flex:2;display:flex;justify-content:flex-end;align-items:center;padding-left:1.5rem;">
+                    <a href="#" class="view-record-link">
+                      View Record
+                      <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round"/><path d="M10 2h4v4M14 2 8 8" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- ── Row 3: Carolina Hayes (collapsed) ── -->
+          <tr class="dna-tr" id="dan-row-carolina">
+            <td class="dna-td">
+              <div class="vip-name-cell">
+                <span class="expand-toggle" id="toggle-carolina" onclick="toggleDetail('carolina')" title="Show details">▸</span>
+                <a class="vip-link">Carolina Hayes</a>
+              </div>
+            </td>
+            <td class="dna-td"><span class="chip chip-sbk">SBK</span></td>
+            <td class="dna-td"><span style="font-size:var(--text-body);font-weight:700;color:#334155;">3</span></td>
+            <td class="dna-td" style="font-size:var(--text-ui);color:#334155;">Risk 1 – Player Stats – Low/Negative Forecast Profit</td>
+            <td class="dna-td"><span class="dna-date">11.03.2026</span></td>
+            <td class="dna-td">
+              <div style="display:flex;gap:0.3rem;align-items:center;"><span class="btn-appeal" onclick="alert('Appeal flow triggered')">Appeal</span><span class="btn-demote" onclick="alert('Demote flow triggered')">Demote</span></div>
+            </td>
+            <td class="dna-td" style="text-align:right;"><button class="gen-menu-btn">⋮</button></td>
+          </tr>
+          <tr class="detail-row" id="detail-carolina" style="display:none;">
+            <td colspan="8"><div class="detail-panel"><em style="font-size:var(--text-ui);color:#706e6b;">Detail panel for Carolina Hayes would appear here.</em></div></td>
+          </tr>
+
+          <!-- ── Row 4: Riley King (collapsed) ── -->
+          <tr class="dna-tr" id="dan-row-riley">
+            <td class="dna-td">
+              <div class="vip-name-cell">
+                <span class="expand-toggle" id="toggle-riley" onclick="toggleDetail('riley')" title="Show details">▸</span>
+                <a class="vip-link">Riley King</a>
+              </div>
+            </td>
+            <td class="dna-td"><span class="chip chip-sbk">SBK</span></td>
+            <td class="dna-td"><span style="font-size:var(--text-body);font-weight:700;color:#334155;">4</span></td>
+            <td class="dna-td" style="font-size:var(--text-ui);color:#334155;">Risk 2 – Low/No Recent Activity</td>
+            <td class="dna-td"><span class="dna-date">11.03.2026</span></td>
+            <td class="dna-td">
+              <div style="display:flex;gap:0.3rem;align-items:center;"><span class="btn-appeal" onclick="alert('Appeal flow triggered')">Appeal</span><span class="btn-demote" onclick="alert('Demote flow triggered')">Demote</span></div>
+            </td>
+            <td class="dna-td" style="text-align:right;"><button class="gen-menu-btn">⋮</button></td>
+          </tr>
+          <tr class="detail-row" id="detail-riley" style="display:none;">
+            <td colspan="8"><div class="detail-panel"><em style="font-size:var(--text-ui);color:#706e6b;">Detail panel for Riley King would appear here.</em></div></td>
+          </tr>
+
+        </tbody>
+      </table>
+      </div><!-- /tab-dan -->
+
+      <!-- ══ NO ACTION TAB ══ -->
+      <div id="tab-dna" style="display:none;">
+        <p class="tab-blurb">VIPs with demotion signals but no immediate action required — monitor or demote at your discretion.</p>
+
+        <table class="dna-table">
+          <colgroup>
+            <col style="width:165px">
+            <col style="width:76px">
+            <col style="width:65px">
+            <col style="width:100px">
+            <col style="width:250px">
+            <col style="width:88px">
+            <col style="width:100px">
+            <col style="width:34px">
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="dna-th">VIP Name</th>
+              <th class="dna-th">Product</th>
+              <th class="dna-th">Priority</th>
+              <th class="dna-th">Type</th>
+              <th class="dna-th">Demotion Reason</th>
+              <th class="dna-th">Dem. Date</th>
+              <th class="dna-th">Action</th>
+              <th class="dna-th"></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- ══ Marcus Bailey – multi-product parent ══ -->
+            <tr class="dna-tr" id="vip-row-marcus">
+              <td class="dna-td">
+                <div class="vip-name-cell">
+                  <button class="parent-chevron" id="parent-toggle-marcus" onclick="toggleParent('marcus')" title="Expand products">›</button>
+                  <a class="vip-link">Marcus Bailey</a>
+                </div>
+              </td>
+              <td class="dna-td" style="color:#475569;">SBK, CAS</td>
+              <td class="dna-td"><span style="font-size:var(--text-body);font-weight:700;color:#334155;">1</span></td>
+              <td class="dna-td"><span class="concern-high">High Concern</span></td>
+              <td class="dna-td" style="font-size:var(--text-ui);color:#334155;">Risk 1 – Player Stats – Low/Negative Forecast Profit</td>
+              <td class="dna-td"><span class="dna-date">11.01.2026</span></td>
+              <td class="dna-td"></td>
+              <td class="dna-td" style="text-align:right;"><button class="gen-menu-btn">⋮</button></td>
+            </tr>
+
+            <!-- ↳ Marcus Bailey SBK sub-row -->
+            <tr class="dna-seg-row" id="seg-row-marcus-sbk" style="display:none;">
+              <td class="dna-td" style="padding-left:1.4rem;">
+                <div class="vip-name-cell">
+                  <span style="color:#94a3b8;font-size:var(--text-sm);margin-right:0.3rem;">↳</span>
+                  <span class="expand-toggle" id="toggle-marcus-sbk" onclick="toggleDetail('marcus-sbk')" title="Show details">▸</span>
+                </div>
+              </td>
+              <td class="dna-td"><span style="font-size:var(--text-sm);font-weight:700;background:#e2e8f0;color:#334155;border-radius:0.18rem;padding:0.04rem 0.28rem;display:inline-block;">SBK</span></td>
+              <td class="dna-td"><span style="font-size:var(--text-body);font-weight:700;color:#334155;">1</span></td>
+              <td class="dna-td"><span class="concern-high">High Concern</span></td>
+              <td class="dna-td" style="font-size:var(--text-ui);color:#334155;">Risk 1 – Player Stats – Low/Negative Forecast Profit</td>
+              <td class="dna-td"><span class="dna-date">11.01.2026</span></td>
+              <td class="dna-td"><span class="btn-demote" onclick="alert('Demote SBK flow triggered')">Demote</span></td>
+              <td class="dna-td" style="text-align:right;"><button class="gen-menu-btn">⋮</button></td>
+            </tr>
+            <tr class="detail-row" id="detail-marcus-sbk" style="display:none;">
+              <td colspan="8">
+                <div class="detail-panel">
+                  <div class="detail-grid">
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Highest Risk Demotion Reason</span><span class="detail-value">Risk 1 – Player Stats – Low/Negative Forecast Profit</span></div>
+                      <div class="detail-field"><span class="detail-label">All Demotion Reasons</span><span class="detail-value">Risk 1 – Player Stats – Low/Negative Forecast Profit</span></div>
+                      <div class="detail-field"><span class="detail-label">Most Common Demotion Reason</span><span class="detail-value">Risk 1 – Player Stats – Low/Negative Forecast Profit</span></div>
+                    </div>
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Explanation</span><span class="detail-value">SBK handle below threshold for 3 consecutive weeks; forecast profit trending negative.</span></div>
+                      <div class="detail-field"><span class="detail-label">Demotion Next Steps</span><span class="detail-value">Monitor for 2 more weeks; if no improvement, recommend removal.</span></div>
+                    </div>
+                  </div>
+                  <div class="detail-recs">
+                    <div class="rec-cell"><span class="rec-label">Total Recs L14</span><span class="rec-value">3</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L30</span><span class="rec-value">9</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L90</span><span class="rec-value">21</span></div>
+                    <div style="flex:2;display:flex;justify-content:flex-end;align-items:center;padding-left:1.5rem;"><a href="#" class="view-record-link">View Record <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round"/><path d="M10 2h4v4M14 2 8 8" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ↳ Marcus Bailey CAS sub-row -->
+            <tr class="dna-seg-row" id="seg-row-marcus-cas" style="display:none;">
+              <td class="dna-td" style="padding-left:1.4rem;">
+                <div class="vip-name-cell">
+                  <span style="color:#94a3b8;font-size:var(--text-sm);margin-right:0.3rem;">↳</span>
+                  <span class="expand-toggle" id="toggle-marcus-cas" onclick="toggleDetail('marcus-cas')" title="Show details">▸</span>
+                </div>
+              </td>
+              <td class="dna-td"><span style="font-size:var(--text-sm);font-weight:700;background:#e2e8f0;color:#334155;border-radius:0.18rem;padding:0.04rem 0.28rem;display:inline-block;">CAS</span></td>
+              <td class="dna-td"><span style="font-size:var(--text-xs);color:#9ea5ae;">—</span></td>
+              <td class="dna-td"><span class="concern-low">Low Concern</span></td>
+              <td class="dna-td" style="font-size:var(--text-ui);color:#334155;">Risk 2 – Low/No Recent Activity</td>
+              <td class="dna-td"><span class="dna-date">11.01.2026</span></td>
+              <td class="dna-td"><span class="btn-demote" onclick="alert('Demote CAS flow triggered')">Demote</span></td>
+              <td class="dna-td" style="text-align:right;"><button class="gen-menu-btn">⋮</button></td>
+            </tr>
+            <tr class="detail-row" id="detail-marcus-cas" style="display:none;">
+              <td colspan="8">
+                <div class="detail-panel">
+                  <div class="detail-grid">
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Highest Risk Demotion Reason</span><span class="detail-value">Risk 2 – Low/No Recent Activity</span></div>
+                      <div class="detail-field"><span class="detail-label">All Demotion Reasons</span><span class="detail-value">Risk 2 – Low/No Recent Activity</span></div>
+                      <div class="detail-field"><span class="detail-label">Most Common Demotion Reason</span><span class="detail-value">Risk 2 – Low/No Recent Activity</span></div>
+                    </div>
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Explanation</span><span class="detail-value">No Casino sessions in 24 days; product engagement has fallen below minimum threshold.</span></div>
+                      <div class="detail-field"><span class="detail-label">Demotion Next Steps</span><span class="detail-value">Review if CAS designation is still appropriate given inactivity window.</span></div>
+                    </div>
+                  </div>
+                  <div class="detail-recs">
+                    <div class="rec-cell"><span class="rec-label">Total Recs L14</span><span class="rec-value">2</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L30</span><span class="rec-value">6</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L90</span><span class="rec-value">14</span></div>
+                    <div style="flex:2;display:flex;justify-content:flex-end;align-items:center;padding-left:1.5rem;"><a href="#" class="view-record-link">View Record <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round"/><path d="M10 2h4v4M14 2 8 8" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ══ John Glancy – single product ══ -->
+            <tr class="dna-tr" id="dan-row-glancy">
+              <td class="dna-td">
+                <div class="vip-name-cell">
+                  <span class="expand-toggle" id="toggle-glancy" onclick="toggleDetail('glancy')" title="Show details">▸</span>
+                  <a class="vip-link">John Glancy</a>
+                </div>
+              </td>
+              <td class="dna-td">SBK</td>
+              <td class="dna-td"><span style="font-size:var(--text-body);font-weight:700;color:#334155;">2</span></td>
+              <td class="dna-td"><span class="concern-high">High Concern</span></td>
+              <td class="dna-td" style="font-size:var(--text-ui);color:#334155;">Risk 2 – Low/No Recent Activity</td>
+              <td class="dna-td"><span class="dna-date">11.03.2026</span></td>
+              <td class="dna-td"><span class="btn-demote" onclick="alert('Demote flow triggered')">Demote</span></td>
+              <td class="dna-td" style="text-align:right;"><button class="gen-menu-btn">⋮</button></td>
+            </tr>
+            <tr class="detail-row" id="detail-glancy" style="display:none;">
+              <td colspan="8">
+                <div class="detail-panel">
+                  <div class="detail-grid">
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Highest Risk Demotion Reason</span><span class="detail-value">Risk 2 – Low/No Recent Activity</span></div>
+                      <div class="detail-field"><span class="detail-label">All Demotion Reasons</span><span class="detail-value">Risk 2 – Low/No Recent Activity; Risk 3 – Deposit Frequency Drop</span></div>
+                      <div class="detail-field"><span class="detail-label">Most Common Demotion Reason</span><span class="detail-value">Risk 2 – Low/No Recent Activity</span></div>
+                    </div>
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Explanation</span><span class="detail-value">Activity sporadic over L30; below engagement minimum for 2 of last 4 weeks.</span></div>
+                      <div class="detail-field"><span class="detail-label">Demotion Next Steps</span><span class="detail-value">No action required at this stage — continue monitoring cadence.</span></div>
+                    </div>
+                  </div>
+                  <div class="detail-recs">
+                    <div class="rec-cell"><span class="rec-label">Total Recs L14</span><span class="rec-value">1</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L30</span><span class="rec-value">5</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L90</span><span class="rec-value">18</span></div>
+                    <div style="flex:2;display:flex;justify-content:flex-end;align-items:center;padding-left:1.5rem;"><a href="#" class="view-record-link">View Record <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round"/><path d="M10 2h4v4M14 2 8 8" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ══ Plan Zit – single product ══ -->
+            <tr class="dna-tr" id="dan-row-planzit">
+              <td class="dna-td">
+                <div class="vip-name-cell">
+                  <span class="expand-toggle" id="toggle-planzit" onclick="toggleDetail('planzit')" title="Show details">▸</span>
+                  <a class="vip-link">Plan Zit</a>
+                </div>
+              </td>
+              <td class="dna-td">SBK</td>
+              <td class="dna-td"><span style="font-size:var(--text-body);font-weight:700;color:#334155;">3</span></td>
+              <td class="dna-td"><span class="concern-susp">Susp/Short TO</span></td>
+              <td class="dna-td" style="font-size:var(--text-ui);color:#334155;">Risk 1 – Player Stats – Low/Negative Forecast Profit</td>
+              <td class="dna-td"><span class="dna-date">11.05.2026</span></td>
+              <td class="dna-td"><span class="btn-demote" onclick="alert('Demote flow triggered')">Demote</span></td>
+              <td class="dna-td" style="text-align:right;"><button class="gen-menu-btn">⋮</button></td>
+            </tr>
+            <tr class="detail-row" id="detail-planzit" style="display:none;">
+              <td colspan="8">
+                <div class="detail-panel">
+                  <div class="detail-grid">
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Highest Risk Demotion Reason</span><span class="detail-value">Risk 1 – Player Stats – Low/Negative Forecast Profit</span></div>
+                      <div class="detail-field"><span class="detail-label">All Demotion Reasons</span><span class="detail-value">Risk 1 – Player Stats – Low/Negative Forecast Profit</span></div>
+                      <div class="detail-field"><span class="detail-label">Most Common Demotion Reason</span><span class="detail-value">Risk 1 – Player Stats – Low/Negative Forecast Profit</span></div>
+                    </div>
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Explanation</span><span class="detail-value">Forecast profit negative for 4 consecutive weeks; handle trending downward with no recovery signals.</span></div>
+                      <div class="detail-field"><span class="detail-label">Demotion Next Steps</span><span class="detail-value">Review account history before escalating — no immediate action required.</span></div>
+                    </div>
+                  </div>
+                  <div class="detail-recs">
+                    <div class="rec-cell"><span class="rec-label">Total Recs L14</span><span class="rec-value">4</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L30</span><span class="rec-value">11</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L90</span><span class="rec-value">29</span></div>
+                    <div style="flex:2;display:flex;justify-content:flex-end;align-items:center;padding-left:1.5rem;"><a href="#" class="view-record-link">View Record <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round"/><path d="M10 2h4v4M14 2 8 8" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ══ Aaron Swayne – DFS ══ -->
+            <tr class="dna-tr" id="dan-row-swayne">
+              <td class="dna-td">
+                <div class="vip-name-cell">
+                  <span class="expand-toggle" id="toggle-swayne" onclick="toggleDetail('swayne')" title="Show details">▸</span>
+                  <a class="vip-link">Aaron Swayne</a>
+                </div>
+              </td>
+              <td class="dna-td">DFS</td>
+              <td class="dna-td"><span style="font-size:var(--text-xs);color:#9ea5ae;">—</span></td>
+              <td class="dna-td"><span class="concern-low">Low Concern</span></td>
+              <td class="dna-td" style="font-size:var(--text-ui);color:#334155;">Risk 2 – Low/No Recent Activity</td>
+              <td class="dna-td"><span class="dna-date">11.07.2026</span></td>
+              <td class="dna-td"><span class="btn-demote" onclick="alert('Demote flow triggered')">Demote</span></td>
+              <td class="dna-td" style="text-align:right;"><button class="gen-menu-btn">⋮</button></td>
+            </tr>
+            <tr class="detail-row" id="detail-swayne" style="display:none;">
+              <td colspan="8">
+                <div class="detail-panel">
+                  <div class="detail-grid">
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Highest Risk Demotion Reason</span><span class="detail-value">Risk 2 – Low/No Recent Activity</span></div>
+                      <div class="detail-field"><span class="detail-label">All Demotion Reasons</span><span class="detail-value">Risk 2 – Low/No Recent Activity</span></div>
+                      <div class="detail-field"><span class="detail-label">Most Common Demotion Reason</span><span class="detail-value">Risk 2 – Low/No Recent Activity</span></div>
+                    </div>
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Explanation</span><span class="detail-value">DFS contest entries dropped significantly over L28; no lineups submitted in last 11 days.</span></div>
+                      <div class="detail-field"><span class="detail-label">Demotion Next Steps</span><span class="detail-value">Monitor for re-engagement — no immediate action required.</span></div>
+                    </div>
+                  </div>
+                  <div class="detail-recs">
+                    <div class="rec-cell"><span class="rec-label">Total Recs L14</span><span class="rec-value">2</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L30</span><span class="rec-value">7</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L90</span><span class="rec-value">16</span></div>
+                    <div style="flex:2;display:flex;justify-content:flex-end;align-items:center;padding-left:1.5rem;"><a href="#" class="view-record-link">View Record <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round"/><path d="M10 2h4v4M14 2 8 8" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ══ Edward W. Chambers – FDR (Racing) ══ -->
+            <tr class="dna-tr" id="dan-row-chambers">
+              <td class="dna-td">
+                <div class="vip-name-cell">
+                  <span class="expand-toggle" id="toggle-chambers" onclick="toggleDetail('chambers')" title="Show details">▸</span>
+                  <a class="vip-link">Edward W. Chambers</a>
+                </div>
+              </td>
+              <td class="dna-td">FDR</td>
+              <td class="dna-td"><span style="font-size:var(--text-xs);color:#9ea5ae;">—</span></td>
+              <td class="dna-td"><span class="concern-susp">Susp/Short TO</span></td>
+              <td class="dna-td" style="font-size:var(--text-ui);color:#334155;">Risk 3 – Suspension / Short Time Out</td>
+              <td class="dna-td"><span class="dna-date">11.09.2026</span></td>
+              <td class="dna-td"><span class="btn-demote" onclick="alert('Demote flow triggered')">Demote</span></td>
+              <td class="dna-td" style="text-align:right;"><button class="gen-menu-btn">⋮</button></td>
+            </tr>
+            <tr class="detail-row" id="detail-chambers" style="display:none;">
+              <td colspan="8">
+                <div class="detail-panel">
+                  <div class="detail-grid">
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Highest Risk Demotion Reason</span><span class="detail-value">Risk 3 – Suspension / Short Time Out</span></div>
+                      <div class="detail-field"><span class="detail-label">All Demotion Reasons</span><span class="detail-value">Risk 3 – Suspension / Short Time Out; Risk 2 – Low/No Recent Activity</span></div>
+                      <div class="detail-field"><span class="detail-label">Most Common Demotion Reason</span><span class="detail-value">Risk 3 – Suspension / Short Time Out</span></div>
+                    </div>
+                    <div>
+                      <div class="detail-field"><span class="detail-label">Explanation</span><span class="detail-value">Account flagged following a short time-out request; Racing handle minimal over L30 window.</span></div>
+                      <div class="detail-field"><span class="detail-label">Demotion Next Steps</span><span class="detail-value">Await end of time-out period before reassessing VIP eligibility.</span></div>
+                    </div>
+                  </div>
+                  <div class="detail-recs">
+                    <div class="rec-cell"><span class="rec-label">Total Recs L14</span><span class="rec-value">1</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L30</span><span class="rec-value">4</span></div>
+                    <div class="rec-cell"><span class="rec-label">Total Recs L90</span><span class="rec-value">11</span></div>
+                    <div style="flex:2;display:flex;justify-content:flex-end;align-items:center;padding-left:1.5rem;"><a href="#" class="view-record-link">View Record <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round"/><path d="M10 2h4v4M14 2 8 8" stroke="#0060a3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div><!-- /tab-dna -->
+
+    </div><!-- /tab-content -->
+  </div><!-- /card -->
+</div>
+
+<script>
+var PARENT_SEGS = { 'marcus': ['marcus-sbk', 'marcus-cas'] };
+
+function toggleParent(id) {
+  var segs = PARENT_SEGS[id] || [];
+  var btn  = document.getElementById('parent-toggle-' + id);
+  var row  = document.getElementById('vip-row-' + id);
+  var open = segs.length && document.getElementById('seg-row-' + segs[0]).style.display !== 'none';
+  segs.forEach(function(sid) {
+    document.getElementById('seg-row-' + sid).style.display = open ? 'none' : '';
+    if (open) {
+      var d = document.getElementById('detail-' + sid);
+      if (d) { d.style.display = 'none'; }
+      var t = document.getElementById('toggle-' + sid);
+      if (t) { t.textContent = '▸'; }
+    }
+  });
+  btn.style.transform = open ? '' : 'rotate(90deg)';
+  if (open) row.classList.remove('expanded'); else row.classList.add('expanded');
+}
+
+function switchTab(tab) {
+  document.getElementById('tab-dan').style.display = tab === 'dan' ? '' : 'none';
+  document.getElementById('tab-dna').style.display = tab === 'dna' ? '' : 'none';
+  document.getElementById('tab-btn-dan').className = 'tab-btn' + (tab === 'dan' ? ' active' : '');
+  document.getElementById('tab-btn-dna').className = 'tab-btn' + (tab === 'dna' ? ' active' : '');
+}
+
+function _showPreviewPicker(event, el, id) {
+  event.stopPropagation();
+  var old = document.getElementById('_previewPicker');
+  if (old) { old.remove(); return; }
+  var rect = el.getBoundingClientRect();
+  var menu = document.createElement('div');
+  menu.id = '_previewPicker';
+  menu.style.cssText = 'position:fixed;z-index:9999;background:#fff;border:1px solid #dddbda;border-radius:0.3rem;box-shadow:0 6px 20px rgba(0,0,0,0.18);min-width:130px;overflow:hidden;';
+  menu.style.top  = (rect.bottom + 4) + 'px';
+  menu.style.left = rect.left + 'px';
+  [{label:'Appeal', color:'#2e844a'},
+   {label:'Demote', color:'#c23934'}
+  ].forEach(function(it) {
+    var d = document.createElement('div');
+    d.style.cssText = 'padding:0.48rem 0.85rem 0.48rem 0.7rem;cursor:pointer;font-size:0.775rem;color:' + it.color + ';border-left:3px solid ' + it.color + ';margin:3px 0;font-weight:600;';
+    d.textContent = it.label;
+    d.onmouseover = function() { this.style.background = '#f8fafc'; };
+    d.onmouseout  = function() { this.style.background = ''; };
+    d.onclick = function(ev) {
+      ev.stopPropagation();
+      var p = document.getElementById('_previewPicker');
+      if (p) p.remove();
+      alert(it.label + ' flow triggered');
+    };
+    menu.appendChild(d);
+  });
+  document.body.appendChild(menu);
+}
+document.addEventListener('click', function(e) {
+  var p = document.getElementById('_previewPicker');
+  if (p && !p.contains(e.target)) p.remove();
+}, true);
+
+function toggleDetail(id) {
+  var detail = document.getElementById('detail-' + id);
+  var toggle = document.getElementById('toggle-' + id);
+  var row    = document.getElementById('dan-row-' + id);
+  var open   = detail.style.display !== 'none';
+  detail.style.display = open ? 'none' : '';
+  toggle.textContent   = open ? '▸' : '▾';
+  if (open) { row.classList.remove('expanded'); }
+  else      { row.classList.add('expanded'); }
+}
+</script>
+</body>
+</html>
